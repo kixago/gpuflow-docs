@@ -1,0 +1,469 @@
+---
+title: 'Access Methods'
+description: Web terminal, SSH, VNC, and port forwarding for GPU access.
+sidebar:
+  label: 'Access Methods'  
+  order: 5
+---
+{/* File: src/content/docs/renters/access-methods.mdx */}
+
+import { Aside } from '@astrojs/starlight/components';
+
+Multiple ways to access your rented GPU environment through secure VPN tunnel.
+
+## Web terminal
+
+### Browser-based access
+
+**Direct URL access:**
+- `http://10.77.x.2:4200` - Web terminal interface
+- No additional software required
+- Works on all modern browsers
+- Full Linux command line access
+
+**Features:**
+- xterm.js terminal emulation
+- Copy/paste support (Ctrl+Shift+C/V)
+- Resizable terminal window
+- File upload/download interface
+- Multi-tab terminal sessions
+
+### Terminal usage
+
+**Basic navigation:**
+```bash
+# Check GPU status
+nvidia-smi
+
+# Monitor resources
+htop
+
+# Navigate workspace
+cd /workspace
+ls -la
+```
+
+**File management:**
+```bash
+# Upload files via web interface drag-and-drop
+# Or use command line tools
+wget https://example.com/dataset.zip
+unzip dataset.zip
+
+# Download results
+# Use web interface download button
+# Or prepare files in /workspace/downloads/
+```
+
+## SSH connections
+
+### Standard SSH access
+
+**Connection details:**
+- Host: `10.77.x.2`
+- Port: `22`
+- Username: `rental`
+- Authentication: Password or key-based
+
+```bash
+# Basic connection
+ssh rental@10.77.x.2
+
+# With custom port
+ssh rental@10.77.x.2 -p 2222
+
+# Using SSH key
+ssh -i ~/.ssh/gpuflow_key rental@10.77.x.2
+```
+
+### SSH key setup
+
+**Generate key pair:**
+```bash
+# Create new key for GPUFlow
+ssh-keygen -t ed25519 -f ~/.ssh/gpuflow_key
+chmod 600 ~/.ssh/gpuflow_key
+```
+
+**Add public key to rental:**
+```bash
+# Copy public key
+cat ~/.ssh/gpuflow_key.pub
+
+# Add to authorized_keys in rental environment
+echo "ssh-ed25519 AAAA..." >> ~/.ssh/authorized_keys
+```
+
+### Advanced SSH features
+
+**Port forwarding:**
+```bash
+# Forward Jupyter to local port 8888
+ssh -L 8888:localhost:8888 rental@10.77.x.2
+
+# Forward multiple services
+ssh -L 8888:localhost:8888 -L 7860:localhost:7860 rental@10.77.x.2
+
+# Dynamic SOCKS proxy
+ssh -D 1080 rental@10.77.x.2
+```
+
+**X11 forwarding:**
+```bash
+# Enable GUI applications over SSH
+ssh -X rental@10.77.x.2
+
+# Launch GUI applications
+firefox &
+code .
+```
+
+**File synchronization:**
+```bash
+# Rsync for efficient transfers
+rsync -avz ./local_data/ rental@10.77.x.2:/workspace/
+rsync -avz rental@10.77.x.2:/workspace/results/ ./results/
+
+# SCP for simple transfers
+scp model.bin rental@10.77.x.2:/workspace/
+scp rental@10.77.x.2:/workspace/output.txt ./
+```
+
+## VNC remote desktop
+
+### Desktop environment access
+
+**Connection details:**
+- VNC Server: `10.77.x.2:5901`
+- Display: `:1`
+- Default password provided in rental credentials
+
+**VNC clients:**
+- **Windows**: TightVNC, RealVNC, UltraVNC
+- **macOS**: Built-in Screen Sharing, RealVNC
+- **Linux**: Remmina, TigerVNC, Vinagre
+- **Mobile**: VNC Viewer (iOS/Android)
+
+### Desktop connection
+
+**Connect via VNC client:**
+1. Enter server address: `10.77.x.2:5901`
+2. Input VNC password from rental credentials
+3. Select color depth and quality settings
+4. Connect to desktop environment
+
+**Web-based VNC:**
+- `http://10.77.x.2:6080` - noVNC web interface
+- Browser-based desktop access
+- No client installation required
+- Optimized for touch devices
+
+### Desktop environment features
+
+**Pre-installed software:**
+- Ubuntu Desktop or similar Linux environment
+- Firefox web browser
+- LibreOffice suite
+- Text editors (gedit, nano, vim)
+- Development tools (VSCode, git)
+- Graphics tools (GIMP, Blender)
+
+**GPU acceleration:**
+- Direct GPU access for applications
+- CUDA support for development
+- OpenGL hardware acceleration
+- Video encoding/decoding capabilities
+
+## Port forwarding
+
+### Local port forwarding
+
+**Forward remote services to local machine:**
+```bash
+# Jupyter Lab access
+ssh -L 8888:localhost:8888 rental@10.77.x.2
+# Access via http://localhost:8888
+
+# TensorBoard
+ssh -L 6006:localhost:6006 rental@10.77.x.2
+# Access via http://localhost:6006
+
+# Custom application
+ssh -L 3000:localhost:3000 rental@10.77.x.2
+# Access via http://localhost:3000
+```
+
+### Reverse port forwarding
+
+**Expose local services to rental environment:**
+```bash
+# Share local web server with rental
+ssh -R 8080:localhost:80 rental@10.77.x.2
+# Rental can access via http://localhost:8080
+
+# Database access
+ssh -R 5432:localhost:5432 rental@10.77.x.2
+# Rental can connect to local PostgreSQL
+```
+
+### Dynamic port forwarding
+
+**SOCKS proxy for flexible routing:**
+```bash
+# Create SOCKS proxy
+ssh -D 1080 rental@10.77.x.2
+
+# Configure browser to use proxy
+# Firefox: Network Settings > SOCKS Host: localhost:1080
+# Chrome: --proxy-server="socks5://localhost:1080"
+```
+
+<Aside type="tip">
+Use SSH port forwarding to access web interfaces securely without exposing services to the internet.
+</Aside>
+
+## Web service access
+
+### Pre-configured services
+
+**Jupyter environments:**
+- `http://10.77.x.2:8888` - JupyterLab interface
+- `http://10.77.x.2:8889` - Jupyter Notebook (classic)
+- Pre-installed kernels: Python, R, Julia
+- GPU-enabled ML libraries ready
+
+**AI/ML interfaces:**
+- `http://10.77.x.2:7860` - Stable Diffusion WebUI
+- `http://10.77.x.2:8188` - ComfyUI
+- `http://10.77.x.2:3000` - Custom ML dashboards
+- `http://10.77.x.2:6006` - TensorBoard
+
+**Development tools:**
+- `http://10.77.x.2:8080` - VS Code Server
+- `http://10.77.x.2:3001` - Code-server alternative
+- `http://10.77.x.2:9000` - File manager
+- `http://10.77.x.2:8025` - Email/SMTP testing
+
+### Service management
+
+**Check running services:**
+```bash
+# List active services
+sudo systemctl list-units --type=service --state=active
+
+# Check specific service
+sudo systemctl status jupyter-lab
+
+# Service logs
+sudo journalctl -u jupyter-lab -f
+```
+
+**Restart services:**
+```bash
+# Restart Jupyter
+sudo systemctl restart jupyter-lab
+
+# Restart all web services
+sudo systemctl restart gpuflow-services
+```
+
+**Custom service startup:**
+```bash
+# Start additional services
+cd /workspace
+python -m http.server 8000 &
+
+# Background processing
+nohup python train_model.py > training.log 2>&1 &
+```
+
+## File transfer methods
+
+### Browser upload/download
+
+**Web interface features:**
+- Drag-and-drop file upload
+- Directory upload support
+- Progress indicators
+- Resume interrupted transfers
+- Bulk download as ZIP
+
+**Limitations:**
+- Individual file size: `<2GB`
+- Total upload: `<10GB` per session
+- Browser timeout on very large files
+
+### Command line transfers
+
+**wget/curl downloads:**
+```bash
+# Download datasets
+wget https://example.com/dataset.tar.gz
+curl -O https://example.com/model.bin
+
+# Download with progress bar
+wget --progress=bar https://example.com/large_file.zip
+```
+
+**SCP transfers:**
+```bash
+# Upload single file
+scp local_file.txt rental@10.77.x.2:/workspace/
+
+# Upload directory
+scp -r ./data_folder/ rental@10.77.x.2:/workspace/
+
+# Download results
+scp rental@10.77.x.2:/workspace/results.tar.gz ./
+```
+
+**Rsync synchronization:**
+```bash
+# Efficient sync with progress
+rsync -avz --progress ./dataset/ rental@10.77.x.2:/workspace/dataset/
+
+# Resume interrupted transfers
+rsync -avz --partial --progress ./large_files/ rental@10.77.x.2:/workspace/
+
+# Sync with exclusions
+rsync -avz --exclude='*.tmp' --exclude='__pycache__' ./project/ rental@10.77.x.2:/workspace/
+```
+
+### Cloud storage integration
+
+**Direct downloads:**
+```bash
+# Google Drive (with gdown)
+pip install gdown
+gdown https://drive.google.com/uc?id=FILE_ID
+
+# AWS S3
+aws s3 cp s3://bucket/file.zip /workspace/
+aws s3 sync s3://bucket/dataset/ /workspace/dataset/
+
+# Azure Blob Storage
+az storage blob download --container-name mycontainer --name myfile.zip
+```
+
+**Upload results:**
+```bash
+# Upload to S3
+aws s3 cp /workspace/results.tar.gz s3://bucket/
+
+# Upload to Google Drive
+# Use web interface or gdrive CLI tool
+```
+
+## Performance optimization
+
+### Connection tuning
+
+**SSH optimization:**
+```bash
+# ~/.ssh/config optimization
+Host gpuflow-rental
+    HostName 10.77.x.2
+    User rental
+    Compression yes
+    ServerAliveInterval 60
+    ServerAliveCountMax 3
+    TCPKeepAlive yes
+```
+
+**VNC optimization:**
+- Reduce color depth for faster rendering
+- Lower screen resolution if possible
+- Disable desktop effects and animations
+- Use local VNC client instead of web browser
+
+### Network performance
+
+**Bandwidth testing:**
+```bash
+# Test upload speed
+dd if=/dev/zero bs=1M count=100 | ssh rental@10.77.x.2 'cat > /dev/null'
+
+# Test download speed  
+ssh rental@10.77.x.2 'dd if=/dev/zero bs=1M count=100' | cat > /dev/null
+
+# iperf3 testing
+ssh rental@10.77.x.2 'iperf3 -s' &
+iperf3 -c 10.77.x.2
+```
+
+**Optimize for latency:**
+- Use geographically close providers
+- Prefer wired internet over WiFi
+- Close bandwidth-heavy applications
+- Use compression for text-based protocols
+
+### Resource monitoring
+
+**Monitor resource usage:**
+```bash
+# Real-time monitoring
+htop
+nvidia-smi -l 1
+iotop
+
+# System information
+free -h
+df -h
+lscpu
+```
+
+**Network monitoring:**
+```bash
+# Monitor network usage
+iftop
+nethogs
+ss -tuln
+```
+
+## Security considerations
+
+### Access control
+
+**Network isolation:**
+- Services only accessible through VPN tunnel
+- No direct internet exposure
+- Provider cannot access your local network
+- Encrypted connections for all protocols
+
+**Authentication:**
+- Unique credentials per rental
+- SSH keys preferred over passwords
+- VNC passwords auto-generated
+- No persistent access after rental expiry
+
+### Data protection
+
+**Sensitive data handling:**
+```bash
+# Encrypt sensitive files
+gpg --cipher-algo AES256 --compress-algo 1 --s2k-mode 3 \
+    --s2k-digest-algo SHA512 --s2k-count 65536 --symmetric file.txt
+
+# Secure file deletion
+shred -vfz -n 3 sensitive_file.txt
+```
+
+**Network security:**
+- All connections encrypted (SSH, HTTPS, VNC with encryption)
+- WireGuard provides additional encryption layer
+- No cleartext protocols used
+- Certificate validation for HTTPS
+
+### Best practices
+
+**During rental:**
+- Change default passwords immediately
+- Don't store credentials in files
+- Log out when not actively using
+- Monitor for unusual activity
+
+**Before expiry:**
+- Download all important data
+- Clear browser cache and saved passwords
+- Remove SSH keys from local agent
+- Verify no background processes remain

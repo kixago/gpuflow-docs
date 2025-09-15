@@ -1,0 +1,329 @@
+---
+title: 'Windows AMD Setup'
+description: Install GPUFlow on Windows systems with AMD GPUs using WSL2 and ROCm.
+sidebar:
+    label: 'Windows + AMD'
+    order: 7
+---
+{/* File: providers/installation/windows/amd.mdx */}
+
+import { Aside } from '@astrojs/starlight/components';
+
+Run GPUFlow on Windows with AMD GPUs using Windows Subsystem for Linux 2 (WSL2) and ROCm drivers. This setup is experimental but allows Windows users with AMD hardware to participate in the GPUFlow network.
+
+<Aside type="caution">
+AMD GPU support on Windows through WSL2 is experimental. NVIDIA GPUs have more mature support. Expect occasional issues and limited software compatibility.
+</Aside>
+
+## Prerequisites
+
+Verify your system meets these requirements:
+
+- **Windows 10 version 2004+** or **Windows 11** (any version)
+- **AMD RX 6000/7000 series GPU** with 12GB+ VRAM
+- **32GB system RAM** (minimum due to WSL2 overhead with AMD)
+- **Administrator access** to install software
+- **Stable internet** connection (25+ Mbps upload)
+
+## Step 1: Check hardware compatibility
+
+Verify your AMD GPU is supported:
+
+**Check your GPU model:**
+1. Right-click desktop, select "AMD Software"
+2. Go to "System" tab
+3. Note your GPU model under "Graphics Hardware"
+
+**Supported AMD GPUs:**
+- RX 6600, 6700 XT, 6800 XT, 6900 XT
+- RX 7600, 7700 XT, 7800 XT, 7900 XT, 7900 XTX
+- Radeon Pro W6000+ series
+
+## Step 2: Install Windows AMD drivers
+
+Install the latest AMD Adrenalin drivers:
+
+1. Visit [AMD's driver download page](https://www.amd.com/en/support)
+2. Select your GPU model
+3. Download and install **AMD Software: Adrenalin Edition**
+4. Restart your computer
+
+## Step 3: Enable WSL2
+
+Install Windows Subsystem for Linux 2:
+
+```powershell
+# Run PowerShell as Administrator
+wsl --install
+
+# Restart computer when prompted
+```
+
+**After restart, verify installation:**
+```powershell
+wsl --version
+```
+
+## Step 4: Install Ubuntu 22.04 on WSL2
+
+```powershell
+# Install Ubuntu
+wsl --install -d Ubuntu-22.04
+
+# Set as default distribution
+wsl --set-default Ubuntu-22.04
+```
+
+**Configure Ubuntu:**
+1. Launch Ubuntu from Start menu
+2. Create username and password
+3. Complete initial setup
+
+## Step 5: Install ROCm in WSL2
+
+ROCm provides AMD GPU compute support in Linux containers.
+
+**Launch WSL2 and install ROCm:**
+```bash
+# Update Ubuntu
+sudo apt update && sudo apt upgrade -y
+
+# Install prerequisites
+sudo apt install wget gnupg2
+
+# Add ROCm repository
+wget -q -O - https://repo.radeon.com/rocm/rocm.gpg.key | sudo apt-key add -
+echo 'deb [arch=amd64] https://repo.radeon.com/rocm/apt/5.7/ ubuntu main' | sudo tee /etc/apt/sources.list.d/rocm.list
+
+# Install ROCm
+sudo apt update
+sudo apt install rocm-dev rocm-libs rocm-utils
+
+# Add user to required groups
+sudo usermod -aG render,video $USER
+```
+
+**Logout and login to WSL2 for group changes:**
+```bash
+exit
+# Then restart WSL2 from PowerShell: wsl
+```
+
+## Step 6: Verify GPU access
+
+Test that WSL2 can see your AMD GPU:
+
+```bash
+# Check if GPU is detected
+lspci | grep -i amd
+
+# Test ROCm
+/opt/rocm/bin/rocminfo
+
+# Check device files
+ls -la /dev/dri/
+```
+
+You should see your AMD GPU listed and device files like `card0` and `renderD128`.
+
+## Step 7: Install Docker with AMD support
+
+Install Docker in your WSL2 environment:
+
+```bash
+# Install Docker
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
+
+# Add user to docker group
+sudo usermod -aG docker $USER
+
+# Start Docker service
+sudo service docker start
+```
+
+**Configure Docker for AMD GPUs:**
+```bash
+# Create Docker daemon configuration
+sudo mkdir -p /etc/docker
+sudo tee /etc/docker/daemon.json > /dev/null <<EOF
+{
+    "runtimes": {
+        "rocm": {
+            "path": "/usr/bin/rocm-runtime",
+            "runtimeArgs": []
+        }
+    }
+}
+EOF
+
+# Restart Docker
+sudo service docker restart
+```
+
+## Step 8: Test AMD GPU in container
+
+Test GPU access with a ROCm container:
+
+```bash
+# Test basic GPU access
+docker run --rm -it \
+  --device=/dev/dri \
+  --device=/dev/kfd \
+  --security-opt seccomp=unconfined \
+  --group-add video \
+  --group-add render \
+  rocm/pytorch:latest \
+  rocm-smi
+```
+
+If successful, you'll see your AMD GPU information displayed.
+
+## Step 9: Deploy GPUFlow provider
+
+**Create data directory:**
+```bash
+sudo mkdir -p /opt/gpuflow
+sudo chown $USER:$USER /opt/gpuflow
+```
+
+**Run GPUFlow provider with AMD GPU support:**
+```bash
+docker run -d \
+  --name gpuflow-provider \
+  --restart=unless-stopped \
+  --device=/dev/dri \
+  --device=/dev/kfd \
+  --security-opt seccomp=unconfined \
+  --group-add video \
+  --group-add render \
+  --network=host \
+  -v /opt/gpuflow:/data \
+  -e GPUFLOW_API_KEY="get-from-dashboard" \
+  -e GPU_VENDOR="amd" \
+  ghcr.io/gpuflow/provider:latest
+```
+
+**Verify provider startup:**
+```bash
+docker ps
+docker logs gpuflow-provider
+```
+
+Look for:
+- AMD GPU detected in logs
+- ROCm initialization successful
+- Network registration complete
+
+## Step 10: Windows startup automation
+
+**Create startup script:**
+```bash
+cat > ~/start-gpuflow-amd.sh << 'EOF'
+#!/bin/bash
+sudo service docker start
+sleep 10  # AMD needs longer startup time
+docker start gpuflow-provider
+EOF
+
+chmod +x ~/start-gpuflow-amd.sh
+```
+
+**Windows startup batch file:**
+1. Press `Win + R`, type `shell:startup`
+2. Create `GPUFlow-AMD.bat`:
+```batch
+@echo off
+wsl -d Ubuntu-22.04 -u your-username /home/your-username/start-gpuflow-amd.sh
+```
+
+## Managing your AMD provider
+
+**Provider management commands:**
+```bash
+# Check status
+docker ps
+
+# Monitor logs for AMD-specific messages
+docker logs gpuflow-provider -f | grep -i rocm
+
+# Restart provider (AMD needs clean restart)
+docker stop gpuflow-provider
+sleep 5
+docker start gpuflow-provider
+
+# Check GPU utilization
+rocm-smi
+```
+
+## Performance considerations
+
+**AMD-specific limitations:**
+- ROCm has less software support than CUDA
+- Some ML frameworks may not work optimally
+- Gaming impact may be higher than NVIDIA setups
+- Longer container startup times (30-60 seconds)
+
+**Resource usage:**
+- WSL2 overhead: 2-4GB RAM for AMD setup
+- ROCm drivers use more system resources
+- Gaming performance impact: 5-10% when provider running
+
+## Troubleshooting AMD issues
+
+**GPU not detected:**
+```bash
+# Check ROCm installation
+/opt/rocm/bin/rocminfo
+
+# Verify device permissions
+ls -la /dev/dri/
+ls -la /dev/kfd
+
+# Fix permissions if needed
+sudo chmod 666 /dev/kfd
+sudo chmod 666 /dev/dri/*
+```
+
+**Container startup failures:**
+```bash
+# Check ROCm service
+sudo systemctl status rocm
+
+# Restart ROCm if needed
+sudo systemctl restart rocm
+
+# Clear Docker containers and retry
+docker system prune -f
+```
+
+**Poor performance:**
+```bash
+# Check GPU clocks
+rocm-smi --showclocks
+
+# Monitor temperature
+rocm-smi --showtemp
+```
+
+## Known limitations
+
+Current AMD Windows setup limitations:
+
+- **Software compatibility**: Many AI frameworks prefer CUDA
+- **Performance**: 15-20% slower than native Linux ROCm
+- **Stability**: ROCm on WSL2 is less stable than NVIDIA CUDA
+- **Support**: Limited community knowledge for troubleshooting
+
+## Next steps
+
+Your Windows AMD provider is configured:
+
+1. [Create your GPUFlow account](/providers/configuration/account-setup)
+2. Link your AMD hardware in dashboard
+3. [Configure AMD-optimized listings](/providers/configuration/creating-listings)
+4. Monitor performance and earnings
+
+<Aside type="note">
+Consider dual-booting Linux for better AMD GPU performance and stability if you're serious about GPU providing with AMD hardware.
+</Aside>

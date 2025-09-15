@@ -1,0 +1,244 @@
+---
+title: 'Wallet Setup'
+description: Configure multiple wallets and payment preferences for GPU rentals.
+sidebar:
+  label: 'Wallet Setup'
+  order: 2
+---
+{/* File: src/content/docs/renters/wallet-setup.mdx */}
+
+import { Aside } from '@astrojs/starlight/components';
+
+Configure payment wallets and manage multiple addresses for secure GPU rental payments.
+
+## Supported wallet types
+
+### Hot wallets
+- **MetaMask**: Browser extension wallet
+- **WalletConnect**: Mobile and desktop wallet connections
+- **Rainbow**: Mobile-first Ethereum wallet
+- **Trust Wallet**: Mobile wallet with WalletConnect
+
+### Hardware wallets
+- **Ledger**: Nano S, Nano X, Nano S Plus
+- **Trezor**: Model T, Model One
+- **GridPlus**: Lattice1
+
+### Multi-signature wallets
+- **Gnosis Safe**: Team and DAO treasury management
+- **Custom multi-sig**: Compatible with EIP-1271
+
+## Network configuration
+
+### Polygon Amoy (Testnet)
+
+For testing without real funds:
+
+**Network details:**
+- Network name: `Polygon Amoy`
+- RPC URL: `https://rpc-amoy.polygon.technology`
+- Chain ID: `80002`
+- Currency: `MATIC`
+- Block explorer: `https://amoy.polygonscan.com`
+
+**Get test tokens:**
+1. Visit [Polygon Faucet](https://faucet.polygon.technology)
+2. Select Amoy network
+3. Enter your wallet address
+4. Claim test MATIC tokens
+
+### Polygon Mainnet (Coming Soon)
+
+Production network with real cryptocurrency:
+
+**Network details:**
+- Network name: `Polygon`
+- RPC URL: `https://polygon-rpc.com`
+- Chain ID: `137`
+- Currency: `MATIC`
+- Block explorer: `https://polygonscan.com`
+
+## Multi-wallet configuration
+
+<Aside type="tip">
+Use different wallets for different purposes: hot wallets for small transactions, hardware wallets for larger amounts.
+</Aside>
+
+### Add additional wallets
+
+1. Go to **Dashboard** `>` **Settings** `>` **Wallet Management**
+2. Click **Add Wallet**
+3. Choose wallet type:
+   - **Hot wallet**: For frequent, smaller transactions
+   - **Hardware wallet**: For secure, larger payments
+   - **Cold storage**: For maximum security
+   - **Multi-sig**: For team or DAO usage
+
+### Set payment preferences
+
+Configure which wallet handles payments:
+
+**Connected wallet payments:**
+- Use currently connected wallet for all transactions
+- Simplest setup for individual users
+- Wallet must be connected during payment
+
+**Custom payment address:**
+- Specify different address for receiving change/refunds
+- Useful for hardware wallets or multi-sig addresses
+- Address validation ensures compatibility
+
+### Wallet labels and organization
+
+Assign labels to wallets:
+- `Main Trading Wallet`
+- `Hardware - Large Payments`
+- `Team Multi-sig`
+- `Mining Profits`
+
+## Payment token configuration
+
+### Supported tokens
+
+**MATIC (recommended):**
+- Native network token
+- Lowest transaction fees
+- Fastest confirmation times
+
+**USDC:**
+- USD-pegged stablecoin
+- Predictable pricing
+- Slightly higher gas costs
+
+**USDT:**
+- Alternative USD stablecoin
+- Widely accepted
+- Similar fees to USDC
+
+**Wrapped ETH (WETH):**
+- Ethereum on Polygon
+- Higher gas costs
+- Compatible with Ethereum tooling
+
+### Token balance management
+
+Monitor balances for:
+- **Payment token**: For rental costs
+- **MATIC**: For transaction fees (even when paying with other tokens)
+
+Minimum recommended balances:
+- `10 MATIC` for gas fees
+- `$50 equivalent` in payment token
+
+## Security best practices
+
+### Wallet security
+
+**Hot wallets:**
+- Enable all security features (PIN, biometrics)
+- Use strong, unique passwords
+- Regular software updates
+- Never share seed phrases
+
+**Hardware wallets:**
+- Verify device authenticity
+- Update firmware regularly
+- Secure physical storage
+- Test recovery process
+
+### Transaction safety
+
+**Before signing:**
+- Verify recipient address matches GPUFlow contract
+- Confirm transaction amount and gas fees
+- Check network matches expected (Polygon, not Ethereum)
+- Review payment token and quantity
+
+**Gas fee optimization:**
+- Use Polygon for lower fees (`<$0.01` typical)
+- Avoid Ethereum mainnet for small transactions
+- Monitor network congestion
+- Set appropriate gas limits
+
+## Troubleshooting
+
+### Connection issues
+
+**Wallet won't connect:**
+1. Clear browser cache and cookies
+2. Disable ad blockers temporarily
+3. Try incognito/private browsing mode
+4. Update wallet extension
+
+**Network switching fails:**
+1. Manually add network in wallet
+2. Verify RPC URL and chain ID
+3. Reset wallet if necessary
+4. Contact wallet support
+
+### Payment problems
+
+**Transaction stuck:**
+- Check wallet for pending transactions
+- Increase gas price if on Ethereum
+- Wait for network congestion to clear
+- Cancel and retry if possible
+
+**Insufficient balance:**
+- Verify token balance covers rental cost
+- Ensure MATIC balance covers gas fees
+- Check for pending transactions consuming funds
+- Add funds before retrying payment
+
+**Wrong network:**
+- Switch to correct network in wallet
+- Wait for GPUFlow to detect network change
+- Refresh page if network switch isn't recognized
+- Verify contract addresses match network
+
+### Multi-wallet issues
+
+**Payment address rejected:**
+- Verify address format (42 characters, starts with `0x`)
+- Ensure address is on correct network
+- Test with small transaction first
+- Check address supports EIP-1271 (for multi-sig)
+
+**Hardware wallet delays:**
+- Keep device connected during entire transaction
+- Don't switch apps while signing
+- Update hardware wallet firmware
+- Try different USB cable or port
+
+## Advanced configuration
+
+### Custom RPC endpoints
+
+For better performance or privacy:
+
+```javascript
+// Example RPC configurations
+{
+  "Polygon Amoy": "https://rpc-amoy.polygon.technology",
+  "Polygon Alternative": "https://polygon-amoy.drpc.org"
+}
+```
+
+### Multi-sig wallet setup
+
+For team or DAO usage:
+
+1. Create Gnosis Safe or similar multi-sig wallet
+2. Add as custom payment address in GPUFlow
+3. Configure signing thresholds
+4. Test with small transaction
+5. Document signing process for team
+
+### API integration
+
+For programmatic wallet management:
+
+- Use GPUFlow API for balance checking
+- Monitor payment statuses
+- Automate wallet switching
+- Implement custom payment flows

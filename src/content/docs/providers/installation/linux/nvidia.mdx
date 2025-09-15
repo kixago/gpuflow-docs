@@ -1,0 +1,72 @@
+---
+title: 'Linux NVIDIA Setup'
+description: Install GPUFlow on Linux systems with NVIDIA GPUs using Docker or Podman.
+sidebar:
+    label: 'Linux + NVIDIA'
+    order: 2
+---
+{/* File: providers/installation/linux/nvidia.mdx */}
+
+import { Card, Aside } from '@astrojs/starlight/components';
+
+
+This guide covers Linux systems with NVIDIA GPUs. You will install either Docker or Podman, configure GPU passthrough, and deploy the GPUFlow provider.
+
+## Prerequisites
+
+- NVIDIA GPU with 8GB+ VRAM
+- Ubuntu 22.04+, Fedora 39+, or Debian 12+
+- NVIDIA drivers installed and working
+
+## Step 1: Verify NVIDIA drivers
+
+Check that your drivers are working:
+
+```bash
+nvidia-smi
+```
+
+You should see your GPU listed with driver version. If this command fails, install drivers first:
+
+```bash
+# Ubuntu/Debian
+sudo apt update
+sudo apt install nvidia-driver-535
+
+# Fedora
+sudo dnf install akmod-nvidia
+
+# Reboot after installation
+sudo reboot
+```
+
+## Step 2: Choose container runtime
+
+Pick either Docker or Podman. Do not install both.
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+  <div class="border rounded-lg p-4">
+    <h4>Docker (Recommended for beginners)</h4>
+    <p>Easier setup, more tutorials online</p>
+    <a href="/providers/container-runtime/docker-nvidia">Continue with Docker →</a>
+  </div>
+  
+  <div class="border rounded-lg p-4">
+    <h4>Podman (Recommended for security)</h4>
+    <p>Rootless containers, better security</p>
+    <a href="/providers/container-runtime/podman-nvidia">Continue with Podman →</a>
+  </div>
+</div>
+
+## What's next
+
+After completing your container runtime setup, you will:
+
+1. Install NVIDIA Container Toolkit
+2. Configure GPU passthrough
+3. Deploy the GPUFlow provider agent
+4. [Create your provider account](/providers/configuration/account-setup)
+
+<Aside type="tip">
+Having trouble? Our [troubleshooting guide](/providers/troubleshooting) covers common NVIDIA setup issues.
+</Aside>

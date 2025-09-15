@@ -1,0 +1,402 @@
+---
+title: 'WireGuard Client'
+description: Install and configure WireGuard VPN client for secure GPU access.
+sidebar:
+  label: 'WireGuard Client'
+  order: 4
+---
+{/* File: src/content/docs/renters/wireguard-client.mdx */}
+
+import { Aside } from '@astrojs/starlight/components';
+
+Install and configure WireGuard VPN client for secure access to rented GPUs.
+
+## Overview
+
+GPUFlow uses WireGuard VPN to create secure, peer-to-peer connections between renters and providers. Each rental generates a unique configuration that expires automatically.
+
+**Connection process:**
+1. Complete GPU rental payment
+2. Receive unique WireGuard configuration file
+3. Import configuration into WireGuard client
+4. Connect to establish encrypted tunnel
+5. Access GPU services through tunnel
+
+## Installation
+
+### Windows
+
+**WireGuard Windows App:**
+1. Download from [WireGuard.com](https://www.wireguard.com/install/)
+2. Run installer as administrator
+3. Complete installation wizard
+4. Launch WireGuard from Start menu
+
+**Alternative - Command line:**
+```powershell
+# Using Chocolatey
+choco install wireguard
+
+# Using Scoop
+scoop install wireguard
+```
+
+### macOS
+
+**Mac App Store:**
+1. Search "WireGuard" in App Store
+2. Install WireGuard by WireGuard Development Team
+3. Launch from Applications folder
+
+**Alternative - Homebrew:**
+```bash
+brew install --cask wireguard-tools
+```
+
+### Linux
+
+**Ubuntu/Debian:**
+```bash
+sudo apt update
+sudo apt install wireguard
+```
+
+**Fedora:**
+```bash
+sudo dnf install wireguard-tools
+```
+
+**Arch Linux:**
+```bash
+sudo pacman -S wireguard-tools
+```
+
+### Mobile
+
+**iOS:**
+- Download "WireGuard" from App Store
+- Requires iOS 12.0 or later
+
+**Android:**
+- Install from Google Play Store or F-Droid
+- Requires Android 5.0 or later
+
+## Configuration import
+
+### Automatic download
+
+After successful payment:
+1. Click **Download Config** in rental dashboard
+2. Configuration file downloads as `rental-[ID].conf`
+3. File is valid for single download only
+4. Import immediately to avoid expiration
+
+<Aside type="caution">
+Configuration files expire 15 minutes after generation. Download and import immediately.
+</Aside>
+
+### Manual import methods
+
+**Desktop GUI:**
+1. Open WireGuard application
+2. Click **Add Tunnel** or `+` button
+3. Select **Import from File**
+4. Choose downloaded `.conf` file
+5. Configuration appears in tunnel list
+
+**Mobile QR code:**
+1. Click **Show QR Code** in rental dashboard
+2. Open WireGuard mobile app
+3. Tap `+` and select **Create from QR Code**
+4. Scan displayed QR code
+5. Configuration imports automatically
+
+**Command line:**
+```bash
+# Linux/macOS
+sudo wg-quick up /path/to/rental-config.conf
+
+# Check status
+sudo wg show
+```
+
+### Configuration validation
+
+**Verify settings before connecting:**
+- **Interface Address**: Unique IP in `10.77.x.x/32` range
+- **Peer Endpoint**: Provider's public IP and port
+- **Allowed IPs**: `10.77.0.0/16` for GPUFlow network
+- **PersistentKeepalive**: `25` seconds
+
+## Connection process
+
+### Establish tunnel
+
+**Desktop:**
+1. Select imported configuration from list
+2. Click **Activate** or toggle switch
+3. Status changes to "Active" when connected
+4. System tray icon indicates connection state
+
+**Mobile:**
+1. Tap tunnel configuration
+2. Toggle switch to "On" position
+3. VPN icon appears in status bar
+4. Connection establishes within 10 seconds
+
+**Command line:**
+```bash
+# Start tunnel
+sudo wg-quick up rental-config
+
+# Verify connection
+ping 10.77.0.1
+
+# Show tunnel statistics
+sudo wg show rental-config
+```
+
+### Connection verification
+
+**Test connectivity:**
+```bash
+# Ping provider gateway
+ping 10.77.0.1
+
+# Test GPU service access
+curl http://10.77.0.2:8080/health
+```
+
+**Check tunnel status:**
+- **Handshake**: Recent timestamp indicates active connection
+- **Transfer**: Data sent/received counters
+- **Peer Endpoint**: Provider's public IP resolution
+- **Latest Handshake**: Should update every 25 seconds
+
+## Accessing services
+
+### Web interfaces
+
+**Common service URLs:**
+- **Jupyter Lab**: `http://10.77.x.2:8888`
+- **ComfyUI**: `http://10.77.x.2:8188`
+- **Stable Diffusion WebUI**: `http://10.77.x.2:7860`
+- **SSH Access**: `ssh user@10.77.x.2 -p 22`
+
+**Service discovery:**
+```bash
+# Scan for available services
+nmap -p 1-10000 10.77.x.2
+
+# Common web services
+curl http://10.77.x.2:8888  # Jupyter
+curl http://10.77.x.2:8188  # ComfyUI
+curl http://10.77.x.2:7860  # SD WebUI
+```
+
+### Direct SSH access
+
+```bash
+# Standard SSH connection
+ssh rental@10.77.x.2
+
+# With specific key
+ssh -i ~/.ssh/gpuflow_key rental@10.77.x.2
+
+# Port forwarding for local access
+ssh -L 8888:localhost:8888 rental@10.77.x.2
+```
+
+### File transfers
+
+**Upload files:**
+```bash
+# SCP upload
+scp localfile.txt rental@10.77.x.2:/workspace/
+
+# Rsync upload
+rsync -av ./data/ rental@10.77.x.2:/workspace/data/
+```
+
+**Download results:**
+```bash
+# SCP download
+scp rental@10.77.x.2:/workspace/output.txt ./
+
+# Download directory
+scp -r rental@10.77.x.2:/workspace/results/ ./
+```
+
+## Troubleshooting
+
+### Connection failures
+
+**Cannot establish tunnel:**
+
+1. **Verify configuration**:
+   - Check endpoint IP and port
+   - Validate private key format
+   - Confirm allowed IPs setting
+
+2. **Network issues**:
+   - Test internet connectivity
+   - Check firewall rules
+   - Try different network (mobile hotspot)
+
+3. **Provider offline**:
+   - Check rental status in dashboard
+   - Verify provider uptime
+   - Contact support if persistent
+
+**Tunnel connects but no service access:**
+
+1. **Service not ready**:
+   - Wait 2-3 minutes for deployment
+   - Check deployment status in dashboard
+   - Verify service URLs
+
+2. **Port forwarding issues**:
+   - Try alternative service ports
+   - Use SSH tunnel as fallback
+   - Check provider configuration
+
+### Performance issues
+
+**Slow connection speeds:**
+```bash
+# Test tunnel throughput
+iperf3 -c 10.77.x.2 -p 5201
+
+# Monitor latency
+ping -c 10 10.77.x.2
+
+# Check routing
+traceroute 10.77.x.2
+```
+
+**High latency:**
+- Geographic distance to provider
+- Network routing inefficiencies
+- Provider internet connection quality
+- Local network congestion
+
+### Mobile-specific issues
+
+**iOS connection problems:**
+- Enable VPN permission in Settings
+- Disable other VPN apps temporarily
+- Restart WireGuard app
+- Re-import configuration
+
+**Android connectivity:**
+- Check battery optimization settings
+- Allow background app activity
+- Verify network permissions
+- Clear app cache if needed
+
+## Security considerations
+
+### Configuration security
+
+**Protect configuration files:**
+- Delete `.conf` files after import
+- Never share configuration with others
+- Each config is single-use only
+- Configurations auto-expire with rental
+
+**Network isolation:**
+- Tunnel traffic is encrypted end-to-end
+- Services only accessible through VPN
+- No direct internet exposure
+- Provider cannot see other traffic
+
+### Best practices
+
+**Connection management:**
+- Disconnect when rental expires
+- Don't leave tunnels active indefinitely
+- Monitor data usage if on metered connection
+- Use kill switch if available
+
+**Data handling:**
+- Encrypt sensitive files before upload
+- Download important results before expiration
+- Assume shared provider environment
+- Clear local configuration after use
+
+## Advanced configuration
+
+### Custom routing
+
+**Split tunneling** (exclude local traffic):
+```ini
+[Interface]
+Address = 10.77.x.x/32
+# Only route GPUFlow network through VPN
+AllowedIPs = 10.77.0.0/16
+```
+
+**Full tunneling** (route all traffic):
+```ini
+[Interface]
+Address = 10.77.x.x/32
+# Route everything through VPN
+AllowedIPs = 0.0.0.0/0
+```
+
+### Command line management
+
+**Scripted connection:**
+```bash
+#!/bin/bash
+# gpuflow-connect.sh
+CONFIG_FILE="$1"
+if [ ! -f "$CONFIG_FILE" ]; then
+    echo "Usage: $0 <config-file>"
+    exit 1
+fi
+
+# Connect and test
+sudo wg-quick up "$CONFIG_FILE"
+sleep 5
+ping -c 3 10.77.0.1 && echo "Connection successful"
+```
+
+**Auto-disconnect timer:**
+```bash
+#!/bin/bash
+# Auto-disconnect after rental expires
+EXPIRES_AT="2024-01-01 15:30:00"
+while [ $(date +%s) -lt $(date -d "$EXPIRES_AT" +%s) ]; do
+    sleep 60
+done
+sudo wg-quick down rental-config
+```
+
+### Integration with system tools
+
+**Network monitoring:**
+```bash
+# Monitor tunnel traffic
+watch -n 1 'sudo wg show'
+
+# Log connection events
+sudo wg show rental-config | logger -t wireguard
+```
+
+**Automatic configuration:**
+```python
+# Python script to handle config import
+import subprocess
+import os
+
+def import_config(config_path):
+    cmd = ['wg-quick', 'up', config_path]
+    result = subprocess.run(cmd, capture_output=True, text=True)
+    return result.returncode == 0
+
+# Usage
+if import_config('/tmp/rental-123.conf'):
+    print("Connected successfully")
+    os.remove('/tmp/rental-123.conf')  # Clean up
+```

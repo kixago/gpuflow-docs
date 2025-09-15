@@ -1,0 +1,134 @@
+---
+title: 'Getting Started'
+description: Browse GPUs, connect your wallet, and complete your first rental.
+sidebar:
+  label: 'Getting Started'
+  order: 1
+---
+{/* File: src/content/docs/renters/getting-started.mdx */}
+
+import { Aside } from '@astrojs/starlight/components';
+
+Rent GPU computing power from providers worldwide using cryptocurrency payments.
+
+## Prerequisites
+
+- Ethereum-compatible wallet (MetaMask, hardware wallet, or multi-sig)
+- Cryptocurrency for payments (MATIC on Polygon recommended)
+- WireGuard client for secure connections
+
+## Browse available GPUs
+
+1. Visit the <a href="https://gpuflow.app/marketplace" target="_blank" rel="noopener noreferrer">marketplace</a>
+2. Filter by specifications:
+   - **VRAM**: Minimum memory required
+   - **Price**: Maximum hourly rate
+   - **Location**: Geographic preference
+   - **Use case**: AI training, mining, rendering
+
+3. View provider details and ratings
+
+## Connect your wallet
+
+<Aside type="note">
+GPUFlow supports multiple wallets per account for flexible payment options.
+</Aside>
+
+### First-time setup
+
+1. Click **Connect Wallet** in the top navigation
+2. Select your wallet provider (MetaMask, WalletConnect, etc.)
+3. Approve the connection request
+4. Switch to a supported network if prompted:
+   - **Polygon Amoy** (testnet)
+   - **Polygon** (mainnet, coming soon)
+
+### Network switching
+
+GPUFlow automatically prompts network changes when required. Always approve network switches to ensure proper payment processing.
+
+## Complete your first rental
+
+### Select a GPU
+
+1. Click **View Details** on any available GPU
+2. Review specifications and hourly rate
+3. Check provider reputation and uptime
+4. Verify the GPU status shows **Online**
+
+### Configure rental
+
+1. Click **Rent Now**
+2. Set rental duration (1-24 hours)
+3. Review cost breakdown:
+   - Base hourly rate
+   - Platform fee (2-3%)
+   - Network gas fees
+
+### Payment process
+
+1. Confirm payment details
+2. Approve transaction in your wallet
+3. Wait for blockchain confirmation
+4. Receive access credentials
+
+<Aside type="tip">
+Transactions on Polygon typically confirm within 30 seconds.
+</Aside>
+
+### Access your rental
+
+Once payment confirms:
+
+1. Download the WireGuard configuration file
+2. Import into your WireGuard client
+3. Connect to establish secure tunnel
+4. Access services through the provided URLs
+
+## Payment methods
+
+### Supported networks
+
+- **Polygon Amoy** (testnet): Free test tokens
+- **Polygon** (mainnet): Low fees, fast confirmation
+
+### Supported tokens
+
+- **MATIC**: Native network token (recommended)
+- **USDC**: Stable USD value
+- **USDT**: Alternative stablecoin
+- **ETH**: Wrapped Ethereum on Polygon
+
+### Multi-wallet configuration
+
+Add multiple payment addresses for:
+- **Hot wallets**: Daily transactions
+- **Hardware wallets**: Large payments
+- **Multi-sig wallets**: Team or DAO usage
+
+## What happens next
+
+After connecting:
+
+1. **Environment setup**: Provider deploys your isolated environment
+2. **Credential delivery**: Receive secure access details
+3. **Active monitoring**: Track usage and remaining time
+4. **Automatic cleanup**: Environment tears down at expiry
+
+Your rental includes:
+- Dedicated GPU allocation
+- Isolated compute environment  
+- Pre-installed software stack
+- Secure network tunnel
+- Real-time usage monitoring
+
+## Getting help
+
+- **Documentation**: Complete guides for all features
+- **Community**: [Discord server](https://discord.gg/gpuflow) for peer support
+- **Support**: [support@gpuflow.app](mailto:support@gpuflow.app) for technical issues
+
+Common first-time issues:
+- **Wallet connection failures**: Clear browser cache and retry
+- **Network switching problems**: Manually add network in wallet settings  
+- **Payment stuck**: Check wallet for pending transactions

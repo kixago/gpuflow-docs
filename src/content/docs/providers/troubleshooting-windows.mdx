@@ -1,0 +1,511 @@
+---
+title: 'Windows Troubleshooting'
+description: Solutions for common Windows-specific GPUFlow provider issues and FAQ.
+sidebar:
+    label: 'Windows Troubleshooting'
+    order: 21
+---
+{/* File: providers/troubleshooting-windows.mdx */}
+
+import { Aside } from '@astrojs/starlight/components';
+
+# Windows Troubleshooting
+
+Solutions for common Windows-specific issues when running GPUFlow providers through WSL2.
+
+## WSL2 Issues
+
+### WSL2 not installed or outdated
+
+**Symptoms:** `wsl --version` command not found or shows old version
+
+**Check WSL2 status:**
+```powershell
+# Run in PowerShell as Administrator
+wsl --status
+wsl --version
+```
+
+**Update WSL2:**
+```powershell
+# Update to latest WSL2
+wsl --update
+
+# Restart WSL2 service
+wsl --shutdown
+# Wait 10 seconds, then restart
+wsl
+```
+
+**Install WSL2 from scratch:**
+```powershell
+# Enable required Windows features
+dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+
+# Restart computer
+# After restart, set WSL2 as default
+wsl --set-default-version 2
+```
+
+### Ubuntu distribution not responding
+
+**Symptoms:** WSL2 hangs on startup or Ubuntu won't launch
+
+**Reset Ubuntu distribution:**
+```powershell
+# Stop all WSL2 instances
+wsl --shutdown
+
+# Reset Ubuntu (this will delete all data in Ubuntu)
+wsl --unregister Ubuntu-22.04
+
+# Reinstall Ubuntu
+wsl --install -d Ubuntu-22.04
+```
+
+**Repair without data loss:**
+```powershell
+# Try terminating specific distribution
+wsl --terminate Ubuntu-22.04
+
+# Restart with verbose logging
+wsl -d Ubuntu-22.04 -v
+```
+
+### WSL2 using too much memory
+
+**Symptoms:** Windows becomes slow, high memory usage by "Vmmem" process
+
+**Create WSL2 configuration file:**
+Create `.wslconfig` in your Windows user folder (`C:\Users\YourUsername\.wslconfig`):
+
+```ini
+[wsl2]
+memory=8GB
+processors=4
+swap=2GB
+localhostForwarding=true
+```
+
+**Apply configuration:**
+```powershell
+wsl --shutdown
+# Wait 10 seconds
+wsl
+```
+
+## NVIDIA Driver Issues (Windows)
+
+### NVIDIA drivers not working in WSL2
+
+**Symptoms:** `nvidia-smi` works in Windows but fails in WSL2
+
+**Verify you have WSL2-specific drivers:**
+1. Open Device Manager in Windows
+2. Expand "Display adapters"
+3. Right-click your NVIDIA GPU
+4. Select "Properties" → "Driver" tab
+5. Driver version should be 470.00+ with "WSL" in description
+
+**Download correct drivers:**
+- Visit [NVIDIA WSL2 driver page](https://developer.nvidia.com/cuda/wsl)
+- Download "NVIDIA Drivers for CUDA on WSL2" (not regular gaming drivers)
+- Uninstall current drivers first if needed
+- Install WSL2 drivers and restart
+
+**Test GPU access in WSL2:**
+```bash
+# In WSL2 Ubuntu
+nvidia-smi
+# Should show GPU information
+
+# Test in container
+docker run --rm --gpus all nvidia/cuda:12.0-base-ubuntu22.04 nvidia-smi
+```
+
+### CUDA version mismatches
+
+**Symptoms:** Container complains about CUDA version incompatibility
+
+**Check versions:**
+```bash
+# In WSL2, check CUDA version
+nvcc --version
+
+# Check driver CUDA version
+nvidia-smi
+```
+
+**Fix version conflicts:**
+```bash
+# Update CUDA in WSL2
+wget https://developer.download.nvidia.com/compute/cuda/repos/wsl-ubuntu/x86_64/cuda-keyring_1.0-1_all.deb
+sudo dpkg -i cuda-keyring_1.0-1_all.deb
+sudo apt update
+sudo apt install cuda-toolkit-12-0
+```
+
+## AMD ROCm Issues (Windows)
+
+### ROCm not detecting GPU in WSL2
+
+**Symptoms:** `rocminfo` shows no GPU or permission errors
+
+**Check Windows AMD drivers:**
+```bash
+# In WSL2, check if GPU is visible
+lspci | grep -i amd
+# Should show your AMD GPU
+
+# Check device files
+ls -la /dev/dri/
+# Should show card0, renderD128, etc.
+```
+
+**Fix device permissions:**
+```bash
+# Fix common permission issues
+sudo chmod 666 /dev/kfd
+sudo chmod 666 /dev/dri/*
+
+# Add user to groups again
+sudo usermod -aG render,video $USER
+
+# Logout and login to WSL2
+exit
+wsl
+```
+
+**Reinstall ROCm if needed:**
+```bash
+# Remove old ROCm installation
+sudo apt remove rocm-dev rocm-libs rocm-utils
+
+# Clean up
+sudo apt autoremove
+sudo apt autoclean
+
+# Reinstall ROCm
+sudo apt install rocm-dev rocm-libs rocm-utils
+
+# Reboot WSL2
+exit
+wsl --shutdown
+wsl
+```
+
+### ROCm containers failing to start
+
+**Symptoms:** AMD containers exit immediately or can't access GPU
+
+**Test minimal ROCm container:**
+```bash
+# Test basic ROCm access
+docker run --rm -it \
+  --device=/dev/dri \
+  --device=/dev/kfd \
+  --group-add video \
+  --group-add render \
+  rocm/pytorch:latest \
+  rocm-smi
+```
+
+**Fix device access:**
+```bash
+# Check device ownership
+ls -la /dev/dri/
+ls -la /dev/kfd
+
+# Add devices to container with proper permissions
+docker run --rm -it \
+  --device=/dev/dri:/dev/dri:rwm \
+  --device=/dev/kfd:/dev/kfd:rwm \
+  --security-opt seccomp=unconfined \
+  --group-add $(getent group video | cut -d: -f3) \
+  --group-add $(getent group render | cut -d: -f3) \
+  rocm/pytorch:latest rocm-smi
+```
+
+## Docker Issues in WSL2
+
+### Docker daemon not starting
+
+**Symptoms:** "Cannot connect to Docker daemon" errors
+
+**Start Docker service:**
+```bash
+# In WSL2 Ubuntu
+sudo service docker start
+
+# Check status
+sudo service docker status
+
+# Enable automatic startup
+echo 'sudo service docker start' >> ~/.bashrc
+```
+
+**Fix common Docker issues:**
+```bash
+# Fix Docker socket permissions
+sudo chmod 666 /var/run/docker.sock
+
+# Restart Docker daemon
+sudo service docker restart
+
+# Test Docker
+docker run hello-world
+```
+
+### Docker containers can't access internet
+
+**Symptoms:** `docker pull` fails, containers can't reach external sites
+
+**Fix DNS in WSL2:**
+```bash
+# Check DNS settings
+cat /etc/resolv.conf
+
+# If DNS is wrong, fix it
+sudo bash -c 'echo "nameserver 8.8.8.8" > /etc/resolv.conf'
+sudo bash -c 'echo "nameserver 8.8.4.4" >> /etc/resolv.conf'
+
+# Restart Docker
+sudo service docker restart
+```
+
+**Windows WSL2 DNS fix:**
+Create or edit `/etc/wsl.conf`:
+```ini
+[network]
+generateResolvConf = false
+```
+
+Then restart WSL2:
+```powershell
+wsl --shutdown
+wsl
+```
+
+## GPUFlow Provider Issues
+
+### Provider not appearing in dashboard
+
+**Symptoms:** Container runs but device doesn't show up to claim
+
+**Check provider logs:**
+```bash
+docker logs gpuflow-provider --tail 20
+```
+
+**Common fixes:**
+
+**API key issues:**
+```bash
+# Verify API key is set
+docker inspect gpuflow-provider | grep GPUFLOW_API_KEY
+
+# Update API key
+docker stop gpuflow-provider
+docker rm gpuflow-provider
+# Re-run docker command with correct API key
+```
+
+**Network connectivity:**
+```bash
+# Test connectivity from within WSL2
+curl -I https://api.gpuflow.app/health
+
+# Test from container
+docker exec gpuflow-provider curl -I https://api.gpuflow.app/health
+```
+
+### Provider keeps restarting
+
+**Symptoms:** Container status shows "Restarting" constantly
+
+**Check system resources:**
+```bash
+# Monitor resource usage
+docker stats gpuflow-provider
+
+# Check available memory
+free -h
+
+# Check disk space
+df -h
+```
+
+**Fix resource limits:**
+```bash
+# Run provider with resource limits
+docker run -d \
+  --name gpuflow-provider \
+  --restart=unless-stopped \
+  --gpus=all \
+  --memory="4g" \
+  --cpus="2.0" \
+  -v /opt/gpuflow:/data \
+  -e GPUFLOW_API_KEY="your-key" \
+  ghcr.io/gpuflow/provider:latest
+```
+
+## Gaming and Provider Conflicts
+
+### Game won't start while provider running
+
+**Symptoms:** Games crash or show GPU errors when provider is active
+
+**Stop provider before gaming:**
+```bash
+# In WSL2, stop provider
+docker stop gpuflow-provider
+
+# After gaming, restart provider
+docker start gpuflow-provider
+```
+
+**Create gaming toggle script:**
+```bash
+# Create gaming mode script
+cat > ~/gaming-mode.sh << 'EOF'
+#!/bin/bash
+echo "Entering gaming mode..."
+docker stop gpuflow-provider
+echo "Provider stopped. GPU available for gaming."
+echo "Run 'docker start gpuflow-provider' to resume providing."
+EOF
+
+chmod +x ~/gaming-mode.sh
+```
+
+### Windows scheduler conflicts
+
+**Symptoms:** Provider stops randomly, especially during Windows updates
+
+**Create persistent startup:**
+```batch
+# Create Windows Task Scheduler entry
+# 1. Open Task Scheduler
+# 2. Create Basic Task
+# 3. Name: "GPUFlow Provider"
+# 4. Trigger: "When the computer starts"
+# 5. Action: "Start a program"
+# 6. Program: wsl
+# 7. Arguments: -d Ubuntu-22.04 -u yourusername /home/yourusername/start-gpuflow.sh
+```
+
+## Windows Performance Issues
+
+### High CPU usage from WSL2
+
+**Symptoms:** Windows becomes slow, high CPU usage from WSL2 processes
+
+**Limit WSL2 CPU usage:**
+Edit `.wslconfig` in Windows user folder:
+```ini
+[wsl2]
+processors=4
+memory=8GB
+```
+
+**Optimize Docker settings:**
+```bash
+# In WSL2, limit Docker resources
+cat > /etc/docker/daemon.json << 'EOF'
+{
+  "default-runtime": "runc",
+  "storage-driver": "overlay2",
+  "log-driver": "json-file",
+  "log-opts": {
+    "max-size": "10m",
+    "max-file": "3"
+  }
+}
+EOF
+
+sudo service docker restart
+```
+
+### Disk space issues
+
+**Symptoms:** WSL2 using excessive disk space
+
+**Clean up Docker:**
+```bash
+# Remove unused Docker data
+docker system prune -a
+
+# Remove unused volumes
+docker volume prune
+
+# Check disk usage
+docker system df
+```
+
+**Clean WSL2 disk:**
+```powershell
+# In PowerShell, compact WSL2 disk
+wsl --shutdown
+diskpart
+# In diskpart:
+select vdisk file="C:\Users\YourUsername\AppData\Local\Packages\CanonicalGroupLimited.Ubuntu22.04LTS_79rhkp1fndgsc\LocalState\ext4.vhdx"
+compact vdisk
+exit
+```
+
+## Frequently Asked Questions
+
+### Can I use my GPU for gaming while providing?
+
+No, you need to stop the provider before gaming. The GPU cannot be shared between Windows games and Linux containers simultaneously.
+
+### How much performance impact does WSL2 have?
+
+WSL2 adds minimal overhead (1-3%) for GPU workloads but uses 1-2GB extra RAM. The provider itself uses minimal resources when idle.
+
+### Can I run multiple providers on different GPUs?
+
+Yes, if you have multiple GPUs, you can run separate provider containers for each GPU using device-specific mappings.
+
+### Will this interfere with Windows updates?
+
+Windows updates may restart WSL2. Set up automatic startup scripts to resume the provider after reboots.
+
+### Is this setup secure?
+
+Yes, containers are isolated from your Windows system. GPU access is managed safely through WSL2's virtualization layer.
+
+## Getting Additional Help
+
+### Collect diagnostic information
+
+Before contacting support, gather:
+
+```powershell
+# Windows information
+winver
+systeminfo | findstr "Total Physical Memory"
+
+# WSL2 information
+wsl --version
+wsl --status
+```
+
+```bash
+# In WSL2 Ubuntu
+uname -a
+docker --version
+nvidia-smi  # or rocm-smi for AMD
+docker logs gpuflow-provider --tail 50
+```
+
+### Windows-specific support channels
+
+- **Community Discord**: `#windows-support` channel
+- **Email support**: Include "Windows WSL2" in subject line
+- **Forum**: [Windows Provider Support](https://forum.gpuflow.app/windows)
+
+<Aside type="tip">
+Most Windows issues stem from WSL2 configuration or driver problems. Check the WSL2 and driver sections first before investigating container-specific issues.
+</Aside>

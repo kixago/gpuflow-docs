@@ -1,0 +1,314 @@
+---
+title: 'Wallet Management'
+description: Configure multiple wallet addresses, set payment preferences, and manage wallet connections for optimal earnings and security.
+sidebar:
+    label: 'Wallet Management'
+    order: 13
+---
+{/* File: providers/configuration/wallet-management.mdx */}
+
+import { Aside } from '@astrojs/starlight/components';
+
+Configure multiple wallet addresses to separate authentication, payments, and security while maintaining flexible earnings management.
+
+## Wallet Types and Purposes
+
+### Authentication vs Payment Wallets
+
+**Connected Wallet (Authentication):**
+- Used for platform login and identity verification
+- Signs transactions and proves ownership
+- Can change when switching wallets in MetaMask/WalletConnect
+- Does not need to hold funds or receive payments
+
+**Payment Wallet (Earnings):**
+- Receives all rental earnings and mining profits
+- Can be different from connected wallet
+- Supports cold storage, multi-sig, and hardware wallets
+- Remains stable regardless of authentication wallet changes
+
+**Separation Benefits:**
+- Use MetaMask for daily operations, hardware wallet for earnings
+- Corporate users: Authentication with personal wallet, payments to company wallet
+- Security: Hot wallet for access, cold storage for accumulation
+- Privacy: Public authentication wallet, private earnings wallet
+
+## Wallet Configuration
+
+### Initial Setup
+
+**Default Behavior:**
+- Payment wallet automatically set to connected wallet address
+- All earnings flow to the wallet you use for authentication
+- No additional configuration required for basic operation
+
+**Access Configuration:**
+1. Navigate to **Dashboard → Settings → Wallet Management**
+2. View current connected wallet and payment settings
+3. Modify payment destination as needed
+
+### Adding Multiple Wallets
+
+**Wallet Collection Management:**
+```
+Connected Wallets Display:
+├── Primary: 0xA1b2...c3D4 (Currently Connected)
+│   ├── Status: Active authentication wallet
+│   ├── Label: "MetaMask Daily"
+│   └── Type: Hot wallet
+├── Payment: 0xE5f6...G7h8 (Earnings Destination)
+│   ├── Status: Receives all payments
+│   ├── Label: "Ledger Cold Storage"
+│   └── Type: Hardware wallet
+└── Historical: 0xI9j0...K1l2 (Previously Connected)
+    ├── Status: Inactive, can reconnect
+    ├── Label: "Old MetaMask"
+    └── Type: Hot wallet
+```
+
+**Adding New Wallets:**
+1. Click **"Add Wallet Address"** in wallet management
+2. Enter wallet address manually or connect with provider
+3. Set descriptive label: "Hardware Wallet", "Company Treasury", "Cold Storage"
+4. Choose wallet type: Hot, Hardware, Cold Storage, Multi-sig
+5. Specify purpose: Authentication, Payments, Both
+
+### Wallet Switching Scenarios
+
+**Scenario 1: New Connected Wallet (Same User)**
+- Connect with different MetaMask account
+- System detects new wallet address
+- Options presented:
+  - **Keep current payment wallet**: Earnings continue to original address
+  - **Switch payment to new wallet**: Update earnings destination
+  - **Add to wallet collection**: Save new address for future use
+
+**Scenario 2: Returning Wallet**
+- Connect with previously used wallet
+- System recognizes address from history
+- Automatic restoration of previous settings and preferences
+- Payment wallet remains unchanged unless explicitly modified
+
+**Scenario 3: First-Time Connection**
+- New wallet address never seen before
+- Payment wallet automatically set to connected address
+- User prompted to add label and configure preferences
+- Settings can be modified immediately in dashboard
+
+<Aside type="tip">
+Use descriptive labels for multiple wallets: "Gaming Rig Earnings", "Mining Farm Primary", "Company Multi-sig". Clear labeling prevents payment mistakes.
+</Aside>
+
+## Payment Destination Management
+
+### Setting Custom Payment Address
+
+**Manual Address Entry:**
+1. **Dashboard → Settings → Wallet Management**
+2. **Payment Preferences → Custom Payment Address**
+3. Enter desired wallet address for earnings
+4. Verify address accuracy (irreversible after earnings sent)
+5. Confirm with connected wallet signature
+
+**Validation Requirements:**
+- Must be valid Ethereum/Polygon address format (0x...)
+- Cannot be zero address or smart contract (unless multi-sig)
+- Warning displayed for non-ERC-20 compatible addresses
+- Confirmation required for addresses not in wallet collection
+
+**Address Verification:**
+```
+Validation Checks:
+✓ Valid address format (42 characters, starts with 0x)
+✓ Valid checksum (prevents typos)
+✓ Compatible with network (Ethereum, Polygon, etc.)
+⚠ Warning for exchange addresses (may not support direct deposits)
+⚠ Confirmation for smart contracts (ensure compatibility)
+```
+
+### Hardware Wallet Integration
+
+**Ledger/Trezor Setup:**
+1. Generate receiving address on hardware device
+2. Copy address from device (never type manually)
+3. Add to GPUFlow wallet collection with "Hardware Wallet" label
+4. Set as payment destination in settings
+5. Verify first small payment before full operation
+
+**Multi-Signature Wallets:**
+- Gnosis Safe and similar multi-sig contracts supported
+- Enter multi-sig contract address as payment destination
+- Ensure all signers can access funds for withdrawal
+- Test with small amount before setting as primary earnings wallet
+
+## Connection Troubleshooting
+
+### Wallet Connection Issues
+
+**Common Connection Problems:**
+```
+Issue: "Wallet not connecting"
+Solution: Clear browser cache, disable conflicting wallet extensions
+
+Issue: "Wrong network selected"
+Solution: Switch to supported network (Ethereum, Polygon, etc.) in wallet
+
+Issue: "Transaction rejected"
+Solution: Check gas settings, ensure sufficient balance for transaction fees
+
+Issue: "Address not recognized"
+Solution: Verify wallet is connected, refresh page, reconnect if needed
+```
+
+**Network Configuration:**
+- Supported networks: Ethereum Mainnet, Polygon, Arbitrum
+- Automatic network detection and switching prompts
+- Gas fee estimation for transaction confirmation
+- Fallback to manual network selection if auto-detection fails
+
+### Recovery Procedures
+
+**Lost Access to Connected Wallet:**
+1. Connect with alternative wallet from your collection
+2. Verify identity using previous transaction signatures
+3. Contact support with ownership proof if needed
+4. Update payment settings to accessible wallet
+
+**Payment Wallet Compromise:**
+1. Immediately change payment destination to secure wallet
+2. Monitor existing payments in blockchain explorer
+3. Withdraw any pending earnings to safe address
+4. Update all wallet labels and security settings
+
+<Aside type="caution">
+Never enter private keys or seed phrases into GPUFlow interface. Platform only needs wallet addresses for payments and signatures for authentication.
+</Aside>
+
+## Enterprise and Advanced Use Cases
+
+### Corporate Wallet Management
+
+**Treasury Integration:**
+- Connect with individual employee wallet for authentication
+- Set payment destination to corporate treasury address
+- Use corporate multi-sig for earnings accumulation
+- Maintain employee access for daily operations
+
+**Department Allocation:**
+```
+Example Setup:
+├── Authentication: employee@company.com wallet
+├── Payments: company-treasury.eth multi-sig
+├── Backup Auth: department-lead.eth wallet
+└── Emergency: founder-hardware-wallet.eth
+```
+
+### Multi-Provider Operations
+
+**Fleet Management:**
+- Use single authentication wallet across multiple GPUs
+- Set individual payment destinations per GPU/location
+- Centralized monitoring with distributed earnings
+- Geographic compliance with local payment addresses
+
+**Scaling Strategies:**
+1. **Centralized**: All earnings to single corporate wallet
+2. **Distributed**: Regional wallets for tax/regulatory compliance
+3. **Hybrid**: Authentication centralized, payments localized
+
+## Security Best Practices
+
+### Wallet Security Hierarchy
+
+**Security Levels (Highest to Lowest):**
+1. **Hardware wallets**: Ledger, Trezor for large amounts
+2. **Multi-signature**: Gnosis Safe, distributed control
+3. **Cold storage**: Air-gapped wallet generation
+4. **Hot wallets**: MetaMask, daily operation only
+
+**Risk Management:**
+- Never use same wallet for authentication and large earnings storage
+- Regularly rotate hot wallet addresses (monthly)
+- Use minimum required balance in authentication wallet
+- Monitor all wallet addresses for unauthorized transactions
+
+### Access Control
+
+**Authentication Security:**
+- Enable 2FA on all wallet providers
+- Use strong, unique passwords for each service
+- Regular backup of recovery phrases (secure, offline storage)
+- Monitor for phishing attempts and suspicious emails
+
+**Payment Protection:**
+- Verify payment addresses before each update
+- Use address book features to prevent typos
+- Set up transaction alerts for earnings wallets
+- Regular balance reconciliation with platform earnings reports
+
+<Aside type="note">
+Optimal security: Use MetaMask for authentication, hardware wallet for earnings. This separation protects your accumulated earnings while maintaining convenient platform access.
+</Aside>
+
+## Monitoring and Maintenance
+
+### Payment Tracking
+
+**Earnings Verification:**
+- **Dashboard → Earnings** shows pending and completed payments
+- Cross-reference with blockchain explorer for transaction confirmation
+- Track payment timing: Weekly automated payments typical
+- Monitor for delays or discrepancies requiring support contact
+
+**Multi-Wallet Monitoring:**
+```
+Payment Dashboard Example:
+├── Current Week Earnings: $127.50 (pending)
+├── Payment Destination: hardware-wallet.eth
+├── Last Payment: $98.75 sent 7 days ago
+├── Transaction Hash: 0xabc123...def789
+└── Next Payment: Estimated in 2 days
+```
+
+### Wallet Health Checks
+
+**Regular Maintenance:**
+- Monthly verification of payment addresses
+- Quarterly security review of wallet access methods
+- Annual backup verification and recovery testing
+- Continuous monitoring for unusual transaction patterns
+
+**Performance Optimization:**
+- Gas fee optimization for payment transactions
+- Network selection based on current congestion
+- Batch payment consolidation where possible
+- Tax reporting preparation and documentation
+
+### Troubleshooting Guide
+
+**Payment Issues:**
+```
+Problem: Payments not arriving
+Check: Payment destination address correct
+Verify: Network congestion or delays
+Review: Transaction hash in blockchain explorer
+Contact: Support if payment missing >48 hours
+
+Problem: Cannot change payment address
+Check: Connected wallet has permissions
+Verify: Network connection and gas balance
+Review: Address format and validation
+Try: Clear cache, reconnect wallet
+```
+
+**Connection Recovery:**
+```
+Problem: Wallet history lost
+Solution: Reconnect all previous wallets to restore settings
+
+Problem: Payment address inaccessible
+Solution: Update to accessible wallet immediately
+
+Problem: Multi-sig approval issues
+Solution: Coordinate with co-signers for transaction approval
+```

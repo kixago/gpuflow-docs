@@ -1,0 +1,278 @@
+---
+title: 'Windows NVIDIA Setup'
+description: Install GPUFlow on Windows systems with NVIDIA GPUs using WSL2 and container runtime.
+sidebar:
+    label: 'Windows + NVIDIA'
+    order: 6
+---
+{/* File: providers/installation/windows/nvidia.mdx */}
+
+import { Aside } from '@astrojs/starlight/components';
+
+Run GPUFlow on Windows with NVIDIA GPUs using Windows Subsystem for Linux 2 (WSL2). This setup allows your Windows PC to act as a GPU provider while maintaining normal Windows functionality.
+
+<Aside type="note">
+Windows support uses WSL2 to run Linux containers with GPU access. Your Windows system continues to work normally while earning from your GPU during idle time.
+</Aside>
+
+## Prerequisites
+
+Before starting, verify your system meets these requirements:
+
+- **Windows 10 version 2004+** or **Windows 11** (any version)
+- **NVIDIA GPU** with 8GB+ VRAM (GTX 1060 or newer)
+- **16GB+ system RAM** (32GB recommended)
+- **Administrator access** to install software
+- **Stable internet** connection (25+ Mbps upload)
+
+## Step 1: Check Windows version
+
+Open PowerShell as Administrator and check your Windows version:
+
+```powershell
+# Check Windows version
+winver
+
+# Check Windows build number
+[System.Environment]::OSVersion.Version
+```
+
+You need Windows 10 build 19041 or newer, or any Windows 11 version.
+
+## Step 2: Enable WSL2
+
+WSL2 is required for GPU passthrough to Linux containers.
+
+**Install WSL2:**
+```powershell
+# Run as Administrator
+wsl --install
+
+# Restart your computer when prompted
+```
+
+**After restart, verify WSL2 installation:**
+```powershell
+wsl --version
+```
+
+You should see WSL version 1.0.0 or newer.
+
+## Step 3: Install Ubuntu on WSL2
+
+Install Ubuntu as your Linux distribution:
+
+```powershell
+# Install Ubuntu 22.04 LTS
+wsl --install -d Ubuntu-22.04
+
+# Set Ubuntu as default
+wsl --set-default Ubuntu-22.04
+```
+
+**Set up Ubuntu:**
+1. Launch Ubuntu from Start menu
+2. Create a username and password when prompted
+3. Wait for initial setup to complete
+
+## Step 4: Install NVIDIA drivers for Windows
+
+Install NVIDIA drivers that support WSL2:
+
+1. Visit [NVIDIA's WSL2 driver page](https://developer.nvidia.com/cuda/wsl)
+2. Download **NVIDIA Drivers for CUDA on WSL2**
+3. Run the installer as Administrator
+4. Restart your computer
+
+<Aside type="caution">
+Use the special WSL2 drivers, not regular Windows game drivers. WSL2 drivers support both Windows gaming and Linux container GPU access.
+</Aside>
+
+## Step 5: Configure WSL2 with GPU support
+
+**Verify GPU access in WSL2:**
+```bash
+# Launch WSL2 Ubuntu
+wsl
+
+# Check if GPU is visible
+lspci | grep -i nvidia
+```
+
+**Update Ubuntu packages:**
+```bash
+# Update package lists
+sudo apt update && sudo apt upgrade -y
+
+# Install essential packages
+sudo apt install curl wget software-properties-common
+```
+
+## Step 6: Install NVIDIA Container Toolkit in WSL2
+
+Install the container toolkit inside your WSL2 Ubuntu environment:
+
+```bash
+# Add NVIDIA repository
+distribution=$(. /etc/os-release;echo $ID$VERSION_ID) \
+    && curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg \
+    && curl -s -L https://nvidia.github.io/libnvidia-container/$distribution/libnvidia-container.list | \
+        sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | \
+        sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+
+# Install toolkit
+sudo apt update
+sudo apt install nvidia-container-toolkit
+```
+
+## Step 7: Install Docker in WSL2
+
+Install Docker inside your WSL2 Ubuntu environment:
+
+```bash
+# Install Docker
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
+
+# Add your user to docker group
+sudo usermod -aG docker $USER
+
+# Start Docker service
+sudo service docker start
+```
+
+**Configure Docker for NVIDIA GPUs:**
+```bash
+# Configure NVIDIA runtime
+sudo nvidia-ctk runtime configure --runtime=docker
+
+# Restart Docker
+sudo service docker restart
+```
+
+## Step 8: Test GPU access in containers
+
+Verify that containers can access your NVIDIA GPU:
+
+```bash
+# Test GPU access
+docker run --rm --gpus all nvidia/cuda:12.0-base-ubuntu22.04 nvidia-smi
+```
+
+You should see your GPU information displayed, confirming GPU passthrough works.
+
+## Step 9: Deploy GPUFlow provider
+
+**Create data directory:**
+```bash
+sudo mkdir -p /opt/gpuflow
+sudo chown $USER:$USER /opt/gpuflow
+```
+
+**Run GPUFlow provider:**
+```bash
+docker run -d \
+  --name gpuflow-provider \
+  --restart=unless-stopped \
+  --gpus=all \
+  --network=host \
+  -v /opt/gpuflow:/data \
+  -e GPUFLOW_API_KEY="get-from-dashboard" \
+  ghcr.io/gpuflow/provider:latest
+```
+
+**Verify provider is running:**
+```bash
+docker ps
+docker logs gpuflow-provider
+```
+
+Look for these success messages in the logs:
+- GPU detection successful
+- Network connectivity established
+- Provider registered with GPUFlow
+
+## Step 10: Auto-start services
+
+Configure services to start automatically when Windows boots:
+
+**Create startup script:**
+```bash
+# Create startup script
+cat > ~/start-gpuflow.sh << 'EOF'
+#!/bin/bash
+sudo service docker start
+sleep 5
+docker start gpuflow-provider
+EOF
+
+chmod +x ~/start-gpuflow.sh
+```
+
+**Add to Windows startup:**
+1. Press `Win + R`, type `shell:startup`, press Enter
+2. Create a new file called `GPUFlow.bat` with this content:
+```batch
+@echo off
+wsl -d Ubuntu-22.04 -u your-username /home/your-username/start-gpuflow.sh
+```
+3. Replace `your-username` with your actual WSL2 username
+
+## Managing your provider
+
+Common management commands (run in WSL2):
+
+```bash
+# Check provider status
+docker ps
+
+# View logs
+docker logs gpuflow-provider -f
+
+# Restart provider
+docker restart gpuflow-provider
+
+# Stop provider (to use GPU for gaming)
+docker stop gpuflow-provider
+
+# Start provider again
+docker start gpuflow-provider
+```
+
+## Performance considerations
+
+**Resource allocation:**
+- WSL2 uses about 1-2GB RAM overhead
+- GPU switching between Windows and containers is seamless
+- Negligible performance impact on Windows gaming
+
+**Gaming while providing:**
+- Stop the provider before launching games: `docker stop gpuflow-provider`
+- Start provider after gaming: `docker start gpuflow-provider`
+- Consider scheduling based on your gaming hours
+
+## Next steps
+
+Your Windows NVIDIA provider is now running:
+
+1. [Create your GPUFlow account](/providers/configuration/account-setup)
+2. Claim your hardware in the dashboard
+3. [Configure your GPU listings](/providers/configuration/creating-listings)
+4. [Set up Windows-specific automation](/providers/configuration/windows-automation)
+
+## Monitoring and optimization
+
+**Check system resource usage:**
+```bash
+# In WSL2, monitor container resources
+docker stats gpuflow-provider
+```
+
+**Windows Task Manager:**
+- GPU usage appears under "GPU Engine" tabs
+- WSL2 appears as "Vmmem" process in memory usage
+- Docker containers don't appear directly in Windows processes
+
+<Aside type="tip">
+For troubleshooting Windows-specific issues, see our [Windows troubleshooting guide](/providers/troubleshooting-windows).
+</Aside>

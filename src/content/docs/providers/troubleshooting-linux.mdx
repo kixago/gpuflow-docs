@@ -1,0 +1,355 @@
+---
+title: 'Troubleshooting'
+description: Solutions for common GPUFlow provider setup and operational issues.
+sidebar:
+    label: 'Troubleshooting'
+    order: 20
+---
+{/* File: providers/troubleshooting.mdx */}
+
+import { Aside } from '@astrojs/starlight/components';
+
+# Troubleshooting
+
+Solutions for common issues when setting up and running GPUFlow providers.
+
+## Container Issues
+
+### Container won't start
+
+**Symptoms:** Container exits immediately or fails to start
+
+**Solutions:**
+
+Check container logs first:
+```bash
+# Docker
+docker logs gpuflow-provider
+
+# Podman
+podman logs gpuflow-provider
+```
+
+Common causes and fixes:
+
+**Missing API key:**
+```bash
+# Set the API key environment variable
+docker run -d \
+  --name gpuflow-provider \
+  -e GPUFLOW_API_KEY="your-actual-key-here" \
+  [other options...]
+```
+
+**Permission errors:**
+```bash
+# Fix data directory permissions
+sudo chown -R $USER:$USER /opt/gpuflow
+chmod 755 /opt/gpuflow
+```
+
+**Port conflicts:**
+```bash
+# Check what's using port 8080
+sudo lsof -i :8080
+sudo systemctl stop [conflicting-service]
+```
+
+### GPU not detected in container
+
+**Symptoms:** Container starts but can't see GPU
+
+**For NVIDIA GPUs:**
+
+Check GPU is visible on host:
+```bash
+nvidia-smi
+```
+
+Test GPU in container:
+```bash
+# Docker
+docker run --rm --gpus all nvidia/cuda:12.0-base-ubuntu22.04 nvidia-smi
+
+# Podman
+podman run --rm --device nvidia.com/gpu=all nvidia/cuda:12.0-base-ubuntu22.04 nvidia-smi
+```
+
+If GPU test fails:
+
+**Regenerate CDI specification (Podman):**
+```bash
+sudo nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml --force
+podman restart gpuflow-provider
+```
+
+**Restart Docker daemon (Docker):**
+```bash
+sudo nvidia-ctk runtime configure --runtime=docker
+sudo systemctl restart docker
+docker restart gpuflow-provider
+```
+
+**For AMD GPUs:**
+
+Verify ROCm installation:
+```bash
+rocm-smi
+```
+
+Check device permissions:
+```bash
+ls -la /dev/dri/
+# Your user should be in 'render' and 'video' groups
+groups $USER
+```
+
+Add missing groups:
+```bash
+sudo usermod -aG render,video $USER
+# Log out and back in
+```
+
+## Network Connectivity Issues
+
+### Provider can't reach GPUFlow API
+
+**Symptoms:** Logs show connection errors or timeouts
+
+**Check network connectivity:**
+```bash
+# Test basic connectivity
+curl -I https://api.gpuflow.app/health
+
+# Check DNS resolution
+nslookup api.gpuflow.app
+
+# Test from within container
+docker exec gpuflow-provider curl -I https://api.gpuflow.app/health
+```
+
+**Firewall configuration:**
+```bash
+# Allow outbound HTTPS
+sudo ufw allow out 443
+sudo ufw allow out 80
+
+# For enterprise firewalls, whitelist:
+# api.gpuflow.app (port 443)
+# dashboard.gpuflow.app (port 443)
+```
+
+### Hardware not appearing in dashboard
+
+**Symptoms:** Provider runs but device doesn't show in "Available to Claim"
+
+**Verify provider registration:**
+```bash
+# Check logs for registration success
+docker logs gpuflow-provider | grep -i registration
+podman logs gpuflow-provider | grep -i registration
+```
+
+**Check API key:**
+```bash
+# Verify API key is set correctly
+docker inspect gpuflow-provider | grep GPUFLOW_API_KEY
+podman inspect gpuflow-provider | grep GPUFLOW_API_KEY
+```
+
+**Force re-registration:**
+```bash
+# Stop and remove container
+docker stop gpuflow-provider
+docker rm gpuflow-provider
+
+# Clear data directory
+rm -rf /opt/gpuflow/*
+
+# Redeploy with fresh registration
+# [Re-run your docker/podman run command]
+```
+
+## Performance Issues
+
+### High CPU usage
+
+**Symptoms:** System becomes slow, high CPU usage from container
+
+**Check resource limits:**
+```bash
+# Monitor container resources
+docker stats gpuflow-provider
+podman stats gpuflow-provider
+```
+
+**Set resource limits:**
+```bash
+# Add limits to container run command
+docker run -d \
+  --cpus="2.0" \
+  --memory="4g" \
+  [other options...]
+```
+
+### GPU overheating
+
+**Symptoms:** GPU temperatures over 85°C, thermal throttling
+
+**Monitor temperatures:**
+```bash
+# NVIDIA
+watch -n 1 nvidia-smi
+
+# AMD
+watch -n 1 rocm-smi
+```
+
+**Solutions:**
+- Check case airflow and clean dust from fans
+- Reduce GPU power limit if necessary
+- Pause listings during high ambient temperatures
+- Consider undervolting GPU for better efficiency
+
+### Slow network performance
+
+**Symptoms:** Renters report slow file transfers or high latency
+
+**Test network speed:**
+```bash
+# Install speedtest
+sudo apt install speedtest-cli  # Ubuntu/Debian
+sudo dnf install speedtest-cli  # Fedora
+
+# Run speed test
+speedtest-cli
+```
+
+**Optimize network:**
+- Use wired ethernet instead of WiFi
+- Check for ISP throttling during peak hours
+- Consider business internet for better uptime
+- Monitor bandwidth usage in dashboard
+
+## Payment and Account Issues
+
+### Payments not being processed
+
+**Symptoms:** Earnings not arriving, payment status stuck
+
+**Check payment settings:**
+1. Verify wallet address is correct in dashboard
+2. Ensure selected network has sufficient gas for transactions
+3. Check minimum payout threshold ($25 equivalent)
+
+**Network-specific troubleshooting:**
+
+**Polygon:** Usually processes within 5 minutes
+**Ethereum:** May take 15-30 minutes during network congestion  
+**Arbitrum/Base:** Typically fast but check for network maintenance
+
+### Account verification issues
+
+**Common KYC problems:**
+
+**Document upload fails:**
+- Use high-resolution photos
+- Ensure all document corners are visible
+- Avoid glare or shadows
+- Supported formats: JPG, PNG, PDF
+
+**Address verification rejected:**
+- Document must be less than 3 months old
+- Name must match account registration
+- Utility bills, bank statements, or government mail accepted
+
+## Hardware-Specific Issues
+
+### NVIDIA driver problems
+
+**Driver version conflicts:**
+```bash
+# Check current driver version
+nvidia-smi
+
+# Remove old drivers (if needed)
+sudo apt purge nvidia-*
+sudo apt autoremove
+
+# Install latest stable driver
+sudo apt install nvidia-driver-535
+sudo reboot
+```
+
+**CUDA version mismatches:**
+```bash
+# Check CUDA version
+nvcc --version
+
+# Update CUDA toolkit if needed
+wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.0-1_all.deb
+sudo dpkg -i cuda-keyring_1.0-1_all.deb
+sudo apt update
+sudo apt install cuda
+```
+
+### AMD ROCm issues
+
+**ROCm not detecting GPU:**
+```bash
+# Check GPU compatibility
+/opt/rocm/bin/rocminfo
+
+# Reinstall ROCm if needed
+sudo apt remove rocm-smi-lib
+sudo apt install rocm-smi-lib
+```
+
+**Permission errors:**
+```bash
+# Fix device permissions
+sudo chmod 666 /dev/kfd
+sudo chmod 666 /dev/dri/*
+```
+
+## Getting Additional Help
+
+### Collect diagnostic information
+
+Before contacting support, gather this information:
+
+```bash
+# System information
+uname -a
+lspci | grep -i gpu
+free -h
+df -h
+
+# Container information
+docker --version  # or podman --version
+docker ps -a
+docker logs gpuflow-provider --tail=50
+
+# GPU information
+nvidia-smi  # or rocm-smi for AMD
+```
+
+### Contact support channels
+
+**Community support:**
+- [GPUFlow Discord](https://discord.gg/gpuflow) - Real-time community help
+- [Community forum](https://forum.gpuflow.app) - Searchable Q&A
+
+**Official support:**
+- Email: [support@gpuflow.app](mailto:support@gpuflow.app)
+- Response time: 24-48 hours
+- Include diagnostic information above
+
+**Emergency issues:**
+- Provider completely offline for 4+ hours
+- Suspected security compromise  
+- Payment processing errors
+
+<Aside type="tip">
+Most issues are resolved within 15 minutes using the solutions above. Check logs first, then try the relevant troubleshooting steps.
+</Aside>

@@ -1,0 +1,474 @@
+---
+title: 'Use Cases'
+description: AI training, mining, rendering, and gaming on rented GPUs.
+sidebar:
+  label: 'Use Cases'
+  order: 6
+---
+{/* File: src/content/docs/renters/use-cases.mdx */}
+
+import { Aside } from '@astrojs/starlight/components';
+
+Common applications and workflows for rented GPU computing power.
+
+## AI model training
+
+### Machine learning workflows
+
+**Deep learning frameworks:**
+- PyTorch with CUDA acceleration
+- TensorFlow/Keras GPU support
+- JAX for research workflows
+- Hugging Face Transformers
+
+**Pre-installed libraries:**
+```python
+# Verify GPU availability
+import torch
+print(torch.cuda.is_available())
+print(torch.cuda.get_device_name())
+
+# Common ML stack
+import tensorflow as tf
+import pandas as pd
+import numpy as np
+import sklearn
+```
+
+**Training optimization:**
+- Mixed precision training for faster performance
+- Gradient accumulation for large batch sizes
+- Model checkpointing for long training runs
+- TensorBoard monitoring for loss tracking
+
+### Popular model types
+
+**Computer vision:**
+- Image classification (ResNet, EfficientNet)
+- Object detection (YOLO, R-CNN)
+- Semantic segmentation (U-Net, DeepLab)
+- Generative models (StyleGAN, DCGAN)
+
+**Natural language processing:**
+- Transformer fine-tuning (BERT, GPT)
+- Language model training
+- Text generation and completion
+- Sentiment analysis and classification
+
+**Time series and forecasting:**
+- LSTM and GRU networks
+- Transformer architectures for sequences
+- Financial market prediction
+- Demand forecasting models
+
+### Training best practices
+
+**Resource management:**
+```python
+# Monitor GPU memory usage
+import torch
+print(f"Allocated: {torch.cuda.memory_allocated()}")
+print(f"Cached: {torch.cuda.memory_reserved()}")
+
+# Clear cache when needed
+torch.cuda.empty_cache()
+
+# Use gradient accumulation for large models
+for i, batch in enumerate(dataloader):
+    loss = model(batch)
+    loss = loss / accumulation_steps
+    loss.backward()
+    
+    if (i + 1) % accumulation_steps == 0:
+        optimizer.step()
+        optimizer.zero_grad()
+```
+
+**Checkpointing:**
+```python
+# Save model checkpoints regularly
+if epoch % save_frequency == 0:
+    torch.save({
+        'epoch': epoch,
+        'model_state_dict': model.state_dict(),
+        'optimizer_state_dict': optimizer.state_dict(),
+        'loss': loss,
+    }, f'/workspace/checkpoint_epoch_{epoch}.pth')
+```
+
+## Stable Diffusion and image generation
+
+### Pre-configured environments
+
+**Automatic1111 WebUI:**
+- Access via `http://10.77.x.2:7860`
+- 100+ pre-installed models
+- Extensions for enhanced functionality
+- ControlNet for guided generation
+
+**ComfyUI:**
+- Node-based workflow interface
+- Advanced model chaining
+- Custom node support
+- Real-time parameter adjustment
+
+### Model management
+
+**Popular models included:**
+- Stable Diffusion 1.5 and 2.1
+- SDXL (Stable Diffusion XL)
+- Realistic Vision
+- DreamShaper
+- Anything V3/V4/V5
+
+**Custom model installation:**
+```bash
+# Download models to appropriate directories
+cd /workspace/stable-diffusion-webui/models/Stable-diffusion/
+wget https://huggingface.co/runwayml/stable-diffusion-v1-5/resolve/main/v1-5-pruned.ckpt
+
+# For ComfyUI
+cd /workspace/ComfyUI/models/checkpoints/
+wget https://example.com/custom-model.safetensors
+```
+
+### Advanced techniques
+
+**ControlNet workflows:**
+- Pose-guided generation
+- Depth map conditioning
+- Edge detection guidance
+- Style transfer applications
+
+**LoRA fine-tuning:**
+- Character-specific training
+- Style adaptation
+- Concept reinforcement
+- Efficient model customization
+
+**Upscaling and enhancement:**
+- Real-ESRGAN integration
+- GFPGAN face restoration
+- CodeFormer enhancement
+- Custom upscaling models
+
+## Cryptocurrency mining
+
+### Pre-configured miners
+
+**GPU miners included:**
+- T-Rex (NVIDIA optimized)
+- TeamRedMiner (AMD optimized)
+- lolMiner (dual mining support)
+- NBMiner (LHR bypass)
+
+**CPU miners:**
+- XMRig (Monero optimized)
+- CPUMiner (general purpose)
+- SRBMiner (multi-algorithm)
+
+### Mining setup
+
+**Auto-configuration:**
+```bash
+# Check available miners
+ls /opt/miners/
+
+# T-Rex for NVIDIA cards
+/opt/miners/t-rex/t-rex -a ethash -o stratum+tcp://pool:4444 -u wallet -w worker
+
+# TeamRedMiner for AMD
+/opt/miners/teamredminer/teamredminer -a ethash -o stratum+tcp://pool:4444 -u wallet
+```
+
+**Pool configuration:**
+- Pre-configured pool lists
+- Automatic failover support
+- Regional pool optimization
+- SSL/TLS encrypted connections
+
+### Profitability optimization
+
+**Algorithm switching:**
+- Automatic profit switching
+- Market condition monitoring
+- Real-time profitability calculation
+- Multi-pool support
+
+**Performance tuning:**
+```bash
+# NVIDIA optimization
+nvidia-smi -pm 1  # Enable persistence mode
+nvidia-smi -pl 250  # Set power limit
+
+# Memory clock optimization
+nvidia-settings -a [gpu:0]/GPUMemoryTransferRate[3]=8000
+
+# Monitor performance
+watch -n 1 nvidia-smi
+```
+
+**Earnings tracking:**
+- Real-time hashrate monitoring
+- Pool statistics integration
+- Profitability calculators
+- Historical performance data
+
+<Aside type="note">
+Mining profitability varies with market conditions. Always verify current rates before starting extended mining sessions.
+</Aside>
+
+## 3D rendering and visualization
+
+### Rendering engines
+
+**Blender integration:**
+- CUDA/OpenCL acceleration
+- Cycles and Eevee renderers
+- GPU-accelerated viewport
+- OptiX denoising support
+
+**Other rendering software:**
+- Cinema 4D with Redshift
+- Autodesk Maya with Arnold
+- 3ds Max with V-Ray
+- Houdini with Mantra/Karma
+
+### Rendering workflows
+
+**Animation rendering:**
+```bash
+# Command-line Blender rendering
+blender -b scene.blend -o /workspace/render/frame_#### -s 1 -e 250 -a
+
+# GPU-specific optimization
+blender -b scene.blend -P gpu_render_script.py
+```
+
+**Batch processing:**
+```python
+# Python script for batch rendering
+import bpy
+import os
+
+# Set GPU rendering
+bpy.context.preferences.addons['cycles'].preferences.compute_device_type = 'CUDA'
+bpy.context.preferences.addons['cycles'].preferences.get_devices()
+
+# Render multiple scenes
+scene_files = ['/workspace/scene1.blend', '/workspace/scene2.blend']
+for scene in scene_files:
+    bpy.ops.wm.open_mainfile(filepath=scene)
+    bpy.context.scene.render.filepath = f'/workspace/output/{os.path.basename(scene)}'
+    bpy.ops.render.render(write_still=True)
+```
+
+### Optimization techniques
+
+**Memory management:**
+- Tile-based rendering for large scenes
+- Out-of-core geometry handling
+- Texture streaming optimization
+- GPU memory monitoring
+
+**Performance tuning:**
+- Optimal tile sizes for GPU
+- Denoising parameter adjustment
+- Sample count optimization
+- Light cache configuration
+
+## Gaming and streaming
+
+### Remote gaming setup
+
+**Steam integration:**
+- Steam client pre-installed
+- GPU-optimized game settings
+- Cloud save synchronization
+- Workshop content support
+
+**Game streaming:**
+- Parsec client configuration
+- OBS Studio for recording
+- Low-latency streaming setup
+- Hardware encoding optimization
+
+### Performance optimization
+
+**Graphics settings:**
+```bash
+# NVIDIA settings for gaming
+nvidia-settings --assign [gpu:0]/GPUPowerMizerMode=1
+nvidia-settings --assign [gpu:0]/GPUFanControlState=1
+
+# Display configuration
+xrandr --output HDMI-1 --mode 1920x1080 --rate 60
+```
+
+**Network optimization:**
+- Low-latency VPN configuration
+- QoS settings for gaming traffic
+- Bandwidth allocation optimization
+- Jitter reduction techniques
+
+### Popular gaming scenarios
+
+**Cloud gaming:**
+- AAA title streaming
+- VR content rendering
+- Multi-monitor gaming setups
+- Competitive gaming optimization
+
+**Content creation:**
+- Game recording and editing
+- Live streaming production
+- Highlight compilation
+- Social media content creation
+
+## Scientific computing
+
+### Research applications
+
+**Computational biology:**
+- Protein folding simulations
+- Molecular dynamics
+- Bioinformatics pipelines
+- Drug discovery workflows
+
+**Physics simulations:**
+- Finite element analysis
+- Computational fluid dynamics
+- Particle physics calculations
+- Climate modeling
+
+**Data science:**
+- Large-scale data processing
+- Statistical modeling
+- Visualization and plotting
+- Interactive analysis
+
+### Software environments
+
+**Pre-installed tools:**
+- MATLAB with GPU acceleration
+- Jupyter Lab with scientific kernels
+- R with GPU packages
+- GNU Octave
+
+**Custom installations:**
+```bash
+# Install domain-specific tools
+conda install -c conda-forge gromacs
+pip install biopython rdkit-pypi
+apt install quantum-espresso
+
+# GPU-accelerated libraries
+pip install cupy-cuda11x  # GPU NumPy
+pip install rapids-cudf   # GPU pandas
+```
+
+### Workflow optimization
+
+**Parallel processing:**
+```python
+# Multi-GPU acceleration
+import torch.nn as nn
+from torch.nn.parallel import DataParallel
+
+model = MyModel()
+if torch.cuda.device_count() > 1:
+    model = DataParallel(model)
+model.to('cuda')
+```
+
+**Memory management:**
+- Efficient data loading strategies
+- Batch processing optimization
+- Out-of-core computing techniques
+- Memory mapping for large datasets
+
+## Development and testing
+
+### Software development
+
+**IDE access:**
+- VS Code Server (`http://10.77.x.2:8080`)
+- JupyterLab development environment
+- Git integration and version control
+- Package manager access
+
+**Testing environments:**
+- Isolated dependency testing
+- Performance benchmarking
+- GPU compatibility validation
+- Cross-platform testing
+
+### DevOps workflows
+
+**Container development:**
+```bash
+# Build Docker images with GPU support
+docker build --tag myapp:gpu .
+docker run --gpus all myapp:gpu
+
+# Kubernetes GPU workload testing
+kubectl apply -f gpu-workload.yaml
+```
+
+**CI/CD integration:**
+- Automated GPU testing pipelines
+- Performance regression detection
+- Model validation workflows
+- Deployment testing
+
+## Cost optimization strategies
+
+### Efficient resource usage
+
+**Right-sizing rentals:**
+- Match GPU tier to workload requirements
+- Use performance monitoring to validate sizing
+- Consider memory requirements vs compute needs
+- Avoid over-provisioning
+
+**Time management:**
+```bash
+# Set up automatic completion
+echo "sudo shutdown -h +240" | at now  # 4-hour auto-shutdown
+
+# Monitor remaining time
+timeout 3600 python long_training.py  # 1-hour timeout
+```
+
+### Batch processing
+
+**Job scheduling:**
+- Queue multiple tasks for single rental
+- Optimize task ordering for efficiency
+- Use containerization for reproducible environments
+- Implement checkpoint/resume mechanisms
+
+**Data preparation:**
+- Pre-download datasets during off-peak hours
+- Use compression for transfer efficiency
+- Prepare data locally when possible
+- Cache frequently used models and datasets
+
+### Cost tracking
+
+**Usage monitoring:**
+```python
+# Track training costs
+import time
+start_time = time.time()
+# ... training code ...
+duration = time.time() - start_time
+cost = duration / 3600 * hourly_rate
+print(f"Training cost: ${cost:.2f}")
+```
+
+**Performance metrics:**
+- Samples per second for ML training
+- Frames per second for rendering
+- Hash rate for mining
+- Throughput for data processing

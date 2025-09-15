@@ -1,0 +1,320 @@
+---
+title: 'Security Best Practices'
+description: Essential security measures for GPU providers to protect hardware, data, and earnings while maintaining safe operations.
+sidebar:
+    label: 'Security Best Practices'
+    order: 12
+---
+{/* File: providers/configuration/security-best-practices.mdx */}
+
+import { Aside } from '@astrojs/starlight/components';
+
+Protect your hardware investment, personal data, and earnings through comprehensive security measures and operational protocols.
+
+## System Isolation
+
+### Container Security
+
+**Mandatory Isolation Requirements:**
+- Dedicated user account for GPUFlow operations
+- Restricted file system access (no personal data exposure)
+- Network segmentation from personal devices
+- Process isolation using container technology
+
+**Implementation Steps:**
+1. Create dedicated system user: `gpuflow-runner`
+2. Configure limited sudo permissions for GPU operations only
+3. Mount minimal filesystem: `/tmp`, `/var/log/gpuflow`, GPU device files
+4. Block access to: `/home`, `/root`, personal storage directories
+
+<Aside type="caution">
+Never run GPU rental services with administrative privileges or access to personal files. Isolation failures can expose sensitive data to renters.
+</Aside>
+
+### Network Segmentation
+
+**Firewall Configuration:**
+```bash
+# Essential ports only
+Allow inbound: 22 (SSH), 5173 (Web interface), 8082-8083 (Container relay)
+Block: 139, 445 (SMB), 21 (FTP), 23 (Telnet), 3389 (RDP)
+```
+
+**VPN Tunnel Approach:**
+- Renters connect through WireGuard tunnels only
+- No direct internet exposure of GPU services
+- Each rental session uses unique tunnel keys
+- Automatic key expiration at session end
+
+**Router-Level Protection:**
+- Separate VLAN for GPU provider machine
+- Block lateral network movement to other devices
+- Monitor traffic patterns for unusual activity
+- Enable DDoS protection if available
+
+## Access Control
+
+### Authentication Layers
+
+**Multi-Factor Requirements:**
+- Platform account: Email + 2FA (Google Authenticator, Authy)
+- System access: SSH keys only, disable password login
+- Emergency access: Hardware token or recovery codes
+
+**Session Management:**
+- Maximum session duration: 24 hours
+- Automatic logout on inactivity: 30 minutes
+- Force re-authentication for sensitive operations
+- Log all authentication attempts and failures
+
+### Permission Management
+
+**Principle of Least Privilege:**
+- GPU access: Hardware manipulation only
+- File system: Read-only except designated work directories
+- Network: Outbound connections limited to approved destinations
+- System calls: Restricted set using seccomp profiles
+
+**Renter Capability Limits:**
+```
+Allowed:
+- GPU compute operations
+- Temporary file creation in /tmp/rental-session
+- Network access for downloading models/data
+- Standard development tools
+
+Prohibited:
+- Persistent storage beyond session
+- System configuration changes  
+- Other hardware device access
+- Network scanning or port probing
+```
+
+## Data Protection
+
+### Personal Information Security
+
+**Data Classification:**
+- **Never Accessible:** Personal files, browser data, email, documents
+- **System Only:** OS configuration, installed software lists
+- **Limited Access:** GPU specifications, performance metrics
+- **Renter Visible:** Container environment, allocated resources
+
+**Storage Isolation:**
+- Encrypt personal data partitions
+- Use separate drives for rental operations
+- Enable full-disk encryption on primary storage
+- Automatic secure deletion of renter data post-session
+
+### Backup and Recovery
+
+**Critical Data Backup:**
+- GPUFlow container configurations
+- Earnings and transaction records
+- System security logs and audit trails
+- Recovery keys and authentication secrets
+
+**Backup Security:**
+- Encrypted backups stored offline
+- Regular restoration testing (monthly)
+- Version control for configuration changes
+- Secure key management for decryption
+
+<Aside type="tip">
+Store backup encryption keys separately from backup media. Cloud storage services work well for encrypted backup files but never for unencrypted keys.
+</Aside>
+
+## Hardware Protection
+
+### Physical Security
+
+**Environmental Controls:**
+- Temperature monitoring with automated alerts
+- Surge protection and UPS for power stability
+- Adequate ventilation to prevent overheating damage
+- Physical access controls to prevent tampering
+
+**Hardware Monitoring:**
+- GPU temperature limits: Hard shutdown at 90°C
+- Memory error detection and reporting
+- Fan speed monitoring with failure alerts
+- Power consumption tracking for anomaly detection
+
+### Usage Limitations
+
+**Resource Governors:**
+- Maximum power consumption limits per session
+- Temperature-based performance scaling
+- Memory allocation caps per renter
+- CPU usage limits to prevent system lock-up
+
+**Automated Protection:**
+```
+Critical Actions:
+- Shutdown GPU if temperature >90°C
+- Kill processes exceeding memory limits
+- Block network traffic to private IP ranges
+- Terminate sessions attempting privilege escalation
+```
+
+## Financial Security
+
+### Payment Protection
+
+**Wallet Security:**
+- Use separate wallet addresses for receiving payments
+- Enable multi-signature for large earnings accumulation
+- Regular withdrawal to cold storage wallets
+- Monitor for suspicious transaction patterns
+
+**Earnings Management:**
+- Daily earnings tracking and reconciliation
+- Automated alerts for payment delays or discrepancies
+- Backup payment methods for platform issues
+- Tax reporting preparation and documentation
+
+### Fraud Prevention
+
+**Renter Verification:**
+- Identity verification for high-value rentals
+- Payment method validation before session start
+- Behavior pattern analysis for abuse detection
+- Community reputation system participation
+
+**Platform Security:**
+- Two-factor authentication on all accounts
+- Strong, unique passwords for each service
+- Regular security audit participation
+- Incident reporting for suspicious activities
+
+## Operational Security
+
+### Monitoring and Logging
+
+**Essential Log Categories:**
+- Authentication events (success/failure)
+- Resource usage patterns and anomalies
+- Network connection attempts and patterns
+- System performance and hardware health
+
+**Alert Configuration:**
+```
+Immediate Response Required:
+- Failed authentication attempts >5 per hour
+- GPU temperature >85°C sustained
+- Unusual network traffic patterns
+- System resource exhaustion
+
+Daily Review:
+- Earnings reconciliation discrepancies
+- New renter background verification
+- Hardware performance degradation trends
+- Security log anomaly patterns
+```
+
+### Incident Response
+
+**Security Event Classification:**
+- **Critical:** Data breach, system compromise, hardware damage
+- **High:** Unauthorized access attempts, policy violations
+- **Medium:** Performance issues, configuration problems
+- **Low:** Routine maintenance, minor connectivity issues
+
+**Response Procedures:**
+1. **Immediate:** Isolate affected systems, preserve evidence
+2. **Assessment:** Determine impact scope and root cause
+3. **Mitigation:** Implement fixes and prevent recurrence
+4. **Recovery:** Restore normal operations safely
+5. **Review:** Update procedures based on lessons learned
+
+<Aside type="caution">
+Document all security incidents, even minor ones. Pattern recognition helps identify sophisticated attacks that might otherwise go unnoticed.
+</Aside>
+
+## Compliance and Legal
+
+### Privacy Protection
+
+**Data Handling Requirements:**
+- No collection of renter personal data beyond platform requirements
+- Automatic deletion of session data within 24 hours
+- Compliance with local privacy regulations (GDPR, CCPA, etc.)
+- Clear privacy policy disclosure to renters
+
+**Geographic Restrictions:**
+- Verify legal compliance in your jurisdiction
+- Understand export control restrictions for certain technologies
+- Implement location-based access controls if required
+- Maintain documentation for regulatory inquiries
+
+### Insurance Considerations
+
+**Coverage Evaluation:**
+- Hardware damage from renter activities
+- Liability for renter-caused third-party damages
+- Business interruption from security incidents
+- Professional liability for service delivery failures
+
+**Risk Assessment:**
+- Regular security audits and penetration testing
+- Hardware valuation and replacement cost analysis
+- Income protection for extended outages
+- Legal defense coverage for compliance issues
+
+## Advanced Security Measures
+
+### Threat Detection
+
+**Behavioral Analysis:**
+- Baseline establishment for normal operations
+- Anomaly detection for unusual resource usage
+- Network traffic pattern recognition
+- Automated response to detected threats
+
+**Security Intelligence:**
+- Integration with threat intelligence feeds
+- Participation in security community sharing
+- Regular security assessment updates
+- Professional security consultation when needed
+
+### Continuous Improvement
+
+**Security Posture Management:**
+- Monthly security review and updates
+- Quarterly penetration testing (self or professional)
+- Annual comprehensive security audit
+- Continuous education on emerging threats
+
+**Community Engagement:**
+- Participate in provider security forums
+- Share anonymized threat intelligence
+- Contribute to security best practices development
+- Maintain awareness of platform security updates
+
+<Aside type="note">
+Security is an ongoing process, not a one-time configuration. Regular review and updates of security measures are essential as threats evolve and systems change.
+</Aside>
+
+## Emergency Procedures
+
+### Security Incident Response
+
+**Immediate Actions:**
+1. Disconnect from network if compromise suspected
+2. Preserve system logs and evidence
+3. Contact platform support for assistance
+4. Document timeline and observed effects
+
+**Recovery Planning:**
+- Maintain current system backups
+- Test restoration procedures regularly
+- Keep emergency contact information accessible
+- Prepare alternative earning strategies during downtime
+
+### Hardware Failure Response
+
+**Protection Measures:**
+- Automated shutdown on critical hardware alerts
+- Redundant monitoring systems for reliability
+- Emergency contact procedures for renters
+- Insurance claim documentation and procedures

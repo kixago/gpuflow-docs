@@ -1,0 +1,616 @@
+---
+title: 'Troubleshooting'
+description: Solutions for connection, payment, and access issues.
+sidebar:
+  label: 'Troubleshooting'
+  order: 7
+---
+{/* File: src/content/docs/renters/troubleshooting.mdx */}
+
+import { Aside } from '@astrojs/starlight/components';
+
+Solutions for common issues when renting and accessing GPUs.
+
+## Payment issues
+
+### Wallet connection problems
+
+**Wallet won't connect:**
+
+Check browser compatibility:
+- Chrome/Brave: Best support
+- Firefox: Good support
+- Safari: Limited support
+- Edge: Basic support
+
+Clear browser data:
+```bash
+# Clear cache and cookies for gpuflow.app
+# Browser settings > Privacy > Clear browsing data
+# Select "Cookies and site data" and "Cached images and files"
+```
+
+**MetaMask specific issues:**
+1. Update to latest version
+2. Disable other wallet extensions temporarily
+3. Reset account in MetaMask settings
+4. Try incognito/private browsing mode
+
+### Transaction failures
+
+**Payment stuck pending:**
+
+Check transaction status:
+1. Open wallet and find transaction hash
+2. Search on [Polygonscan](https://polygonscan.com) (mainnet) or [Amoy Explorer](https://amoy.polygonscan.com) (testnet)
+3. Wait for network confirmation (usually `<2 minutes`)
+4. Retry if transaction fails
+
+**Insufficient funds error:**
+```
+Error: "Insufficient funds for gas * price + value"
+```
+
+Solutions:
+- Ensure wallet has MATIC for gas fees (minimum `0.01 MATIC`)
+- Check total cost includes both rental payment and gas
+- Wait for previous transactions to confirm
+- Increase gas price if network is congested
+
+**Wrong network error:**
+
+Switch to correct network:
+1. Click network dropdown in wallet
+2. Select "Polygon" or "Polygon Amoy" 
+3. Approve network switch request
+4. Retry payment
+
+Add network manually if missing:
+```
+Network Name: Polygon Amoy
+RPC URL: https://rpc-amoy.polygon.technology
+Chain ID: 80002
+Currency: MATIC
+Block Explorer: https://amoy.polygonscan.com
+```
+
+### Token approval issues
+
+**ERC-20 token approval failed:**
+
+Reset token allowance:
+```javascript
+// In browser console (advanced users only)
+// This resets USDC allowance to zero, then set new amount
+```
+
+Alternative solutions:
+- Use MATIC instead of ERC-20 tokens
+- Try smaller approval amounts first
+- Check token contract address matches network
+- Verify sufficient token balance
+
+<Aside type="caution">
+Never share private keys or seed phrases. GPUFlow support will never ask for these.
+</Aside>
+
+## Connection issues
+
+### VPN connection failures
+
+**WireGuard won't connect:**
+
+Verify configuration:
+```bash
+# Check configuration file syntax
+cat rental-config.conf | grep -E "(Address|Endpoint|PublicKey)"
+
+# Test basic connectivity to provider
+ping provider-ip-address
+```
+
+Common configuration issues:
+- Expired configuration (15-minute download window)
+- Incorrect private key format
+- Missing endpoint information
+- Invalid allowed IPs range
+
+**Connection drops frequently:**
+
+Network stability issues:
+1. Check internet connection stability
+2. Switch from WiFi to ethernet if possible
+3. Disable power saving on network adapter
+4. Try different WireGuard client
+
+Provider-side issues:
+- Provider internet connection unstable
+- Provider hardware maintenance
+- Network routing problems
+- Firewall blocking VPN traffic
+
+### Service access problems
+
+**Cannot reach web interfaces:**
+
+Verify VPN connection:
+```bash
+# Test tunnel connectivity
+ping 10.77.0.1
+
+# Check assigned IP
+ip addr show  # Linux/macOS
+ipconfig      # Windows
+```
+
+Service status checks:
+```bash
+# Test specific services
+curl -I http://10.77.x.2:8888  # Jupyter
+curl -I http://10.77.x.2:7860  # Stable Diffusion
+telnet 10.77.x.2 22            # SSH
+```
+
+**Services not responding:**
+
+Wait for deployment:
+- Initial deployment takes 1-3 minutes
+- Check deployment status in dashboard
+- Provider may need time to start services
+
+Alternative access methods:
+- Try SSH if web interfaces fail
+- Use direct IP access instead of hostnames
+- Check for typos in URLs
+- Verify correct ports
+
+## Access method issues
+
+### SSH connection problems
+
+**SSH connection refused:**
+
+```bash
+# Test basic connectivity
+telnet 10.77.x.2 22
+
+# Try verbose SSH for debugging
+ssh -v rental@10.77.x.2
+```
+
+Common causes:
+- SSH service not started yet
+- Firewall blocking SSH port
+- Incorrect username (use `rental`)
+- VPN tunnel not established
+
+**Authentication failed:**
+
+Password authentication:
+- Use password provided in rental credentials
+- Check for caps lock or special characters
+- Try copy/paste to avoid typing errors
+
+Key-based authentication:
+```bash
+# Verify key file permissions
+chmod 600 ~/.ssh/gpuflow_key
+
+# Test key authentication
+ssh -i ~/.ssh/gpuflow_key rental@10.77.x.2
+
+# Check if key is loaded in agent
+ssh-add -l
+```
+
+### Web terminal issues
+
+**Terminal won't load:**
+
+Browser compatibility:
+- Update browser to latest version
+- Disable ad blockers for gpuflow.app
+- Enable JavaScript if disabled
+- Try different browser
+
+Network issues:
+- Check VPN connection established
+- Verify terminal URL correct
+- Try refreshing page
+- Clear browser cache
+
+**Terminal commands not working:**
+
+Environment issues:
+```bash
+# Check shell and environment
+echo $SHELL
+echo $PATH
+which python
+which nvidia-smi
+```
+
+Permission issues:
+```bash
+# Check user permissions
+whoami
+groups
+ls -la /workspace
+```
+
+### VNC desktop problems
+
+**VNC won't connect:**
+
+Connection testing:
+```bash
+# Test VNC port accessibility
+telnet 10.77.x.2 5901
+
+# Check VNC server status
+ssh rental@10.77.x.2 'ps aux | grep vnc'
+```
+
+VNC client configuration:
+- Server: `10.77.x.2:5901` or `10.77.x.2::5901`
+- Password: From rental credentials
+- Color depth: 16-bit for better performance
+- Compression: Enable for slower connections
+
+**Desktop appears frozen:**
+
+Resource constraints:
+```bash
+# Check system resources via SSH
+ssh rental@10.77.x.2
+htop              # Check CPU/memory usage
+nvidia-smi        # Check GPU usage
+df -h             # Check disk space
+```
+
+Desktop environment issues:
+- Right-click desktop for context menu
+- Open terminal from desktop
+- Restart desktop environment if needed
+- Switch to lighter desktop environment
+
+## Performance issues
+
+### Slow response times
+
+**High latency connections:**
+
+Network optimization:
+```bash
+# Test latency to provider
+ping -c 10 10.77.x.2
+
+# Trace network route
+traceroute 10.77.x.2
+
+# Test bandwidth
+ssh rental@10.77.x.2 'iperf3 -s' &
+iperf3 -c 10.77.x.2
+```
+
+Connection tuning:
+- Use wired internet instead of WiFi
+- Close bandwidth-heavy applications
+- Choose geographically closer providers
+- Consider time-of-day network congestion
+
+**GPU performance issues:**
+
+Monitor GPU utilization:
+```bash
+# Real-time GPU monitoring
+watch -n 1 nvidia-smi
+
+# Check GPU memory usage
+nvidia-smi --query-gpu=memory.used,memory.total --format=csv
+
+# Monitor temperature and throttling
+nvidia-smi --query-gpu=temperature.gpu,clocks.gr,clocks.mem --format=csv
+```
+
+Performance optimization:
+```python
+# Verify GPU accessibility in Python
+import torch
+print(f"GPU available: {torch.cuda.is_available()}")
+print(f"GPU name: {torch.cuda.get_device_name()}")
+print(f"GPU memory: {torch.cuda.get_device_properties(0).total_memory}")
+
+# Check CUDA version compatibility
+print(f"CUDA version: {torch.version.cuda}")
+```
+
+### Memory issues
+
+**Out of memory errors:**
+
+GPU memory management:
+```python
+# Monitor GPU memory in PyTorch
+import torch
+print(f"Allocated: {torch.cuda.memory_allocated() / 1024**3:.2f} GB")
+print(f"Reserved: {torch.cuda.memory_reserved() / 1024**3:.2f} GB")
+
+# Clear GPU cache
+torch.cuda.empty_cache()
+
+# Use gradient accumulation for large models
+accumulation_steps = 4
+for i, batch in enumerate(dataloader):
+    loss = model(batch) / accumulation_steps
+    loss.backward()
+    if (i + 1) % accumulation_steps == 0:
+        optimizer.step()
+        optimizer.zero_grad()
+```
+
+System memory issues:
+```bash
+# Check system memory usage
+free -h
+ps aux --sort=-%mem | head -10
+
+# Clear system cache if needed
+sudo sync
+sudo echo 3 > /proc/sys/vm/drop_caches
+```
+
+## Environment-specific issues
+
+### Jupyter Lab problems
+
+**Jupyter won't start:**
+
+Service management:
+```bash
+# Check Jupyter status
+ssh rental@10.77.x.2 'systemctl --user status jupyter-lab'
+
+# Restart Jupyter
+ssh rental@10.77.x.2 'systemctl --user restart jupyter-lab'
+
+# Check logs
+ssh rental@10.77.x.2 'journalctl --user -u jupyter-lab -f'
+```
+
+Configuration issues:
+```bash
+# Check Jupyter configuration
+ssh rental@10.77.x.2 'jupyter lab --generate-config'
+ssh rental@10.77.x.2 'cat ~/.jupyter/jupyter_lab_config.py'
+
+# Reset Jupyter settings
+ssh rental@10.77.x.2 'rm -rf ~/.jupyter/lab'
+```
+
+**Kernel issues:**
+
+Kernel not starting:
+```bash
+# List available kernels
+ssh rental@10.77.x.2 'jupyter kernelspec list'
+
+# Install missing kernels
+ssh rental@10.77.x.2 'python -m ipykernel install --user --name python3'
+
+# Test kernel manually
+ssh rental@10.77.x.2 'python -c "import torch; print(torch.cuda.is_available())"'
+```
+
+Package import errors:
+```bash
+# Check Python environment
+ssh rental@10.77.x.2 'which python'
+ssh rental@10.77.x.2 'pip list | grep torch'
+
+# Install missing packages
+ssh rental@10.77.x.2 'pip install package-name'
+```
+
+### Stable Diffusion issues
+
+**WebUI won't load:**
+
+Service status:
+```bash
+# Check Stable Diffusion WebUI
+curl -I http://10.77.x.2:7860
+
+# Check service logs
+ssh rental@10.77.x.2 'systemctl --user status stable-diffusion-webui'
+ssh rental@10.77.x.2 'journalctl --user -u stable-diffusion-webui -f'
+```
+
+Model loading problems:
+```bash
+# Check model files
+ssh rental@10.77.x.2 'ls -la /workspace/stable-diffusion-webui/models/Stable-diffusion/'
+
+# Check disk space
+ssh rental@10.77.x.2 'df -h /workspace'
+
+# Test model loading
+ssh rental@10.77.x.2 'cd /workspace/stable-diffusion-webui && python -c "from modules import shared; print(shared.opts.sd_model_checkpoint)"'
+```
+
+**Generation errors:**
+
+CUDA out of memory:
+```python
+# Reduce image resolution
+# Use `--medvram` or `--lowvram` flags
+# Enable `--xformers` for memory optimization
+```
+
+Model compatibility:
+- Verify model format (`.ckpt`, `.safetensors`)
+- Check model architecture compatibility
+- Ensure sufficient VRAM for model size
+- Try different sampling methods
+
+### Mining software issues
+
+**Miner won't start:**
+
+Configuration verification:
+```bash
+# Check miner configuration
+ssh rental@10.77.x.2 'cat /opt/miners/t-rex/config.json'
+
+# Test GPU detection
+ssh rental@10.77.x.2 '/opt/miners/t-rex/t-rex --list-devices'
+
+# Check pool connectivity
+ssh rental@10.77.x.2 'telnet pool-address 4444'
+```
+
+Permission issues:
+```bash
+# Check file permissions
+ssh rental@10.77.x.2 'ls -la /opt/miners/'
+
+# Fix permissions if needed
+ssh rental@10.77.x.2 'chmod +x /opt/miners/t-rex/t-rex'
+```
+
+**Low hashrate performance:**
+
+GPU optimization:
+```bash
+# Check current GPU settings
+nvidia-smi -q -d CLOCK,POWER
+
+# Monitor during mining
+watch -n 1 'nvidia-smi --query-gpu=clocks.gr,clocks.mem,temperature.gpu,power.draw --format=csv'
+```
+
+Mining optimization:
+- Verify optimal algorithm selection
+- Check memory clock settings
+- Monitor temperature and throttling
+- Ensure adequate power supply
+
+## Data transfer issues
+
+### Upload/download failures
+
+**Large file transfer problems:**
+
+Alternative transfer methods:
+```bash
+# Use rsync for resume capability
+rsync -avz --partial --progress large_file.zip rental@10.77.x.2:/workspace/
+
+# Split large files
+split -b 1G large_file.zip file_part_
+# Transfer parts individually
+# Reassemble: cat file_part_* > large_file.zip
+```
+
+Network optimization:
+```bash
+# Compress before transfer
+tar -czf archive.tar.gz data_directory/
+# Transfer compressed file
+# Extract on remote: tar -xzf archive.tar.gz
+```
+
+**Transfer interrupted:**
+
+Resume transfers:
+```bash
+# Rsync with resume
+rsync -avz --partial --progress --append-verify source/ rental@10.77.x.2:/workspace/
+
+# SCP alternative with resume capability
+# Note: SCP doesn't support resume, use rsync instead
+```
+
+Verify integrity:
+```bash
+# Generate checksums before transfer
+sha256sum file.zip > file.zip.sha256
+
+# Verify after transfer
+ssh rental@10.77.x.2 'cd /workspace && sha256sum -c file.zip.sha256'
+```
+
+## Getting help
+
+### Diagnostic information
+
+Before contacting support, collect:
+
+**System information:**
+```bash
+# Browser information
+# - Browser name and version
+# - Operating system
+# - Extensions installed
+
+# Network information
+ping -c 5 gpuflow.app
+nslookup gpuflow.app
+```
+
+**Rental details:**
+- Rental ID from dashboard
+- Provider wallet address
+- GPU model and specifications
+- Error messages (exact text)
+- Screenshots of issues
+
+**Connection information:**
+```bash
+# WireGuard status
+sudo wg show
+
+# Network configuration
+ip route show
+ip addr show
+```
+
+### Support channels
+
+**Community support:**
+- [Discord server](https://discord.gg/gpuflow) - Real-time help
+- [Community forum](https://forum.gpuflow.app) - Searchable knowledge base
+
+**Official support:**
+- Email: [support@gpuflow.app](mailto:support@gpuflow.app)
+- Response time: 24-48 hours for technical issues
+- Include diagnostic information above
+
+**Emergency issues:**
+- Payment processed but no access after 10 minutes
+- Suspected security compromise
+- Provider completely unresponsive
+- Data loss during active rental
+
+<Aside type="tip">
+Check the status page at [status.gpuflow.app](https://status.gpuflow.app) for known issues before troubleshooting.
+</Aside>
+
+### Self-help resources
+
+**Documentation:**
+- Review relevant use case guides
+- Check provider troubleshooting documentation
+- Verify wallet and network setup
+
+**Community resources:**
+- Search Discord for similar issues
+- Check GitHub issues and discussions
+- Review provider community forums
+
+**Testing steps:**
+1. Try different browser/incognito mode
+2. Test with different wallet if available
+3. Attempt connection from different network
+4. Verify issue persists across multiple rentals
+5. Test with different provider if possible

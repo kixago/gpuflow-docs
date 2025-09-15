@@ -1,0 +1,292 @@
+---
+title: 'WireGuard P2P Tunneling'
+description: Automatic point-to-point networking that provides secure, isolated access for renters to your GPU containers.
+sidebar:
+    label: 'WireGuard P2P'
+    order: 25
+---
+{/* File: providers/networking/wireguard-p2p.mdx */}
+
+import { Aside } from '@astrojs/starlight/components';
+
+GPUFlow uses WireGuard to create secure point-to-point tunnels between renters and your containers. Each rental session receives an isolated network connection with automatic cleanup.
+
+## How It Works
+
+### Automatic Tunnel Creation
+
+When a rental begins:
+
+1. **Key Generation**: Container generates unique WireGuard keys for the session
+2. **IP Assignment**: Renter receives dedicated IP from `10.77.0.0/16` subnet
+3. **Configuration Delivery**: Renter downloads a one-time `.conf` file
+4. **Session Activation**: Tunnel establishes within 30 seconds
+
+### Network Isolation
+
+**Per-Session Security:**
+- Each rental uses unique cryptographic keys
+- Dedicated IP address prevents cross-session access
+- Network traffic encrypted with ChaCha20-Poly1305
+
+**Automatic Cleanup:**
+- WireGuard peer removed when rental expires
+- Keys invalidated immediately upon completion
+- No persistent access after session ends
+
+## Network Requirements
+
+### Firewall Configuration
+
+**Required Ports:**
+```bash
+# WireGuard UDP traffic
+ufw allow 51820/udp
+
+# Container access (TCP)
+ufw allow 8082/tcp
+```
+
+**Router Port Forwarding:**
+- Port `51820/UDP` → Container host IP
+- Port `8082/TCP` → Container host IP
+
+### IP Address Requirements
+
+**Public IP Scenarios:**
+- **Static IP**: Optimal performance, consistent endpoint
+- **Dynamic IP**: Functional but may require restart after IP changes
+- **CGNAT/Residential**: May impact connectivity for some renters
+
+**Private Network Setup:**
+- Port forwarding required on router/gateway
+- UPnP automatic forwarding not supported
+- Manual configuration necessary
+
+<Aside type="caution">
+CGNAT (Carrier-Grade NAT) environments may prevent inbound connections. Verify your public IP matches your router's WAN IP before listing GPUs.
+</Aside>
+
+## Container Network Setup
+
+### WireGuard Interface
+
+The container automatically configures WireGuard with:
+
+**Interface Configuration:**
+```
+Interface: wg0
+Listen Port: 51820
+Network Range: 10.77.0.0/16
+```
+
+**Dynamic Peer Management:**
+- Peers added per rental session
+- Allowed IPs: Single `/32` address per renter
+- Persistent keepalive: 25 seconds
+- Automatic peer removal on session end
+
+### Internal Routing
+
+**Service Binding:**
+- Container services bind to `10.77.0.1`
+- Renters access via their assigned `10.77.x.y` IP
+- External internet access remains through host interface
+
+**Access Control:**
+- WireGuard provides network-layer isolation
+- Application-layer authentication per rental session
+- No cross-renter communication possible
+
+## Troubleshooting
+
+### Connection Issues
+
+**Symptom**: Renter cannot establish WireGuard connection
+
+**Diagnosis Steps:**
+1. Verify UDP/51820 is accessible from internet
+2. Check container WireGuard interface status
+3. Confirm peer configuration matches rental session
+
+**Resolution:**
+```bash
+# Check WireGuard status
+docker exec gpuflow-agent wg show
+
+# Verify UDP port accessibility
+nc -u -l 51820
+```
+
+### Performance Problems
+
+**Symptom**: Slow or unstable connection through tunnel
+
+**Common Causes:**
+- High network latency (`>100ms`)
+- Insufficient upload bandwidth (`<10 Mbps`)
+- Router NAT table overflow
+- ISP UDP throttling
+
+**Optimization:**
+- Enable QoS prioritization for UDP/51820
+- Configure router for gaming/streaming mode
+- Consider upgrading internet plan if bandwidth-limited
+
+### IP Address Conflicts
+
+**Symptom**: Multiple renters reporting same IP address
+
+**Resolution:**
+- Restart container to reset peer state
+- Check system clock synchronization
+- Verify no other WireGuard services on `10.77.0.0/16`
+
+<Aside type="note">
+WireGuard tunnels automatically handle NAT traversal and firewall negotiation. Most connection issues relate to router configuration rather than the container itself.
+</Aside>
+
+## Advanced Configuration
+
+### Custom Network Ranges
+
+Default configuration uses `10.77.0.0/16`. Modify only if conflicts exist:
+
+**Environment Variable:**
+```bash
+# Custom WireGuard subnet
+WG_CIDR=10.200.0.0/24
+```
+
+**Supported Ranges:**
+- `10.x.x.x/16` - Recommended
+- `172.16-31.x.x/16` - Alternative private range
+- `192.168.x.x/24` - May conflict with home networks
+
+### Port Customization
+
+Change WireGuard port if `51820/UDP` conflicts:
+
+```bash
+# Alternative port configuration
+WG_PORT=51821
+```
+
+**Router Update Required:**
+- Update port forwarding rules
+- Restart container after configuration change
+- Verify new port accessibility
+
+### Performance Tuning
+
+**High-Throughput Optimization:**
+```bash
+# Increase socket buffer sizes
+echo 'net.core.rmem_max = 134217728' >> /etc/sysctl.conf
+echo 'net.core.wmem_max = 134217728' >> /etc/sysctl.conf
+sysctl -p
+```
+
+**Low-Latency Priority:**
+```bash
+# Set WireGuard traffic priority
+tc qdisc add dev wg0 root fq_codel
+```
+
+## Security Considerations
+
+### Key Management
+
+**Automatic Key Generation:**
+- New key pair created per rental session
+- Private keys never transmitted or stored
+- Public key exchange through secure relay
+
+**Key Rotation:**
+- Keys valid only for rental duration
+- Automatic invalidation on session end
+- No key reuse across sessions
+
+### Network Monitoring
+
+**Connection Logging:**
+- Peer handshakes logged to container
+- Traffic volume monitoring available
+- Connection duration tracking
+
+**Access Audit:**
+- All WireGuard connections attributed to rental sessions
+- IP assignments tracked per renter
+- Session termination events logged
+
+<Aside type="tip">
+Monitor WireGuard connection logs through Dashboard → Containers → [Your Container] for troubleshooting and verification of proper tunnel operation.
+</Aside>
+
+## Integration with Rentals
+
+### Session Lifecycle
+
+**Rental Start:**
+1. Smart contract creates rental record
+2. Container receives rental parameters
+3. WireGuard peer configured automatically
+4. Configuration file delivered to renter
+
+**Active Session:**
+- Encrypted tunnel provides container access
+- Application-layer authentication enforces session limits
+- Real-time monitoring of connection health
+
+**Rental End:**
+1. Session expiration triggers cleanup
+2. WireGuard peer removed immediately
+3. Keys invalidated permanently
+4. Network access terminated
+
+### Access Methods
+
+Renters connect through WireGuard tunnel to access:
+
+**Web Interfaces:**
+- Jupyter notebooks via `http://10.77.x.y:8888`
+- SSH terminals via web browser
+- Application-specific interfaces
+
+**Direct SSH Access:**
+- Standard SSH client connection
+- Key-based authentication per session
+- Root access within container isolation
+
+**File Transfer:**
+- SCP/SFTP through tunnel
+- Web-based upload/download
+- Persistent storage within rental duration
+
+## Monitoring and Analytics
+
+### Connection Metrics
+
+Track through container dashboard:
+
+**Performance Indicators:**
+- Connection establishment time (`<30 seconds` optimal)
+- Tunnel throughput (limited by internet bandwidth)
+- Handshake success rate (`>99%` target)
+
+**Health Monitoring:**
+- Peer connectivity status
+- Last handshake timestamp
+- Data transfer volumes
+
+### Revenue Impact
+
+**Connection Quality Effects:**
+- Fast connections (`<10s` setup): Higher renter satisfaction
+- Stable tunnels (`<1%` drop rate): Reduced support burden
+- Low latency (`<50ms`): Premium pricing justification
+
+**Optimization Benefits:**
+- Reliable networking increases repeat bookings
+- Fast setup reduces rental abandonment
+- Professional connectivity commands higher rates

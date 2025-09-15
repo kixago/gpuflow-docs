@@ -1,0 +1,180 @@
+---
+title: 'Podman + NVIDIA Setup'
+description: Configure Podman with NVIDIA GPU support for GPUFlow providers.
+sidebar:
+    label: 'Podman + NVIDIA'
+    order: 4
+---
+{ /* File: providers/container-runtime/podman-nvidia.mdx */}
+
+import { Aside } from '@astrojs/starlight/components';
+
+This guide configures Podman with NVIDIA GPU support on Linux systems. Podman runs containers without a daemon and supports rootless operation for better security.
+
+## Step 1: Install Podman
+
+Install Podman using your distribution's package manager:
+
+```bash
+# Ubuntu/Debian
+sudo apt update && sudo apt install podman
+
+# Fedora/RHEL
+sudo dnf install podman
+
+# Check installation
+podman --version
+```
+
+Verify Podman is working:
+
+```bash
+podman run hello-world
+```
+
+## Step 2: Install NVIDIA Container Toolkit
+
+Install the NVIDIA container toolkit:
+
+```bash
+# Add NVIDIA repository (same as Docker setup)
+distribution=$(. /etc/os-release;echo $ID$VERSION_ID) \
+    && curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg \
+    && curl -s -L https://nvidia.github.io/libnvidia-container/$distribution/libnvidia-container.list | \
+        sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | \
+        sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+
+# Install toolkit
+sudo apt update && sudo apt install nvidia-container-toolkit
+```
+
+Configure Podman runtime:
+
+```bash
+sudo nvidia-ctk runtime configure --runtime=podman
+```
+
+## Step 3: Generate CDI specification
+
+Podman uses Container Device Interface (CDI) for GPU access:
+
+```bash
+# Generate CDI specification for your GPUs
+sudo nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml
+
+# Verify CDI file was created
+ls -la /etc/cdi/
+```
+
+## Step 4: Test GPU access
+
+Test that containers can access your GPU:
+
+```bash
+podman run --rm --device nvidia.com/gpu=all nvidia/cuda:12.0-base-ubuntu22.04 nvidia-smi
+```
+
+You should see your GPU information displayed.
+
+<Aside type="note">
+Podman uses `--device nvidia.com/gpu=all` instead of Docker's `--gpus=all` syntax.
+</Aside>
+
+## Step 5: Configure SELinux (Fedora/RHEL only)
+
+If you're using Fedora, RHEL, or CentOS, configure SELinux:
+
+```bash
+# Check if SELinux is enforcing
+getenforce
+
+# If output is "Enforcing", run:
+sudo setsebool -P container_use_devices=on
+```
+
+## Step 6: Deploy GPUFlow provider
+
+Create data directory:
+
+```bash
+sudo mkdir -p /opt/gpuflow
+sudo chown $USER:$USER /opt/gpuflow
+```
+
+Run the provider container:
+
+```bash
+podman run -d \
+  --name gpuflow-provider \
+  --restart=unless-stopped \
+  --device nvidia.com/gpu=all \
+  --network=host \
+  -v /opt/gpuflow:/data:Z \
+  -e GPUFLOW_API_KEY="get-from-dashboard" \
+  ghcr.io/gpuflow/provider:latest
+```
+
+Check the provider status:
+
+```bash
+podman ps
+podman logs gpuflow-provider
+```
+
+Expected log output:
+- GPU detection successful
+- Network connectivity established  
+- Provider registered with GPUFlow
+
+## Step 7: Enable systemd service (optional)
+
+To start the provider automatically on boot:
+
+```bash
+# Generate systemd service file
+podman generate systemd --name gpuflow-provider --files --new
+
+# Move service file to systemd directory
+sudo mv container-gpuflow-provider.service /etc/systemd/system/
+
+# Enable and start service
+sudo systemctl daemon-reload
+sudo systemctl enable container-gpuflow-provider.service
+sudo systemctl start container-gpuflow-provider.service
+```
+
+## Managing the provider
+
+Common commands for managing your provider:
+
+```bash
+# Check status
+podman ps -a
+
+# View logs
+podman logs gpuflow-provider -f
+
+# Restart provider
+podman restart gpuflow-provider
+
+# Stop provider
+podman stop gpuflow-provider
+
+# Update provider
+podman pull ghcr.io/gpuflow/provider:latest
+podman stop gpuflow-provider
+podman rm gpuflow-provider
+# Re-run the podman run command from Step 6
+```
+
+## Next steps
+
+Your provider is now running. Complete the setup:
+
+1. [Create your GPUFlow account](/providers/configuration/account-setup)
+2. Link your hardware in the dashboard
+3. [Create your first GPU listing](/providers/configuration/creating-listings)
+
+<Aside type="tip">
+Podman's rootless mode provides better security isolation. Consider running containers as a non-root user for production setups.
+</Aside>

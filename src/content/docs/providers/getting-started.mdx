@@ -1,0 +1,75 @@
+---
+title: 'Getting Started'
+description: Choose your setup path and get your GPU online in the GPUFlow network.
+sidebar:
+    label: 'Getting Started'
+    order: 1
+---
+{ /* File: providers/getting-started.mdx */}
+
+GPUFlow lets you earn money from your unused GPU. This guide helps you choose the right setup path for your hardware and operating system.
+
+## Before you begin
+
+Verify your hardware meets the minimum requirements:
+
+- Compatible GPU (NVIDIA or AMD)
+- Stable internet connection (25+ Mbps upload)
+- At least 100GB free disk space
+
+## Choose your path
+
+Your setup process depends on your GPU and operating system. Select the path that matches your hardware:
+
+### Step 1: Identify your GPU
+
+Run this command to check your GPU:
+
+```bash
+# On Linux/macOS
+lspci | grep -i vga
+
+# On Windows (PowerShell)
+Get-WmiObject Win32_VideoController | Select-Object Name
+```
+
+### Step 2: Select your installation path
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+  <div class="border rounded-lg p-4">
+    <h4>NVIDIA GPU</h4>
+    <p>RTX, GTX, Tesla, Quadro series</p>
+    <ul>
+      <li><a href="/providers/installation/linux/nvidia">Linux + NVIDIA</a></li>
+      <li><a href="/providers/installation/windows/nvidia">Windows + NVIDIA</a></li>
+      <li><a href="/providers/installation/macos/overview">macOS + NVIDIA</a></li>
+    </ul>
+  </div>
+  
+  <div class="border rounded-lg p-4">
+    <h4>AMD GPU</h4>
+    <p>RX 6000, RX 7000, Radeon Pro series</p>
+    <ul>
+      <li><a href="/providers/installation/linux/amd">Linux + AMD</a></li>
+      <li><a href="/providers/installation/windows/amd">Windows + AMD</a></li>
+    </ul>
+  </div>
+</div>
+
+## What happens next
+
+After following your installation guide, you will:
+
+1. Install the container runtime (Docker or Podman)
+2. Set up GPU passthrough for containers
+3. Deploy the GPUFlow provider agent
+4. Create your provider account
+5. List your GPU and start earning
+
+The entire process takes 30-45 minutes for most users.
+
+## Need help?
+
+- Check our [troubleshooting guide](/providers/troubleshooting)
+- Join the [community Discord](https://discord.gg/gpuflow)
+- Contact [support@gpuflow.app](mailto:support@gpuflow.app)

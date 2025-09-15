@@ -1,36 +1,50 @@
 ---
-title: Welcome to Starlight
-description: Get started building your docs site with Starlight.
+title: Welcome to the GPUFlow Docs
 template: splash
 hero:
-  tagline: Congrats on setting up a new Starlight project!
-  image:
-    file: ../../assets/houston.webp
+  tagline: Your guide to the decentralized GPU marketplace. Find what you need to get started as a renter, provider, or developer.
   actions:
-    - text: Example Guide
-      link: /guides/example/
-      icon: right-arrow
-    - text: Read the Starlight docs
-      link: https://starlight.astro.build
-      icon: external
-      variant: minimal
+    - text: 'For Renters: Quick Start'
+      link: /renters/getting-started/
+      variant: primary
+    - text: 'For Providers: Get Started'
+      link: /providers/getting-started/
+      variant: secondary
 ---
 
 import { Card, CardGrid } from '@astrojs/starlight/components';
 
-## Next steps
-
 <CardGrid stagger>
-	<Card title="Update content" icon="pencil">
-		Edit `src/content/docs/index.mdx` to see this page change.
+	<Card title="Renters" icon="credit-card">
+		Learn how to connect your wallet, find the right GPU, and access your instance in under 60 seconds.
+		<br /><br />
+        **Key Guides:**
+        - [How to Rent a GPU](/renters/getting-started/)
+        - [Payment & Multi-Wallet Guide](/renters/payment-guide/)
+        - [Connecting with WireGuard](/renters/terminal-access/)
 	</Card>
-	<Card title="Add new content" icon="add-document">
-		Add Markdown or MDX files to `src/content/docs` to create new pages.
+	<Card title="Providers" icon="server">
+		Turn your idle hardware into a passive income stream. See our guides on installation, security, and maximizing your earnings.
+		<br /><br />
+        **Key Guides:**
+        - [Getting Started Guide](/providers/getting-started/)
+        - [Container Setup](/providers/container-setup/)
+        - [Provider Earnings Guide](/providers/earnings-guide/)
 	</Card>
-	<Card title="Configure your site" icon="setting">
-		Edit your `sidebar` and other config in `astro.config.mjs`.
+    <Card title="Developers" icon="code">
+		Integrate with GPUFlow using our API references and smart contract guides. Learn about our real-time WebSocket events.
+		<br /><br />
+        **Key Guides:**
+        - [API Reference](/developers/api-reference/)
+        - [Smart Contracts](/developers/smart-contracts/)
+        - [WebSocket API](/developers/websocket-api/)
 	</Card>
-	<Card title="Read the docs" icon="open-book">
-		Learn more in [the Starlight Docs](https://starlight.astro.build/).
+    <Card title="General Guides" icon="book-open">
+		Find answers to frequently asked questions, learn about supported networks, and get help with general wallet setup.
+		<br /><br />
+        **Key Guides:**
+        - [Frequently Asked Questions (FAQ)](/guides/faq/)
+        - [Supported Blockchains](/guides/blockchain-networks/)
+        - [Security Best Practices](/providers/security-best-practices/)
 	</Card>
 </CardGrid>

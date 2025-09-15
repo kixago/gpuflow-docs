@@ -1,0 +1,348 @@
+---
+title: 'How to Rent'
+description: Complete guide to selecting, configuring, and paying for GPU rentals.
+sidebar:
+  label: 'How to Rent'
+  order: 3
+---
+{/* File: src/content/docs/renters/how-to-rent.mdx */}
+
+import { Aside } from '@astrojs/starlight/components';
+
+Select and rent GPU computing power from the decentralized marketplace.
+
+## GPU selection process
+
+### Browse the marketplace
+
+1. Navigate to the [GPU Marketplace](https://gpuflow.app/marketplace)
+2. Choose view type:
+   - **Individual GPUs**: Specific hardware listings
+   - **Group by Model**: Aggregated GPU types
+
+### Filter available hardware
+
+**By specifications:**
+- **VRAM**: `8GB`, `16GB`, `24GB`, `40GB+`
+- **GPU Model**: RTX 4090, A100, H100, etc.
+- **Performance Score**: Relative compute rating
+- **Use Case**: AI/ML, rendering, mining, scientific
+
+**By availability:**
+- **Instant Access**: Online and ready
+- **Available Offline**: Provider must start hardware
+- **Currently Unavailable**: In use or maintenance
+
+**By cost:**
+- **Hourly Rate**: `$0.50-$5.00` typical range
+- **Max Price**: Set budget limits
+- **Sort Options**: Price, performance, rating, VRAM
+
+**By location:**
+- **Region**: US, EU, Asia, North America, Oceania
+- **Latency**: Network proximity for real-time applications
+
+### Provider evaluation
+
+**Check provider metrics:**
+- **Uptime**: Historical availability percentage
+- **Rating**: User feedback score (1-5 stars)
+- **Response Time**: Average deployment speed
+- **Total Rentals**: Experience indicator
+
+**Provider profile details:**
+- Wallet address (truncated)
+- Hardware specifications
+- Geographic location
+- Operating history
+
+## Rental configuration
+
+### Duration selection
+
+**Minimum**: 1 hour
+**Maximum**: 24 hours per rental
+**Extensions**: Available during active rentals
+**Auto-renewal**: Not supported (intentional security feature)
+
+<Aside type="note">
+Rentals automatically terminate at expiration. Plan accordingly for long-running tasks.
+</Aside>
+
+### Access level options
+
+**Compute**: Full GPU access with pre-installed ML/AI tools
+**Mining**: Optimized for cryptocurrency mining
+**Gaming**: Remote desktop with gaming software
+**Custom**: Provider-specific environments
+
+### Environment types
+
+**AI/ML Studio:**
+- Jupyter Lab pre-configured
+- Popular ML frameworks installed
+- GPU-optimized containers
+- 30% premium pricing
+
+**Stable Diffusion XL:**
+- ComfyUI and Automatic1111 interfaces
+- 100+ pre-installed models
+- Real-time image generation
+- 20% premium pricing
+
+**Gaming Rig:**
+- Windows desktop environment
+- Steam and Epic Games installed
+- Parsec streaming optimized
+- 40% premium pricing
+
+**Mining Setup:**
+- T-Rex, TeamRedMiner, XMRig ready
+- Pool configurations included
+- Real-time monitoring
+- Standard pricing
+
+## Cost calculation
+
+### Base pricing
+
+**Hourly rates vary by:**
+- GPU performance tier
+- Provider demand/supply
+- Geographic location
+- Environment complexity
+
+**Typical ranges:**
+- **RTX 3080**: `$0.80-$1.50/hour`
+- **RTX 4090**: `$1.50-$2.50/hour` 
+- **A100**: `$3.00-$5.00/hour`
+- **H100**: `$6.00-$10.00/hour`
+
+### Additional fees
+
+**Platform fee**: 2-3% of rental cost
+**Network fees**: Blockchain gas costs (`<$0.05` on Polygon)
+**Setup fees**: Premium environments only (`$1-$5`)
+
+### Payment calculation
+
+```
+Example rental:
+RTX 4090 × 4 hours × $2.00/hour = $8.00
+Platform fee (3%) = $0.24
+Total payment = $8.24 + gas fees
+```
+
+### Platform credits
+
+Unused rental time converts to credits:
+- 90% returned to wallet immediately
+- 10% becomes platform credit for future rentals
+- Credits auto-apply on next rental
+- 1-year expiration on credits
+
+## Payment process
+
+### Pre-payment verification
+
+GPUFlow checks payment capacity before deployment:
+1. **Wallet balance**: Sufficient funds for full duration
+2. **Token approval**: ERC-20 token spending limits
+3. **Network validation**: Correct blockchain selected
+4. **Gas estimation**: Transaction fee preview
+
+### Escrow system
+
+**Payment flow:**
+1. Full rental cost transferred to escrow contract
+2. Provider receives deployment confirmation
+3. Environment deploys and access credentials delivered
+4. Usage tracked in real-time
+5. Final payment processed at completion
+
+**Refund handling:**
+- **Early completion**: Automatic refund for unused time
+- **Provider issues**: Full refund if deployment fails
+- **User cancellation**: Refund minus usage and fees
+
+### Multi-wallet payments
+
+**Connected wallet**: Default payment method
+**Custom payment address**: Alternative funding source
+**Hardware wallet**: Secure signing for large amounts
+**Multi-sig wallet**: Team or DAO treasury payments
+
+<Aside type="tip">
+Set up multiple wallets in advance. Payment processing requires active wallet connection.
+</Aside>
+
+## Deployment process
+
+### After payment confirmation
+
+**Typical timeline:**
+1. **Payment confirmation**: 30-60 seconds (Polygon)
+2. **Provider notification**: Immediate via WebSocket
+3. **Environment deployment**: 30-120 seconds
+4. **Credential delivery**: Automatic via encrypted channel
+5. **Access ready**: Total time usually `<3 minutes`
+
+### Real-time status updates
+
+**Dashboard notifications:**
+- Payment confirmed
+- Provider deploying environment
+- Credentials ready
+- Connection established
+- Usage milestones
+- Expiration warnings
+
+### Access credential delivery
+
+**Automatic delivery includes:**
+- WireGuard VPN configuration file
+- Access URLs for web interfaces
+- SSH connection details (if applicable)
+- Environment-specific instructions
+- Expiration timestamp
+
+## Rental management
+
+### Active rental monitoring
+
+**Usage tracking:**
+- Real-time GPU utilization
+- Memory consumption
+- Network activity
+- Time remaining
+- Cost accumulation
+
+**Performance metrics:**
+- GPU temperature and power
+- Container resource usage
+- Network latency
+- Application-specific monitoring
+
+### Extension and modification
+
+**During active rental:**
+- Extend duration (subject to availability)
+- Monitor resource consumption
+- Access support tools
+- Download data before expiration
+
+**Extension payment:**
+- Additional escrow payment required
+- Immediate processing for uninterrupted service
+- Pro-rated pricing for partial hours
+- Provider confirmation required
+
+### Early termination
+
+**User-initiated completion:**
+1. Click "End Rental" in dashboard
+2. Confirm termination request
+3. Automatic refund processing
+4. Environment cleanup
+5. Final usage report
+
+**Automatic termination:**
+- Exact expiration time enforcement
+- No grace period (security feature)
+- Connection termination within 60 seconds
+- Final payment processing
+- Environment cleanup
+
+## Troubleshooting rentals
+
+### Common payment issues
+
+**Transaction pending:**
+- Wait for network confirmation
+- Check wallet for stuck transactions
+- Verify sufficient gas fees
+- Cancel and retry if necessary
+
+**Payment rejected:**
+- Verify wallet balance includes gas fees
+- Switch to correct network
+- Check token contract addresses
+- Retry with fresh transaction
+
+**Escrow problems:**
+- Contact support immediately
+- Provide transaction hash
+- Do not attempt duplicate payments
+- Monitor blockchain explorer
+
+### Deployment failures
+
+**Environment won't start:**
+- Provider hardware issues
+- Network connectivity problems
+- Resource allocation conflicts
+- Automatic refund processing
+
+**Credential delivery delays:**
+- Network congestion
+- Provider response issues
+- Check spam/security software
+- Access backup delivery methods
+
+### Connection problems
+
+**VPN configuration issues:**
+- Verify WireGuard client installation
+- Import configuration file correctly
+- Check firewall settings
+- Try alternative connection methods
+
+**Service access failures:**
+- Confirm VPN connection established
+- Verify service URLs
+- Check for typos in addresses
+- Contact provider support
+
+## Best practices
+
+### Planning rentals
+
+**Before renting:**
+- Estimate actual time requirements
+- Download any needed data/models in advance
+- Test small duration first
+- Verify wallet has sufficient balance
+
+**During rentals:**
+- Monitor usage regularly
+- Save work frequently
+- Plan for automatic termination
+- Extend before expiration if needed
+
+### Security considerations
+
+**Data protection:**
+- Assume shared hardware environment
+- Encrypt sensitive data
+- Avoid storing credentials in containers
+- Clean up data before expiration
+
+**Network safety:**
+- VPN connections are encrypted
+- Web interfaces use HTTPS
+- Avoid exposing services publicly
+- Monitor for suspicious activity
+
+### Cost optimization
+
+**Efficient usage:**
+- Use appropriate GPU tier for workload
+- Avoid over-provisioning
+- Plan batch operations
+- Consider off-peak pricing
+
+**Payment strategies:**
+- Use Polygon for lower fees
+- Batch multiple short rentals
+- Take advantage of platform credits
+- Monitor market pricing trends
