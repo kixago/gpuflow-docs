@@ -1,0 +1,91 @@
+---
+// Only run in production
+const isDevelopment = import.meta.env.DEV;
+---
+
+{!isDevelopment && (
+  <script is:inline>
+    (() => {
+      let ws = null;
+      let authenticated = false;
+      
+      function connectWebSocket() {
+        if (ws?.readyState === WebSocket.OPEN) return;
+        
+        try {
+          ws = new WebSocket('wss://ws.gpuflow.app/ws/client');
+          
+          ws.onopen = () => {
+            // Authenticate as docs visitor
+            const token = `docs-${Date.now()}-${Math.random().toString(36).substr(2, 8)}`;
+            ws.send(JSON.stringify({
+              type: 'authenticate',
+              data: token
+            }));
+          };
+          
+          ws.onmessage = (event) => {
+            const msg = JSON.parse(event.data);
+            if (msg.type === 'auth_success' && !authenticated) {
+              authenticated = true;
+              // Send initial page visit
+              sendPageVisit();
+            }
+          };
+          
+          ws.onclose = () => {
+            authenticated = false;
+            setTimeout(connectWebSocket, 5000);
+          };
+          
+        } catch (error) {
+          console.error('Docs analytics error:', error);
+        }
+      }
+      
+      function sendPageVisit() {
+        if (ws?.readyState === WebSocket.OPEN && authenticated) {
+          ws.send(JSON.stringify({
+            type: 'page_visit',
+            data: {
+              url: window.location.pathname + window.location.search,
+              title: document.title,
+              site: 'docs',
+              referrer: document.referrer,
+              timestamp: Date.now()
+            }
+          }));
+        }
+      }
+      
+      // Connect on page load
+      connectWebSocket();
+      
+      // Track navigation changes for SPA routing
+      let currentPath = window.location.pathname;
+      const checkPathChange = () => {
+        if (window.location.pathname !== currentPath) {
+          currentPath = window.location.pathname;
+          sendPageVisit();
+        }
+      };
+      
+      // Check for path changes every second
+      setInterval(checkPathChange, 1000);
+      
+      // Send page leave on unload
+      window.addEventListener('beforeunload', () => {
+        if (ws?.readyState === WebSocket.OPEN) {
+          ws.send(JSON.stringify({
+            type: 'page_leave',
+            data: {
+              url: window.location.pathname,
+              site: 'docs',
+              duration: Date.now()
+            }
+          }));
+        }
+      });
+    })();
+  </script>
+)}
