@@ -5,7 +5,6 @@ sidebar:
     label: 'Performance Monitoring'
     order: 15
 ---
-{/* File: providers/operations/performance-monitoring.mdx */}
 
 import { Aside } from '@astrojs/starlight/components';
 
@@ -18,19 +17,19 @@ Access performance metrics through **Dashboard → Containers** or **Dashboard �
 ### Key Performance Indicators
 
 **Utilization Rate**
-- Target: >85% during available hours
-- Calculation: (Active rental hours / Total available hours) × 100
-- Low utilization (`<70%`) indicates pricing or availability issues
+- Target: `>` `85%` during available hours
+- Calculation: `(Active rental hours / Total available hours) × 100`
+- Low utilization `(<70%)` indicates pricing or availability issues
 
 **Revenue Per Hour**
-- Formula: Total earnings ÷ Total available hours
+- Formula: `Total earnings ÷ Total available hours`
 - Compare against market rates for similar hardware
 - Track weekly trends to identify optimization opportunities
 
 **Session Duration**
 - Average rental length across all bookings
 - Longer sessions typically indicate satisfied renters
-- Sub-30 minute sessions may signal performance issues
+- `Sub-30` minute sessions may signal performance issues
 
 ## Real-Time GPU Monitoring
 
@@ -39,19 +38,19 @@ Access performance metrics through **Dashboard → Containers** or **Dashboard �
 Critical thresholds for common GPUs:
 
 **NVIDIA RTX 40 Series:**
-- Normal operation: 65-75°C
-- Throttling begins: 83°C
-- Emergency shutdown: 90°C
+- Normal operation: `65-75°C`
+- Throttling begins: `83°C`
+- Emergency shutdown: `90°C`
 
 **NVIDIA RTX 30 Series:**
-- Normal operation: 70-78°C  
-- Throttling begins: 83°C
-- Emergency shutdown: 93°C
+- Normal operation: `70-78°C`  
+- Throttling begins: `83°C`
+- Emergency shutdown: `93°C`
 
 **AMD RX 7000/6000:**
-- Normal operation: 75-85°C
-- Throttling begins: 90°C
-- Emergency shutdown: 95°C
+- Normal operation: `75-85°C`
+- Throttling begins: `90°C`
+- Emergency shutdown: `95°C`
 
 <Aside type="caution">
 Sustained temperatures above throttling thresholds reduce performance and earnings. Implement additional cooling if temperatures consistently exceed normal ranges.
@@ -61,29 +60,29 @@ Sustained temperatures above throttling thresholds reduce performance and earnin
 
 **VRAM Allocation:**
 - Monitor through **Dashboard → Containers → GPU Monitor**
-- Efficient allocation: 85-95% during active rentals
+- Efficient allocation: `85-95%` during active rentals
 - Memory leaks: Usage remains high between rentals
-- Clean state: '<500MB' usage when idle
+- Clean state: `<500MB` usage when idle
 
 **System RAM Impact:**
-- AI workloads: 16-32GB recommended
-- Mining operations: 8-16GB sufficient
-- Gaming/streaming: 32GB+ optimal
+- AI workloads: `16-32GB` recommended
+- Mining operations: `8-16GB` sufficient
+- Gaming/streaming: `32GB+` optimal
 
 ### Power Consumption Analysis
 
 Track power efficiency to optimize electrical costs:
 
 **Power Limit Tuning:**
-- Default: 100% power limit (maximum performance)
-- Efficiency mode: 80-90% limit (reduced heat/noise)
-- Calculate: Revenue per watt = Earnings ÷ Power consumed
+- Default: `100%` power limit (maximum performance)
+- Efficiency mode: `80-90%` limit (reduced heat/noise)
+- Calculate: `Revenue per watt = Earnings ÷ Power consumed`
 
 **Cost-Benefit Analysis:**
 ```
 Revenue optimization example (RTX 4090):
-100% power: $0.60/hour, 450W = $1.33/kWh
-85% power: $0.54/hour, 320W = $1.69/kWh
+`100%` power: `$0.60/hour`, `450W = $1.33/kWh`
+`85%` power: `$0.54/hour`, `320W = $1.69/kWh`
 ```
 
 ## Earnings Optimization
@@ -92,39 +91,39 @@ Revenue optimization example (RTX 4090):
 
 **Market Position Analysis:**
 - Check competitor rates weekly via marketplace filters
-- Price 5-10% below similar hardware initially
-- Increase by $0.05/hour after achieving >90% utilization
+- Price `5-10%` below similar hardware initially
+- Increase by `$0.05/hour` after achieving `>90%` utilization
 
 **Demand Pattern Recognition:**
-- Peak hours: Evenings (6-11 PM local time)
-- Weekend premium: 15-25% rate increase typical
-- Holiday demand: Gaming workloads increase 40-60%
+- Peak hours: Evenings `(6-11 PM local time)`
+- Weekend premium: `15-25%` rate increase typical
+- Holiday demand: Gaming workloads increase `40-60%`
 
 **Performance-Based Pricing:**
-- High-end cooling: +10-15% premium justified
-- Consistent 99%+ uptime: +20% premium
-- Below-average performance: -15-25% discount required
+- High-end cooling: `+10-15%` premium justified
+- Consistent `99%+` uptime: `+20%` premium
+- Below-average performance: `-15-25%` discount required
 
 ### Availability Scheduling
 
 **Optimal Availability Windows:**
-- 24/7 availability: 35-50% higher monthly earnings
-- Peak-only (6 PM - 12 AM): Higher hourly rates, lower volume
-- Business hours (9 AM - 5 PM): Enterprise customers, steady demand
+- `24/7` availability: `35-50%` higher monthly earnings
+- Peak-only `(6 PM - 12 AM)`: Higher hourly rates, lower volume
+- Business hours `(9 AM - 5 PM)`: Enterprise customers, steady demand
 
 **Minimum Session Management:**
-- 1-hour minimum: Maximum flexibility, higher turnover costs
-- 4-hour minimum: Reduced overhead, better for intensive workloads
-- 8+ hour minimum: Enterprise focus, stable income
+- `1-hour` minimum: Maximum flexibility, higher turnover costs
+- `4-hour` minimum: Reduced overhead, better for intensive workloads
+- `8+` hour minimum: Enterprise focus, stable income
 
 ## System Health Monitoring
 
 ### Hardware Degradation Tracking
 
 **GPU Health Metrics:**
-- Core clock stability: <2% variance during load
-- Memory error rate: <0.1 errors per hour acceptable
-- Fan curve efficiency: Monitor RPM vs temperature correlation
+- Core clock stability: `<2%` variance during load
+- Memory error rate: `<0.1` errors per hour acceptable
+- Fan curve efficiency: Monitor `RPM vs temperature` correlation
 
 **Early Warning Signs:**
 - Increasing temperatures with same workloads
@@ -135,14 +134,14 @@ Revenue optimization example (RTX 4090):
 ### Network Performance Impact
 
 **Connection Quality Requirements:**
-- Upload speed: Minimum 50 Mbps for responsive access
-- Latency: <50ms to major cloud providers optimal
-- Jitter: <10ms variation for smooth experience
+- Upload speed: Minimum `50 Mbps` for responsive access
+- Latency: `<50ms` to major cloud providers optimal
+- Jitter: `<10ms` variation for smooth experience
 
 **Bandwidth Usage Patterns:**
-- AI training: 10-100 MB/s sustained transfers
-- Mining: <1 MB/s steady-state
-- Gaming/streaming: 50-200 MB/s peak usage
+- AI training: `10-100 MB/s` sustained transfers
+- Mining: `<1 MB/s` steady-state
+- Gaming/streaming: `50-200 MB/s` peak usage
 
 ## Troubleshooting Common Issues
 
@@ -150,11 +149,11 @@ Revenue optimization example (RTX 4090):
 
 **Pricing Analysis:**
 1. Compare rates against similar hardware in marketplace
-2. Check booking rate: Views → Inquiries → Completed rentals
+2. Check booking rate: `Views → Inquiries → Completed rentals`
 3. Review renter feedback for performance complaints
 
 **Technical Issues:**
-- Container startup time >60 seconds: Investigate system resources
+- Container startup time `>60` seconds: Investigate system resources
 - Connection failures: Verify port forwarding and firewall rules
 - Performance complaints: Run GPU benchmarks during idle periods
 
@@ -167,9 +166,9 @@ Revenue optimization example (RTX 4090):
 4. **System Resource:** Monitor CPU, RAM, and storage impact
 
 **Resolution Priority:**
-- Critical (revenue impact >50%): Address within 4 hours
-- High (revenue impact 20-50%): Resolve within 24 hours  
-- Medium (revenue impact <20%): Schedule maintenance window
+- Critical (revenue impact `>50%`): Address within `4` hours
+- High (revenue impact `20-50%`): Resolve within `24` hours  
+- Medium (revenue impact `<20%`): Schedule maintenance window
 
 ## Advanced Analytics
 
@@ -178,7 +177,7 @@ Revenue optimization example (RTX 4090):
 **Historical Analysis:**
 - Track monthly earnings trends
 - Identify seasonal patterns
-- Calculate growth rate month-over-month
+- Calculate growth rate `month-over-month`
 
 **Market Expansion Opportunities:**
 - Underserved time zones: International renter access
@@ -193,12 +192,12 @@ Revenue optimization example (RTX 4090):
 - Feature comparison: Cooling, overclocks, additional software
 
 **Performance Optimization:**
-- A/B test pricing strategies over 2-week periods
+- A/B test pricing strategies over `2-week` periods
 - Monitor booking patterns after rate adjustments
 - Track renter retention and repeat bookings
 
 <Aside type="tip">
-Set up automated alerts for GPU temperature >80°C, utilization <60%, or earnings decline >15% week-over-week. Early detection prevents revenue loss and hardware damage.
+Set up automated alerts for GPU temperature `>80°C`, utilization `<60%`, or earnings decline `>15%` week-over-week. Early detection prevents revenue loss and hardware damage.
 </Aside>
 
 ## Reporting and Analytics
@@ -209,7 +208,7 @@ Access through **Dashboard → Analytics** (if available) or compile manually:
 
 **Key Metrics Summary:**
 - Total active hours today
-- Revenue generated (gross/net)
+- Revenue generated `(gross/net)`
 - Average GPU temperature and utilization
 - Number of unique renters served
 
@@ -242,5 +241,5 @@ Access through **Dashboard → Analytics** (if available) or compile manually:
 - Growth trajectory projections
 
 <Aside type="note">
-Optimal performing providers typically achieve 85%+ utilization during available hours, maintain 99%+ uptime, and price within 15% of market median for comparable hardware.
+Optimal performing providers typically achieve `85%+` utilization during available hours, maintain `99%+` uptime, and price within `15%` of market median for comparable hardware.
 </Aside>
