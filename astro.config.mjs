@@ -2,7 +2,9 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 
-// Simple plugin to add external link handling
+/**
+ * @type {import('@astrojs/starlight/types').StarlightPlugin}
+ */
 const externalLinksPlugin = {
 	name: 'external-links',
 	hooks: {
@@ -49,7 +51,7 @@ export default defineConfig({
 			social: [{ 
 				icon: 'github', 
 				label: 'GitHub', 
-				href: 'https://github.com/withastro/starlight' 
+				href: 'https://github.com/kixago/gpuflow-docs' 
 			}],
 			customCss: ['./src/styles/custom.css'],
 			plugins: [externalLinksPlugin],
