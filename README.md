@@ -1,49 +1,87 @@
-# Starlight Starter Kit: Basics
+# GPUFlow Documentation
 
-[![Built with Starlight](https://astro.badg.es/v2/built-with-starlight/tiny.svg)](https://starlight.astro.build)
+Official documentation for [GPUFlow](https://gpuflow.app) - the decentralized GPU rental marketplace.
 
+## About GPUFlow
+
+GPUFlow connects GPU owners with users who need computational resources, creating a peer-to-peer marketplace for GPU computing power. Whether you're training AI models, mining cryptocurrency, or rendering 3D graphics, GPUFlow provides affordable access to high-performance GPUs worldwide.
+
+## Documentation Site
+
+This repository contains the source code for our documentation website at [docs.gpuflow.app](https://docs.gpuflow.app).
+
+## What You'll Find Here
+
+### For GPU Providers
+- **Getting Started**: How to list your GPU and start earning
+- **Container Setup**: Installing and configuring the GPUFlow provider
+- **Earnings Guide**: Understanding payments and maximizing income
+- **Security Best Practices**: Keeping your hardware and data safe
+
+### For GPU Renters
+- **How to Rent**: Browse, select, and pay for GPU access
+- **Wallet Setup**: Multi-wallet configuration and payment methods
+- **Terminal Access**: Using the web-based development environment
+- **Use Cases**: AI training, mining, gaming, and rendering guides
+
+### For Developers
+- **API Reference**: Integration endpoints and WebSocket events
+- **Smart Contracts**: Contract addresses and interaction guides
+- **Container Specifications**: Hardware and software requirements
+
+## Technology Stack
+
+- **Framework**: Astro.js with TypeScript
+- **Styling**: Tailwind CSS
+- **Deployment**: Cloudflare Pages
+- **Content**: Markdown with frontmatter
+
+## Contributing
+
+We welcome contributions to improve our documentation:
+
+1. Fork this repository
+2. Create a feature branch (`git checkout -b feature/improve-docs`)
+3. Make your changes
+4. Submit a pull request
+
+### Writing Guidelines
+
+- Use clear, concise language
+- Include code examples where helpful
+- Test all instructions before submitting
+- Follow our existing tone and style
+
+## Local Development
+
+```bash
+# Clone the repository
+git clone https://github.com/kixago/gpuflow-docs.git
+cd gpuflow-docs
+
+# Install dependencies
+pnpm install
+
+# Start development server
+pnpm dev
+
+# Build for production
+pnpm build
+
+# Preview production build
+pnpm preview
 ```
-pnpm create astro@latest -- --template starlight
-```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Support
 
-## 🚀 Project Structure
+- **Platform Issues**: Contact support through [gpuflow.app](https://gpuflow.app)
+- **Documentation Issues**: Open an issue in this repository
+- **Community**: Join our discussions and get help from other users
 
-Inside of your Astro + Starlight project, you'll see the following folders and files:
+## License
 
-```
-.
-├── public/
-├── src/
-│   ├── assets/
-│   ├── content/
-│   │   └── docs/
-│   └── content.config.ts
-├── astro.config.mjs
-├── package.json
-└── tsconfig.json
-```
+This documentation is open source under the MIT License. See [LICENSE](LICENSE) for details.
 
-Starlight looks for `.md` or `.mdx` files in the `src/content/docs/` directory. Each file is exposed as a route based on its file name.
+---
 
-Images can be added to `src/assets/` and embedded in Markdown with a relative link.
-
-Static assets, like favicons, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `pnpm install`             | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Check out [Starlight’s docs](https://starlight.astro.build/), read [the Astro documentation](https://docs.astro.build), or jump into the [Astro Discord server](https://astro.build/chat).
+**GPUFlow** - Democratizing access to GPU computing power through Web3 technology.
