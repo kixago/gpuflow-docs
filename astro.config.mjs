@@ -60,18 +60,23 @@ const analyticsPlugin = {
 								(function() {
 									let ws = null;
 									let authenticated = false;
+									let pageStartTime = Date.now();
+									let scrollDepth = 0;
+									let clickCount = 0;
+									let sessionStart = Date.now();
 									
 									function connectWebSocket() {
-										if (ws?.readyState === WebSocket.OPEN) return;
+										if (ws && ws.readyState === WebSocket.OPEN) return;
 										
 										try {
 											ws = new WebSocket('wss://ws.gpuflow.app/ws/client');
 											
 											ws.onopen = function() {
-												const token = 'docs-' + Date.now() + '-' + Math.random().toString(36).substr(2, 8);
+												const token = 'docs-anon-' + Date.now() + '-' + Math.random().toString(36).substr(2, 8);
 												ws.send(JSON.stringify({
 													type: 'authenticate',
-													data: token
+													data: token,
+													timestamp: Date.now()
 												}));
 											};
 											
@@ -79,7 +84,9 @@ const analyticsPlugin = {
 												const msg = JSON.parse(event.data);
 												if (msg.type === 'auth_success' && !authenticated) {
 													authenticated = true;
+													sendSessionStart();
 													sendPageVisit();
+													startHeartbeat();
 												}
 											};
 											
@@ -97,19 +104,108 @@ const analyticsPlugin = {
 										}
 									}
 									
-									function sendPageVisit() {
-										if (ws?.readyState === WebSocket.OPEN && authenticated) {
+									function sendMessage(type, data) {
+										if (ws && ws.readyState === WebSocket.OPEN && authenticated) {
 											ws.send(JSON.stringify({
-												type: 'page_visit',
-												data: {
-													url: window.location.pathname + window.location.search,
-													title: document.title,
-													site: 'docs',
-													referrer: document.referrer,
-													timestamp: Date.now()
-												}
+												type: type,
+												data: data,
+												timestamp: Date.now()
 											}));
 										}
+									}
+									
+									function sendSessionStart() {
+										sendMessage('session_start', {
+											site: 'docs',
+											sessionStart: new Date(sessionStart).toISOString(),
+											userAgent: navigator.userAgent,
+											viewport: {
+												width: window.innerWidth,
+												height: window.innerHeight
+											},
+											timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+											language: navigator.language
+										});
+									}
+									
+									function sendPageVisit() {
+										pageStartTime = Date.now();
+										scrollDepth = 0;
+										clickCount = 0;
+										
+										sendMessage('page_visit', {
+											url: window.location.pathname + window.location.search,
+											title: document.title,
+											site: 'docs',
+											referrer: document.referrer,
+											userAgent: navigator.userAgent,
+											viewport: {
+												width: window.innerWidth,
+												height: window.innerHeight
+											}
+										});
+									}
+									
+									function sendPageLeave() {
+										const timeOnPage = Date.now() - pageStartTime;
+										sendMessage('page_leave', {
+											url: window.location.pathname,
+											duration: timeOnPage,
+											maxScrollDepth: scrollDepth,
+											clickEvents: clickCount,
+											site: 'docs'
+										});
+									}
+									
+									function startHeartbeat() {
+										setInterval(function() {
+											if (authenticated) {
+												const timeOnPage = Date.now() - pageStartTime;
+												sendMessage('session_update', {
+													site: 'docs',
+													currentPage: window.location.pathname,
+													timeOnCurrentPage: timeOnPage,
+													scrollDepth: scrollDepth,
+													clickCount: clickCount,
+													sessionDuration: Date.now() - sessionStart
+												});
+											}
+										}, 15000);
+									}
+									
+									// Track scroll depth
+									let scrollTimeout;
+									window.addEventListener('scroll', function() {
+										clearTimeout(scrollTimeout);
+										scrollTimeout = setTimeout(function() {
+											const scrollPercent = Math.round(
+												(window.pageYOffset / (document.body.scrollHeight - window.innerHeight)) * 100
+											);
+											scrollDepth = Math.max(scrollDepth, scrollPercent || 0);
+										}, 100);
+									});
+									
+									// Track clicks and docs-specific interactions
+									document.addEventListener('click', function(event) {
+										clickCount++;
+										
+										const target = event.target;
+										if (target && target.matches && target.matches('a[href]')) {
+											const href = target.getAttribute('href');
+											const isExternal = href && (href.startsWith('http://') || href.startsWith('https://')) && !href.includes('docs.gpuflow.app');
+											
+											sendMessage('docs_link_click', {
+												href: href,
+												text: target.textContent && target.textContent.trim().substring(0, 50) || '',
+												isExternal: isExternal,
+												section: getCurrentSection()
+											});
+										}
+									});
+									
+									function getCurrentSection() {
+										const pathParts = window.location.pathname.split('/').filter(Boolean);
+										return pathParts[0] || 'home';
 									}
 									
 									// Connect on page load
@@ -119,6 +215,7 @@ const analyticsPlugin = {
 									let currentPath = window.location.pathname;
 									function checkPathChange() {
 										if (window.location.pathname !== currentPath) {
+											sendPageLeave();
 											currentPath = window.location.pathname;
 											sendPageVisit();
 										}
@@ -128,20 +225,21 @@ const analyticsPlugin = {
 									
 									// Handle Astro page navigation
 									document.addEventListener('astro:page-load', function() {
-										setTimeout(sendPageVisit, 100);
+										setTimeout(function() {
+											sendPageLeave();
+											sendPageVisit();
+										}, 100);
 									});
 									
 									// Send page leave on unload
 									window.addEventListener('beforeunload', function() {
-										if (ws?.readyState === WebSocket.OPEN) {
-											ws.send(JSON.stringify({
-												type: 'page_leave',
-												data: {
-													url: window.location.pathname,
-													site: 'docs',
-													duration: Date.now()
-												}
-											}));
+										sendPageLeave();
+									});
+									
+									// Handle visibility changes
+									document.addEventListener('visibilitychange', function() {
+										if (document.hidden) {
+											sendPageLeave();
 										}
 									});
 								})();
@@ -165,7 +263,7 @@ export default defineConfig({
 				href: 'https://github.com/kixago/gpuflow-docs' 
 			}],
 			customCss: ['./src/styles/custom.css'],
-			plugins: [externalLinksPlugin, analyticsPlugin], // Added analyticsPlugin here
+			plugins: [externalLinksPlugin, analyticsPlugin],
 			sidebar: [
 				{
 					label: 'GPU Providers',
