@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
 
+Disallow: /_astro/
+Disallow: /pagefind/
+
 Sitemap: https://docs.gpuflow.app/sitemap-index.xml
