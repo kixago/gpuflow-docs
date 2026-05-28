@@ -262,6 +262,14 @@ export default defineConfig({
     sitemap(),
     starlight({
       title: "GPUFlow Documentation",
+      head: [
+        {
+          tag: "meta",
+          attrs: { property: "og:site_name", content: "GPUFlow Documentation" },
+        },
+        { tag: "meta", attrs: { name: "twitter:card", content: "summary" } },
+        { tag: "meta", attrs: { name: "theme-color", content: "#6366f1" } },
+      ],
       social: [
         {
           icon: "github",
