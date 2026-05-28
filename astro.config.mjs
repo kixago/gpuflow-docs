@@ -446,6 +446,5 @@ export default defineConfig({
         },
       ],
     }),
-    sitemap(),
   ],
 });
