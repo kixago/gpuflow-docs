@@ -171,15 +171,20 @@ sudo chown $USER:$USER /opt/gpuflow
 
 **Run GPUFlow provider:**
 ```bash
+docker pull docker.io/gpuflow/universal:latest
+
 docker run -d \
   --name gpuflow-provider \
   --restart=unless-stopped \
   --gpus=all \
   --network=host \
   -v /opt/gpuflow:/data \
-  -e GPUFLOW_API_KEY="get-from-dashboard" \
-  ghcr.io/gpuflow/provider:latest
+  -e GPUFLOW_MACHINE_ID="YOUR_MACHINE_ID" \
+  -e RELAY_SERVER_URL="wss://gpuflow.app/ws/container" \
+  -e MAIN_SITE_URL="https://gpuflow.app" \
+  docker.io/gpuflow/universal:latest
 ```
+> Your Machine ID is shown in the GPUFlow dashboard under **Dashboard → Containers**. Add your machine ID there first, then copy it into the command above.
 
 **Verify provider is running:**
 ```bash

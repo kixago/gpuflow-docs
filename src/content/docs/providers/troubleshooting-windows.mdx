@@ -300,15 +300,15 @@ docker logs gpuflow-provider --tail 20
 
 **Common fixes:**
 
-**API key issues:**
+**Machine ID issues:**
 ```bash
-# Verify API key is set
-docker inspect gpuflow-provider | grep GPUFLOW_API_KEY
+# Verify Machine ID and relay URL are set correctly
+docker inspect gpuflow-provider | grep -A 10 '"Env"'
 
-# Update API key
+# Update with correct values
 docker stop gpuflow-provider
 docker rm gpuflow-provider
-# Re-run docker command with correct API key
+# Re-run docker command with correct Machine ID
 ```
 
 **Network connectivity:**
@@ -346,8 +346,10 @@ docker run -d \
   --memory="4g" \
   --cpus="2.0" \
   -v /opt/gpuflow:/data \
-  -e GPUFLOW_API_KEY="your-key" \
-  ghcr.io/gpuflow/provider:latest
+  -e GPUFLOW_MACHINE_ID="your-machine-id-from-dashboard" \
+  -e RELAY_SERVER_URL="wss://gpuflow.app/ws/container" \
+  -e MAIN_SITE_URL="https://gpuflow.app" \
+  docker.io/gpuflow/universal:latest
 ```
 
 ## Gaming and Provider Conflicts
@@ -507,5 +509,5 @@ docker logs gpuflow-provider --tail 50
 - **Forum**: [Windows Provider Support](https://forum.gpuflow.app/windows)
 
 <Aside type="tip">
-Most Windows issues stem from WSL2 configuration or driver problems. Check the WSL2 and driver sections first before investigating container-specific issues.
+Most Windows issues stem from WSL2 configuration, driver problems, or an incorrect Machine ID. Verify your GPUFLOW_MACHINE_ID matches exactly what's shown in your dashboard under Containers.
 </Aside>

@@ -110,7 +110,9 @@ podman run -d \
   --device nvidia.com/gpu=all \
   --network=host \
   -v /opt/gpuflow:/data:Z \
-  -e GPUFLOW_API_KEY="get-from-dashboard" \
+  -e GPUFLOW_MACHINE_ID="YOUR_MACHINE_ID" \
+  -e RELAY_SERVER_URL="wss://gpuflow.app/ws/container" \
+  -e MAIN_SITE_URL="https://gpuflow.app" \
   docker.io/gpuflow/universal:latest
 ```
 
@@ -120,6 +122,7 @@ Check the provider status:
 podman ps
 podman logs gpuflow-provider
 ```
+> Your Machine ID is shown in the GPUFlow dashboard under **Dashboard → Containers**. Add your machine ID there first, then copy it into the command above.
 
 Expected log output:
 - GPU detection successful
@@ -161,7 +164,7 @@ podman restart gpuflow-provider
 podman stop gpuflow-provider
 
 # Update provider
-podman pull ghcr.io/gpuflow/provider:latest
+podman pull docker.io/gpuflow/universal:latest
 podman stop gpuflow-provider
 podman rm gpuflow-provider
 # Re-run the podman run command from Step 6

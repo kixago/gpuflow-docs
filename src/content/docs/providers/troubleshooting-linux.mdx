@@ -34,10 +34,12 @@ Common causes and fixes:
 
 **Missing API key:**
 ```bash
-# Set the API key environment variable
+# Verify your GPUFLOW_MACHINE_ID is set correctly
 docker run -d \
   --name gpuflow-provider \
-  -e GPUFLOW_API_KEY="your-actual-key-here" \
+  -e GPUFLOW_MACHINE_ID="your-machine-id-from-dashboard" \
+  -e RELAY_SERVER_URL="wss://gpuflow.app/ws/container" \
+  -e MAIN_SITE_URL="https://gpuflow.app" \
   [other options...]
 ```
 
@@ -150,11 +152,11 @@ docker logs gpuflow-provider | grep -i registration
 podman logs gpuflow-provider | grep -i registration
 ```
 
-**Check API key:**
+**Check Machine ID:**
 ```bash
-# Verify API key is set correctly
-docker inspect gpuflow-provider | grep GPUFLOW_API_KEY
-podman inspect gpuflow-provider | grep GPUFLOW_API_KEY
+# Check variables are set correctly
+docker inspect gpuflow-provider | grep -A 5 '"Env"'
+podman inspect gpuflow-provider | grep -A 5 '"Env"'
 ```
 
 **Force re-registration:**

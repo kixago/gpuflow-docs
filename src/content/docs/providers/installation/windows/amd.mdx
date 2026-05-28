@@ -166,16 +166,26 @@ sudo service docker restart
 Test GPU access with a ROCm container:
 
 ```bash
+docker pull docker.io/gpuflow/universal:latest
+
 # Test basic GPU access
-docker run --rm -it \
+docker run -d \
+  --name gpuflow-provider \
+  --restart=unless-stopped \
   --device=/dev/dri \
   --device=/dev/kfd \
   --security-opt seccomp=unconfined \
   --group-add video \
   --group-add render \
-  rocm/pytorch:latest \
-  rocm-smi
+  --network=host \
+  -v /opt/gpuflow:/data \
+  -e GPUFLOW_MACHINE_ID="YOUR_MACHINE_ID" \
+  -e RELAY_SERVER_URL="wss://gpuflow.app/ws/container" \
+  -e MAIN_SITE_URL="https://gpuflow.app" \
+  -e GPU_VENDOR="amd" \
+  docker.io/gpuflow/universal:latest
 ```
+> Your Machine ID is shown in the GPUFlow dashboard under **Dashboard → Containers**. Add your machine ID there first, then copy it into the command above.
 
 If successful, you'll see your AMD GPU information displayed.
 
