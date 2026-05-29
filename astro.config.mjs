@@ -262,6 +262,9 @@ export default defineConfig({
     sitemap(),
     starlight({
       title: "GPUFlow Documentation",
+      components: {
+        Head: "./src/components/Head.astro",
+      },
       head: [
         {
           tag: "meta",

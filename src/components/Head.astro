@@ -1,0 +1,34 @@
+---
+import Default from '@astrojs/starlight/components/Head.astro';
+
+// Build breadcrumb from URL path
+const parts = Astro.url.pathname.replace(/\/$/, '').split('/').filter(Boolean);
+
+const breadcrumbs = [
+  { name: 'GPUFlow', url: 'https://gpuflow.app' },
+  { name: 'Documentation', url: 'https://docs.gpuflow.app' },
+];
+
+let currentPath = 'https://docs.gpuflow.app';
+for (const part of parts) {
+  currentPath += `/${part}`;
+  const name = part
+    .replace(/-/g, ' ')
+    .replace(/\b\w/g, (c) => c.toUpperCase());
+  breadcrumbs.push({ name, url: `${currentPath}/` });
+}
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: breadcrumbs.map((crumb, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: crumb.name,
+    item: crumb.url,
+  })),
+};
+---
+
+<Default {...Astro.props}><slot /></Default>
+<script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
