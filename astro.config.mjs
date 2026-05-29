@@ -272,6 +272,14 @@ export default defineConfig({
         },
         { tag: "meta", attrs: { name: "twitter:card", content: "summary" } },
         { tag: "meta", attrs: { name: "theme-color", content: "#6366f1" } },
+        {
+          tag: "script",
+          attrs: {
+            src: "https://anal.gpuflow.app/api/script.js",
+            "data-site-id": "YOUR_DOCS_SITE_ID",
+            defer: true,
+          },
+        },
       ],
       social: [
         {
