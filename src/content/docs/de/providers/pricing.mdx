@@ -1,0 +1,92 @@
+---
+title: Den Preis für Ihre GPU festlegen
+description: Was GPUs wie Ihre pro Stunde kosten (RTX 3060 bis RTX 5090, A4000 bis A6000), was Ihnen nach der GPUFlow-Gebühr bleibt, Ihre Stromkosten und ein einfacher Weg zu Ihrem Preis.
+sidebar:
+  label: Den Preis für Ihre GPU festlegen
+  order: 3
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+import { Image } from 'astro:assets';
+import bar from '../../../../assets/screens/de/provider-price-bar.png';
+
+Ihr Preis ist der wichtigste Grund, warum ein Mieter Ihre GPU wählt oder eine andere. Hier steht, was Ihnen bleibt, was Sie der Betrieb kostet und was GPUs wie Ihre heute kosten.
+
+## Was Ihnen bleibt
+
+Sie legen einen Stundenpreis fest. Der Mieter zahlt diesen Preis für die Zeit, die er nutzt. **GPUFlow behält 12 %, Sie bekommen 88 %.**
+
+| Ihr Preis pro Stunde | Ihr Verdienst pro Stunde | 8 Stunden am Tag, 30 Tage lang |
+| --- | --- | --- |
+| $0.10 | $0.088 | $21.12 |
+| $0.20 | $0.176 | $42.24 |
+| $0.35 | $0.308 | $73.92 |
+| $0.50 | $0.44 | $105.60 |
+
+Die letzte Spalte geht davon aus, dass Ihre GPU jeden Tag 8 Stunden vermietet ist. Wie viel sie tatsächlich genutzt wird, hängt von Ihrem Preis, Ihrer Modellwahl und davon ab, wie oft Sie online sind.
+
+## Was Sie der Betrieb kostet
+
+Die größten Kosten sind Strom. Das rechnen Sie in einer Minute aus:
+
+<Steps>
+
+1. Öffnen Sie **Meine Rechner**, während Ihre GPU ausgelastet ist. Die Karte zeigt unter **Leistung** die Leistungsaufnahme in Watt.
+2. Teilen Sie durch 1.000, dann haben Sie Kilowatt. 350 W sind 0,35 kW.
+3. Multiplizieren Sie mit Ihrem Strompreis pro kWh (er steht auf Ihrer Stromrechnung).
+
+</Steps>
+
+Beispiel: 0,35 kW × $0.15 pro kWh = **$0.053 pro Stunde**. Ihr Verdienst pro Stunde sollte deutlich darüber liegen.
+
+## Was GPUs gerade kosten
+
+Das sind On-Demand-Preise pro GPU und Stunde, die wir im **September 2026** auf anderen GPU-Vermietungsseiten gefunden haben: Vast.ai, RunPod, Salad, SimplePod, TensorDock, Hyperstack und Lambda, teils über die Vergleichsseite getdeploying.com. Sie ändern sich jede Woche. Verstehen Sie sie also als Orientierung, nicht als Regel.
+
+| GPU | Üblicher Preis pro Stunde |
+| --- | --- |
+| RTX 3060 12 GB | $0.05 – $0.08 |
+| RTX 3070 | $0.09 – $0.13 |
+| RTX 3080 | $0.14 – $0.17 |
+| RTX 3090 | $0.11 – $0.31 |
+| RTX 4060 Ti 16 GB | $0.10 – $0.14 |
+| RTX 4070 | $0.07 – $0.15 |
+| RTX 4070 Ti | $0.19 – $0.24 |
+| RTX 4080 | $0.23 – $0.27 |
+| RTX 4090 | $0.30 – $0.46 |
+| RTX 5080 | $0.22 – $0.39 |
+| RTX 5090 | $0.41 – $0.69 |
+| RTX A4000 | $0.08 – $0.17 |
+| RTX A5000 | $0.16 – $0.25 |
+| RTX A6000 | $0.40 – $0.53 |
+
+Große Cloud-Anbieter verlangen für Rechenzentrums-GPUs deutlich mehr. Eine NVIDIA L4 bei AWS kostet zum Beispiel etwa $0.80 pro Stunde. Mieter, die auf einen Marktplatz wie GPUFlow kommen, vergleichen Sie aber mit den Preisen oben, nicht mit AWS.
+
+<Aside type="note" title="Warum Sie in der unteren Hälfte anfangen sollten">
+Auf den meisten dieser Seiten bekommt ein Mieter den ganzen Rechner. Auf GPUFlow bekommt er Ihre KI-Modelle über eine API. Das ist für ihn einfacher, bietet aber weniger Möglichkeiten. Setzen Sie Ihren Preis deshalb in die untere Hälfte der Spanne, zumindest bis Sie die ersten Mieten hatten.
+</Aside>
+
+## Die Preisleiste im Angebotsformular
+
+Wenn Sie unter **GPU anbieten** oder **Bearbeiten** einen Stundensatz eingeben, zeigt eine Leiste unter dem Feld, wo Ihr Preis liegt:
+
+<Image src={bar} alt="Die Preisleiste unter dem Feld Stundensatz, die den Preis als üblich für diese GPU einstuft" />
+
+- **Grüner Bereich, „Andere Vermietungsseiten“:** die übliche Spanne für Ihr GPU-Modell auf anderen Vermietungsseiten, aus der Tabelle oben.
+- **Blaue Linie, „Andere GPUFlow-Angebote dieses Modells“:** der Durchschnittspreis anderer GPUFlow-Angebote mit demselben GPU-Modell, mit deren niedrigstem und höchstem Preis. Sie erscheint nur, wenn es solche Angebote gibt.
+- **Orangefarbene Markierung:** Ihr Preis. Die Zeile unter der Leiste sagt **Günstig**, **Üblicher Preis** oder **Teuer**. Die letzte Zeile zeigt, was Sie nach der Gebühr von 12 % pro Stunde verdienen.
+
+Steht Ihre GPU nicht in der Tabelle und bietet sie noch niemand sonst auf GPUFlow an, kann die Leiste nicht vergleichen. Nehmen Sie dann die ähnlichste Karte aus der Tabelle als Orientierung.
+
+## Ihren Preis wählen: ein einfacher Plan
+
+<Steps>
+
+1. **Fangen Sie niedrig an.** Wählen Sie einen Preis im unteren Drittel der Spanne für Ihre GPU. Bei einer RTX 4090 sind das etwa $0.30 – $0.35.
+2. **Bleiben Sie online.** Eine Offline-GPU kann niemand mieten. Die Stunden, in denen Sie online sind, zählen mehr als ein paar Cent.
+3. **Schauen Sie nach einer Woche wieder hin.**
+   - Meistens vermietet? Erhöhen Sie den Preis um $0.02 – $0.05.
+   - Gar keine Mieten? Senken Sie ihn um $0.02 – $0.05 und prüfen Sie, ob Ihre Beschreibung Ihre Modelle nennt.
+4. **Prüfen Sie einmal im Monat.** Die Preise auf anderen Seiten ändern sich. Ihren eigenen ändern Sie unter **Meine GPUs → Bearbeiten**.
+
+</Steps>

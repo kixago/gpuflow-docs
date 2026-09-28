@@ -1,0 +1,65 @@
+---
+title: Ein gutes Angebot schreiben
+description: Ein GPUFlow-Angebot Feld für Feld ausfüllen, mit Beispielen für Namen, Beschreibungen und Merkmale zum Kopieren und Anpassen.
+sidebar:
+  label: Ein gutes Angebot schreiben
+  order: 2
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import { Image } from 'astro:assets';
+import form from '../../../../assets/screens/de/provider-list-gpu.png';
+
+Mieter entscheiden sich in wenigen Sekunden für eine GPU. Den Unterschied machen ein klarer Name, das richtige Modell und eine kurze Beschreibung, die sagt, welche KI-Modelle Sie bereitstellen.
+
+Öffnen Sie **Dashboard → GPU anbieten** (oder klicken Sie bei einem Rechner, der online ist, auf **Zur Miete anbieten**). Das Formular sieht so aus:
+
+<Image src={form} alt="Das Formular GPU anbieten, mit einem Beispiel ausgefüllt, jedes Feld nummeriert" />
+
+## Feld für Feld
+
+**1. GPU-Name (Ihr Angebotsname).** Das sehen Mieter zuerst. Nennen Sie darin die GPU und das wichtigste Modell.
+
+> `RTX 4090 · qwen2.5 7B`
+> `RTX 3060 12 GB · fast small models`
+> `RTX 3090 · qwen2.5 14B, evenings and weekends`
+
+**2. GPU-Modell (Offiziell).** Wählen Sie Ihre genaue Karte aus der Liste. Danach richtet sich der VRAM, der in Ihrem Angebot steht. Außerdem erscheinen Sie auf dem Marktplatz zusammen mit Angeboten derselben Karte. Sie können es später nicht ändern.
+
+**3. Stundensatz (USD).** Das zahlt ein Mieter für eine Stunde. Lesen Sie [Den Preis für Ihre GPU festlegen](/de/providers/pricing/), bevor Sie sich entscheiden.
+
+**4. Standort.** Wählen Sie die nächstgelegene Stadt aus der Liste. Mieter können den Marktplatz nach Standort filtern.
+
+**5. Rechner.** Der Rechner, der dieses Angebot bedient. Wenn Sie über **Zur Miete anbieten** gekommen sind, ist er schon ausgewählt. Andernfalls wählen Sie einen, der online ist. Oder Sie lassen **Keiner, später verknüpfen** stehen und nutzen danach **Online schalten** unter **Meine GPUs**.
+
+**6. Wichtige Merkmale (durch Komma getrennt).** Kurze Stichworte, durch Kommas getrennt:
+
+> `24 GB VRAM, qwen2.5:7b, llama3.1:8b, 1 Gbit upload`
+
+**7. Beschreibung.** Zwei oder drei Sätze. Nennen Sie die Modelle, die Sie bereitstellen, Ihre Verbindung und wann der Rechner meistens läuft:
+
+> RTX 4090 mit 24 GB VRAM an einer 1-Gbit-Leitung. Stellt qwen2.5:7b und llama3.1:8b über eine OpenAI-kompatible API bereit. An den meisten Tagen von 08:00 bis 23:00 Uhr online (UTC-7).
+
+> RTX 3060 mit 12 GB VRAM an einem Glasfaseranschluss (500 Mbit). Stellt qwen2.5:0.5b und qwen2.5:7b bereit. Gut für Tests, kleine Skripte und Chatbots. Meist rund um die Uhr online.
+
+Klicken Sie dann auf **GPU anbieten**.
+
+<Aside type="tip" title="Versprechen Sie nur, was stimmt">
+Nennen Sie nur die Modelle, die wirklich auf Ihrem Rechner installiert sind, und nur die Zeiten, in denen Sie wirklich online sind. Mieter, die bekommen, was sie erwartet haben, kommen wieder.
+</Aside>
+
+## Nach dem Anbieten
+
+Unter **Meine GPUs** können Sie:
+
+- **Bearbeiten:** Name, Preis, Standort, Beschreibung oder den Rechner ändern.
+- **Zurückziehen:** das Angebot auf dem Marktplatz ausblenden, ohne es zu löschen. **Veröffentlichen** macht es wieder sichtbar.
+- **Löschen:** das Angebot endgültig entfernen. Solange es vermietet ist, können Sie es nicht löschen.
+- **Online schalten:** den Befehl für ein Angebot abrufen, dessen Rechner offline ist.
+
+## Was Mieter sehen
+
+Ihr Angebot erscheint auf dem Marktplatz:
+
+- im grünen Bereich **Sofortzugriff Verfügbar**, solange Ihr Rechner online ist,
+- im gelben Bereich **Verfügbar - Anbieter Offline**, solange er aus ist. Dort können Mieter auf **Benachrichtigen, wenn online** klicken. Sie bekommen dann eine E-Mail, dass jemand wartet, und der Mieter bekommt eine, sobald Sie wieder online sind.

@@ -1,0 +1,45 @@
+---
+title: Documentación de GPUFlow
+description: Cómo alquilar una GPU por horas en GPUFlow o ganar dinero alquilando la tuya. Guías paso a paso con capturas de pantalla.
+template: splash
+hero:
+  tagline: Alquila una GPU por horas o gana dinero con la tuya. Guías breves, paso a paso y con capturas de pantalla.
+  actions:
+    - text: Alquilar una GPU
+      link: /es/renters/getting-started/
+      variant: primary
+      icon: right-arrow
+    - text: Poner mi GPU en alquiler
+      link: /es/providers/getting-started/
+      variant: secondary
+---
+
+import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+## Qué es GPUFlow
+
+GPUFlow es un mercado donde las personas alquilan GPUs a otras personas, por horas.
+
+- **Los inquilinos** añaden créditos con una tarjeta, eligen una GPU y reciben una clave API para usarla. La clave funciona con cualquier app o código que use la API de OpenAI.
+- **Los proveedores** ejecutan un comando en una computadora Linux con GPU, fijan un precio por hora y cobran en su cuenta bancaria.
+
+<CardGrid>
+  <Card title="Quiero alquilar una GPU" icon="rocket">
+    - [Alquilar una GPU, paso a paso](/es/renters/getting-started/)
+    - [Usar tu clave API](/es/renters/api-quickstart/)
+    - [Créditos, facturación y reembolsos](/es/renters/billing/)
+    - [Resolver un problema](/es/renters/troubleshooting/)
+  </Card>
+  <Card title="Quiero poner mi GPU en alquiler" icon="laptop">
+    - [Pon tu GPU en línea](/es/providers/getting-started/)
+    - [Escribe un buen anuncio](/es/providers/creating-listings/)
+    - [Cómo poner precio a tu GPU](/es/providers/pricing/)
+    - [Cobrar](/es/providers/getting-paid/)
+  </Card>
+</CardGrid>
+
+<LinkCard
+  title="¿Necesitas ayuda?"
+  description="Abre un ticket de soporte en gpuflow.app. Te respondemos por email."
+  href="https://gpuflow.app/es/support"
+/>

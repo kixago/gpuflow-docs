@@ -1,0 +1,7 @@
+{
+  "copy.markdown": "复制 Markdown",
+  "open": "打开",
+  "open.chatgpt": "在 ChatGPT 中打开",
+  "open.claude": "在 Claude 中打开",
+  "heading.anchorLabel": "标题：{{title}}"
+}

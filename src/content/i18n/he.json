@@ -1,0 +1,11 @@
+{
+  "copy.markdown": "העתקת Markdown",
+  "open": "פתיחה",
+  "open.chatgpt": "פתיחה ב-ChatGPT",
+  "open.claude": "פתיחה ב-Claude",
+  "heading.anchorLabel": "קישור לסעיף „{{title}}”",
+  "aside.note": "הערה",
+  "aside.tip": "טיפ",
+  "aside.caution": "זהירות",
+  "aside.danger": "סכנה"
+}

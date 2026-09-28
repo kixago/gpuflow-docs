@@ -1,0 +1,71 @@
+---
+title: Getting paid
+description: How GPUFlow providers get paid - the 12% fee, the 7-day earnings hold, setting up payouts with Stripe, and cashing out to your bank ($25 minimum, $2.50 fee).
+sidebar:
+  label: Getting paid
+  order: 4
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+import { Image } from 'astro:assets';
+import setup from '../../../assets/screens/en/provider-payout-setup.png';
+import cashout from '../../../assets/screens/en/provider-cash-out.png';
+
+## How money reaches you
+
+<Steps>
+
+1. **A rental ends.** The renter pays for the time used. GPUFlow keeps 12% and the other 88% is yours.
+2. **Your earnings are held for 7 days.** They show under **Earnings on hold** on **Dashboard → Payments**. If your account is less than 30 days old, the hold is 14 days. The hold protects against card fraud and disputes.
+3. **They become ready to cash out.** After the hold they move to **Ready to cash out**, and you get a notification.
+4. **You cash out** to your bank through Stripe, our payment partner.
+
+</Steps>
+
+You can also spend your earnings on renting other GPUs. Credits you bought with a card can be spent, but they can't be cashed out.
+
+## Set up payouts (once)
+
+You need a confirmed email address and a payout account with Stripe. Stripe checks your identity and asks for your bank details. It takes a few minutes.
+
+<Steps>
+
+1. Open **Dashboard → Payments**.
+2. Under **Cash out**, choose the country where you live or where your business is registered.
+3. Click **Set up payouts with Stripe** and follow Stripe's steps. Have an ID and your bank details ready.
+4. When you finish, Stripe sends you back to GPUFlow.
+
+</Steps>
+
+<Image src={setup} alt="The Cash out box: the country list and the Set up payouts with Stripe button highlighted" />
+
+Stripe sometimes reviews your details first. That usually takes a few minutes, sometimes a day or two. If a step is still missing, you'll see **Continue setup on Stripe**.
+
+**Countries where payouts work:** United States, Canada, United Kingdom, Switzerland, and the European Economic Area: Austria, Belgium, Bulgaria, Croatia, Cyprus, Czechia, Denmark, Estonia, Finland, France, Germany, Greece, Hungary, Iceland, Ireland, Italy, Latvia, Liechtenstein, Lithuania, Luxembourg, Malta, Netherlands, Norway, Poland, Portugal, Romania, Slovakia, Slovenia, Spain and Sweden.
+
+## Cash out
+
+<Steps>
+
+1. Open **Dashboard → Payments**.
+2. Under **Cash out**, type the amount, or leave the full amount that's filled in.
+3. Check the line under it: it shows the $2.50 fee and what you receive.
+4. Click **Cash out**.
+
+</Steps>
+
+<Image src={cashout} alt="The Cash out box with the amount field and the Cash out button highlighted" />
+
+- **Minimum:** $25 per cash-out.
+- **Fee:** $2.50 per cash-out, no matter the amount. Cashing out less often saves fees.
+- The money is sent in US dollars to your Stripe payout account, and Stripe pays it to your bank.
+- You get an email and a notification when it's sent. If it doesn't go through, the full amount returns to your balance.
+- Change your bank details any time with **Manage payout details on Stripe**.
+
+## If a renter disputes a card payment
+
+Sometimes a renter asks their bank to reverse a card payment. When that happens, GPUFlow takes back earnings from that renter's rentals that are **still on hold**, and you get an email about it. If the dispute is settled in our favor, the earnings come back to you. Earnings that have finished their hold aren't touched.
+
+<Aside type="note">
+Your earnings are income. How they're taxed depends on where you live. If you're not sure, ask a tax advisor.
+</Aside>

@@ -1,0 +1,65 @@
+---
+title: Rédiger une bonne annonce
+description: Remplissez une annonce GPUFlow champ par champ, avec des exemples de noms, de descriptions et de caractéristiques à copier et adapter.
+sidebar:
+  label: Rédiger une bonne annonce
+  order: 2
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import { Image } from 'astro:assets';
+import form from '../../../../assets/screens/fr/provider-list-gpu.png';
+
+Les locataires choisissent un GPU en quelques secondes. Un nom clair, le bon modèle et une courte description qui indique les modèles d'IA que vous proposez font la différence.
+
+Ouvrez **Tableau de bord → Lister un GPU** (ou cliquez sur **Mettre en location** sur une machine en ligne). Le formulaire ressemble à ceci :
+
+<Image src={form} alt="Le formulaire Lister un GPU rempli avec un exemple, chaque champ numéroté" />
+
+## Champ par champ
+
+**1. Nom du GPU (Nom de votre annonce).** C'est ce que les locataires voient en premier. Indiquez-y le GPU et le modèle principal.
+
+> `RTX 4090 · qwen2.5 7B`
+> `RTX 3060 12 GB · fast small models`
+> `RTX 3090 · qwen2.5 14B, evenings and weekends`
+
+**2. Modèle de GPU (Officiel).** Choisissez votre carte exacte dans la liste. Ce choix fixe la VRAM affichée sur votre annonce et vous regroupe avec les mêmes cartes sur la place de marché. Vous ne pourrez plus le modifier ensuite.
+
+**3. Tarif Horaire (USD).** Ce qu'un locataire paie pour une heure. Consultez [Fixer le prix de votre GPU](/fr/providers/pricing/) avant de choisir.
+
+**4. Emplacement.** Choisissez la ville la plus proche dans la liste. Les locataires peuvent filtrer la place de marché par emplacement.
+
+**5. Machine.** L'ordinateur qui sert cette annonce. Si vous venez de **Mettre en location**, elle est déjà sélectionnée. Sinon, choisissez-en une qui est en ligne, ou laissez **Aucune, associer plus tard** et utilisez ensuite **Mettre en ligne** dans **Mes GPU**.
+
+**6. Caractéristiques Clés (séparées par des virgules).** Des mots-clés courts, séparés par des virgules :
+
+> `24 GB VRAM, qwen2.5:7b, llama3.1:8b, 1 Gbit upload`
+
+**7. Description.** Deux ou trois phrases. Indiquez les modèles que vous proposez, votre connexion et les heures où la machine est en général allumée :
+
+> RTX 4090 avec 24 Go de VRAM sur une ligne à 1 Gbit. Sert qwen2.5:7b et llama3.1:8b via une API compatible OpenAI. En ligne presque tous les jours de 08:00 à 23:00 (UTC-7).
+
+> RTX 3060 avec 12 Go de VRAM sur la fibre (500 Mbit). Sert qwen2.5:0.5b et qwen2.5:7b. Convient pour les tests, les petits scripts et les chatbots. En général en ligne 24 h/24, 7 j/7.
+
+Cliquez ensuite sur **Lister le GPU**.
+
+<Aside type="tip" title="Ne promettez que ce qui est vrai">
+N'indiquez que les modèles réellement installés sur votre machine, et seulement les heures où vous êtes vraiment en ligne. Les locataires qui obtiennent ce qu'ils attendaient reviennent.
+</Aside>
+
+## Une fois l'annonce publiée
+
+Dans **Mes GPU**, vous pouvez :
+
+- **Modifier :** changer le nom, le prix, l'emplacement, la description ou la machine.
+- **Masquer :** faire disparaître l'annonce de la place de marché sans la supprimer. **Publier** la fait réapparaître.
+- **Supprimer :** l'effacer définitivement. Vous ne pouvez pas supprimer une annonce pendant qu'elle est louée.
+- **Mettre en ligne :** obtenir la commande pour une annonce dont la machine est hors ligne.
+
+## Ce que voient les locataires
+
+Votre annonce apparaît sur la place de marché :
+
+- dans la section verte **Accès Instantané Disponible** tant que votre machine est en ligne,
+- dans la section jaune **Disponible - Fournisseur Hors Ligne** quand elle est éteinte. Les locataires peuvent y cliquer sur **Me notifier quand en ligne**. Vous recevez un e-mail indiquant que quelqu'un attend, et ils en reçoivent un à votre retour.

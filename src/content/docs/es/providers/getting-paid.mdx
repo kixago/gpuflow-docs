@@ -1,0 +1,71 @@
+---
+title: Cobrar
+description: Cómo cobran los proveedores de GPUFlow - la comisión del 12 %, la retención de ganancias de 7 días, la configuración de retiros con Stripe y el retiro a tu banco (mínimo $25, comisión de $2.50).
+sidebar:
+  label: Cobrar
+  order: 4
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+import { Image } from 'astro:assets';
+import setup from '../../../../assets/screens/es/provider-payout-setup.png';
+import cashout from '../../../../assets/screens/es/provider-cash-out.png';
+
+## Cómo te llega el dinero
+
+<Steps>
+
+1. **Termina un alquiler.** El inquilino paga el tiempo usado. GPUFlow se queda con el 12 % y el 88 % restante es tuyo.
+2. **Tus ganancias quedan retenidas 7 días.** Aparecen en **Ganancias retenidas**, en **Panel → Pagos**. Si tu cuenta tiene menos de 30 días, la retención es de 14 días. La retención protege contra el fraude con tarjetas y las reclamaciones.
+3. **Quedan listas para retirar.** Después de la retención pasan a **Listo para retirar** y recibes una notificación.
+4. **Retiras el dinero** a tu banco a través de Stripe, nuestro socio de pagos.
+
+</Steps>
+
+También puedes gastar tus ganancias en alquilar otras GPUs. Los créditos que compraste con tarjeta se pueden gastar, pero no retirar.
+
+## Configura los retiros (una sola vez)
+
+Necesitas una dirección de email confirmada y una cuenta de pagos en Stripe. Stripe verifica tu identidad y te pide tus datos bancarios. Tarda unos minutos.
+
+<Steps>
+
+1. Abre **Panel → Pagos**.
+2. En **Retirar**, elige el país donde vives o donde está registrada tu empresa.
+3. Haz clic en **Configurar retiros con Stripe** y sigue los pasos de Stripe. Ten a mano un documento de identidad y tus datos bancarios.
+4. Cuando termines, Stripe te devuelve a GPUFlow.
+
+</Steps>
+
+<Image src={setup} alt="El cuadro Retirar: la lista de países y el botón Configurar retiros con Stripe resaltados" />
+
+A veces Stripe revisa primero tus datos. Normalmente tarda unos minutos, a veces uno o dos días. Si todavía falta algún paso, verás **Continuar la configuración en Stripe**.
+
+**Países donde funcionan los retiros:** Estados Unidos, Canadá, Reino Unido, Suiza y el Espacio Económico Europeo: Alemania, Austria, Bélgica, Bulgaria, Chequia, Chipre, Croacia, Dinamarca, Eslovaquia, Eslovenia, España, Estonia, Finlandia, Francia, Grecia, Hungría, Irlanda, Islandia, Italia, Letonia, Liechtenstein, Lituania, Luxemburgo, Malta, Noruega, Países Bajos, Polonia, Portugal, Rumania y Suecia.
+
+## Retira tu dinero
+
+<Steps>
+
+1. Abre **Panel → Pagos**.
+2. En **Retirar**, escribe el importe o deja el importe total que aparece ya escrito.
+3. Revisa la línea de debajo: muestra la comisión de $2.50 y lo que recibes.
+4. Haz clic en **Retirar**.
+
+</Steps>
+
+<Image src={cashout} alt="El cuadro Retirar con el campo del importe y el botón Retirar resaltados" />
+
+- **Mínimo:** $25 por retiro.
+- **Comisión:** $2.50 por retiro, sea cual sea el importe. Retirar con menos frecuencia te ahorra comisiones.
+- El dinero se envía en dólares estadounidenses a tu cuenta de pagos de Stripe, y Stripe lo transfiere a tu banco.
+- Recibes un email y una notificación cuando se envía. Si no se completa, el importe total vuelve a tu saldo.
+- Puedes cambiar tus datos bancarios cuando quieras con **Gestionar datos de pago en Stripe**.
+
+## Si un inquilino reclama un pago con tarjeta
+
+A veces un inquilino le pide a su banco que anule un pago con tarjeta. Cuando pasa, GPUFlow descuenta las ganancias de los alquileres de ese inquilino que **todavía están retenidas**, y recibes un email al respecto. Si la reclamación se resuelve a nuestro favor, las ganancias vuelven a ti. Las ganancias que ya terminaron su retención no se tocan.
+
+<Aside type="note">
+Tus ganancias son ingresos. Cómo tributan depende de dónde vivas. Si no estás seguro, consulta a un asesor fiscal.
+</Aside>

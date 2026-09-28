@@ -1,0 +1,45 @@
+---
+title: توثيق GPUFlow
+description: كيف تستأجر وحدة GPU بالساعة على GPUFlow، أو تربح المال من تأجير وحدتك. أدلة خطوة بخطوة مع لقطات شاشة.
+template: splash
+hero:
+  tagline: استأجر وحدة GPU بالساعة، أو اربح المال من وحدتك. أدلة قصيرة خطوة بخطوة مع لقطات شاشة.
+  actions:
+    - text: استأجر وحدة GPU
+      link: /ar/renters/getting-started/
+      variant: primary
+      icon: right-arrow
+    - text: أجّر وحدة GPU الخاصة بي
+      link: /ar/providers/getting-started/
+      variant: secondary
+---
+
+import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+## ما هي GPUFlow
+
+GPUFlow سوق يستأجر فيه الناس وحدات GPU من أشخاص آخرين، بالساعة.
+
+- **المستأجرون** يشحنون رصيدهم بالبطاقة، ويختارون وحدة GPU، ويحصلون على مفتاح API لها. يعمل المفتاح مع أي تطبيق أو كود يتعامل مع OpenAI API.
+- **المزودون** ينفّذون أمراً واحداً على كمبيوتر يعمل بنظام Linux وفيه وحدة GPU، ويحددون سعراً بالساعة، ويتلقون أرباحهم في حسابهم المصرفي.
+
+<CardGrid>
+  <Card title="أريد استئجار وحدة GPU" icon="rocket">
+    - [استئجار وحدة GPU خطوة بخطوة](/ar/renters/getting-started/)
+    - [استخدام مفتاح API](/ar/renters/api-quickstart/)
+    - [الرصيد والفوترة والاسترداد](/ar/renters/billing/)
+    - [حل مشكلة](/ar/renters/troubleshooting/)
+  </Card>
+  <Card title="أريد تأجير وحدة GPU الخاصة بي" icon="laptop">
+    - [توصيل وحدة GPU بـ GPUFlow](/ar/providers/getting-started/)
+    - [كتابة إعلان جيد](/ar/providers/creating-listings/)
+    - [كيف تحدد سعر وحدة GPU الخاصة بك](/ar/providers/pricing/)
+    - [استلام أرباحك](/ar/providers/getting-paid/)
+  </Card>
+</CardGrid>
+
+<LinkCard
+  title="تحتاج إلى مساعدة؟"
+  description="افتح تذكرة دعم على gpuflow.app. يصلك الرد بالبريد الإلكتروني."
+  href="https://gpuflow.app/ar/support"
+/>

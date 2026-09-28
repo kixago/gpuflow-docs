@@ -1,0 +1,68 @@
+---
+title: Résoudre un problème (fournisseurs)
+description: Solutions pour une machine GPUFlow qui affiche Hors ligne, les erreurs d'installation, un modèle qui ne se télécharge pas, et comment désinstaller l'agent.
+sidebar:
+  label: Résoudre un problème
+  order: 6
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+## D'abord, regardez l'agent
+
+Lancez ces commandes sur l'ordinateur équipé du GPU :
+
+```bash
+systemctl status gpuflow-agent      # doit afficher "active (running)"
+journalctl -u gpuflow-agent -n 50   # les 50 dernières lignes de son journal
+```
+
+La plupart des réponses se trouvent dans ces 50 lignes.
+
+## Ma machine affiche Hors ligne
+
+1. **L'ordinateur est-il allumé et connecté à Internet ?** L'agent doit pouvoir joindre `gpuflow.app` et `ws.gpuflow.app` sur le port 443 (HTTPS classique).
+2. **L'agent est-il en marche ?** Si `systemctl status gpuflow-agent` n'affiche pas `active (running)`, démarrez-le :
+
+   ```bash
+   sudo systemctl start gpuflow-agent
+   ```
+
+3. **Toujours hors ligne ?** Ouvrez **Mes machines**, copiez la commande sur la carte de cette machine et relancez-la. Elle réinstalle l'agent et conserve la même machine : son annonce revient d'elle-même.
+
+Une machine qui était hors ligne apparaît en ligne environ une minute après la connexion de l'agent.
+
+## Erreurs d'installation
+
+| Ce que vous voyez | Que faire |
+| --- | --- |
+| `enrollment failed` et le journal indique que le jeton a expiré | La commande est valable 15 minutes. Rechargez le tableau de bord, copiez une nouvelle commande et lancez-la. |
+| `this installer targets systemd Linux; systemctl not found` | L'installateur a besoin de Linux avec systemd. Windows, macOS et les systèmes sans systemd ne sont pas encore pris en charge. |
+| `unsupported CPU architecture` | Seuls les PC 64 bits (x86_64) et l'ARM 64 bits (arm64) sont pris en charge. |
+| `no enrollment token` | Copiez la commande entière depuis le tableau de bord, y compris `--token` et tout ce qui suit. |
+| `failed to pull model '…'` | Le nom du modèle est erroné, ou le modèle ne tient pas sur votre GPU. Essayez-en un plus petit, par exemple `--model qwen2.5:0.5b`. |
+
+## Le modèle est lent ou ne se charge pas
+
+- Un modèle trop gros pour la mémoire de votre GPU tourne lentement, ou pas du tout. Choisissez-en un plus petit (voir [Choisir un modèle d'IA](/fr/providers/getting-started/#choisir-un-modèle-dia)).
+- Après un redémarrage, la première requête est plus lente, le temps que le modèle se charge en mémoire.
+- Vérifiez la température du GPU dans **Mes machines**. Un GPU trop chaud ralentit de lui-même.
+
+## Une location s'est terminée plus tôt que prévu
+
+Si votre machine reste hors ligne 10 minutes pendant une location, la location se termine. Vous êtes payé pour le temps écoulé jusqu'à la coupure, et le locataire récupère le reste. Gardez la machine allumée : désactivez la mise en veille et la mise en veille prolongée dans les réglages de votre système.
+
+## Désinstaller
+
+```bash
+sudo systemctl disable --now gpuflow-agent
+sudo rm -f /usr/local/bin/gpuflow-agent /etc/systemd/system/gpuflow-agent.service
+sudo rm -rf /etc/gpuflow /var/lib/gpuflow /var/lib/private/gpuflow
+sudo systemctl daemon-reload
+```
+
+Ollama reste installé. Supprimez-le séparément si vous n'en voulez plus. Supprimez ensuite la machine dans **Mes machines** avec le bouton en forme de corbeille.
+
+<Aside>
+Toujours bloqué ? Ouvrez un ticket sur [gpuflow.app/support](https://gpuflow.app/fr/support) et collez les 50 dernières lignes du journal (`journalctl -u gpuflow-agent -n 50`).
+</Aside>

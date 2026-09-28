@@ -1,0 +1,68 @@
+---
+title: Resolver un problema (proveedores)
+description: Soluciones para una máquina de GPUFlow que aparece como desconectada, errores de instalación, un modelo que no se descarga y cómo desinstalar el agente.
+sidebar:
+  label: Resolver un problema
+  order: 6
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+## Primero, revisa el agente
+
+Ejecuta esto en la computadora con la GPU:
+
+```bash
+systemctl status gpuflow-agent      # debe decir "active (running)"
+journalctl -u gpuflow-agent -n 50   # las últimas 50 líneas de su log
+```
+
+La mayoría de las respuestas están en esas 50 líneas.
+
+## Mi máquina aparece como desconectada
+
+1. **¿La computadora está encendida y conectada a internet?** El agente necesita llegar a `gpuflow.app` y `ws.gpuflow.app` por el puerto 443 (HTTPS normal).
+2. **¿El agente está en marcha?** Si `systemctl status gpuflow-agent` no dice `active (running)`, inícialo:
+
+   ```bash
+   sudo systemctl start gpuflow-agent
+   ```
+
+3. **¿Sigue desconectada?** Abre **Mis máquinas**, copia el comando de la tarjeta de esa máquina y ejecútalo otra vez. Reinstala el agente y conserva la misma máquina, así que su anuncio vuelve solo.
+
+Una máquina que estaba desconectada aparece en línea en más o menos un minuto después de que el agente se conecte.
+
+## Errores de instalación
+
+| Ves | Qué hacer |
+| --- | --- |
+| `enrollment failed` y el log dice que el token caducó | El comando es válido durante 15 minutos. Recarga el panel, copia un comando nuevo y ejecútalo. |
+| `this installer targets systemd Linux; systemctl not found` | El instalador necesita Linux con systemd. Windows, macOS y los sistemas sin systemd todavía no son compatibles. |
+| `unsupported CPU architecture` | Solo son compatibles las PC de 64 bits (x86_64) y ARM de 64 bits (arm64). |
+| `no enrollment token` | Copia el comando completo desde el panel, incluido `--token` y todo lo que va después. |
+| `failed to pull model '…'` | El nombre del modelo está mal o no cabe en tu GPU. Prueba uno más pequeño, por ejemplo `--model qwen2.5:0.5b`. |
+
+## El modelo va lento o no carga
+
+- Un modelo demasiado grande para la memoria de tu GPU va lento o no funciona. Elige uno más pequeño (consulta [elegir un modelo de IA](/es/providers/getting-started/#elegir-un-modelo-de-ia)).
+- La primera solicitud después de un reinicio es más lenta mientras el modelo se carga en memoria.
+- Revisa la temperatura de la GPU en **Mis máquinas**. Una GPU caliente reduce su velocidad por sí sola.
+
+## Un alquiler terminó antes de tiempo
+
+Si tu máquina está desconectada durante 10 minutos en medio de un alquiler, el alquiler termina. Cobras el tiempo hasta el momento en que se desconectó, y al inquilino se le devuelve el resto. Mantén la máquina despierta: desactiva la suspensión y la hibernación en la configuración de tu sistema.
+
+## Desinstalar
+
+```bash
+sudo systemctl disable --now gpuflow-agent
+sudo rm -f /usr/local/bin/gpuflow-agent /etc/systemd/system/gpuflow-agent.service
+sudo rm -rf /etc/gpuflow /var/lib/gpuflow /var/lib/private/gpuflow
+sudo systemctl daemon-reload
+```
+
+Ollama sigue instalado. Desinstálalo aparte si no lo quieres. Después, quita la máquina en **Mis máquinas** con el botón de la papelera.
+
+<Aside>
+¿Sigues con el problema? Abre un ticket en [gpuflow.app/support](https://gpuflow.app/es/support) y pega las últimas 50 líneas del log (`journalctl -u gpuflow-agent -n 50`).
+</Aside>

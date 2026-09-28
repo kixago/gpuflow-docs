@@ -1,0 +1,45 @@
+---
+title: GPUFlow-Dokumentation
+description: So mieten Sie bei GPUFlow eine GPU stundenweise oder verdienen Geld, indem Sie Ihre eigene vermieten. Schritt-für-Schritt-Anleitungen mit Screenshots.
+template: splash
+hero:
+  tagline: Mieten Sie eine GPU stundenweise oder verdienen Sie Geld mit Ihrer eigenen. Kurze Schritt-für-Schritt-Anleitungen mit Screenshots.
+  actions:
+    - text: GPU mieten
+      link: /de/renters/getting-started/
+      variant: primary
+      icon: right-arrow
+    - text: Meine GPU vermieten
+      link: /de/providers/getting-started/
+      variant: secondary
+---
+
+import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+## Was GPUFlow ist
+
+GPUFlow ist ein Marktplatz, auf dem Menschen GPUs von anderen Menschen stundenweise mieten.
+
+- **Mieter** laden per Karte Credits auf, wählen eine GPU und bekommen dafür einen API-Schlüssel. Der Schlüssel funktioniert mit jeder App und jedem Code, der die OpenAI-API nutzt.
+- **Anbieter** führen auf einem Linux-Rechner mit GPU einen einzigen Befehl aus, legen einen Stundenpreis fest und bekommen ihr Geld auf ihr Bankkonto.
+
+<CardGrid>
+  <Card title="Ich möchte eine GPU mieten" icon="rocket">
+    - [GPU mieten, Schritt für Schritt](/de/renters/getting-started/)
+    - [Ihren API-Schlüssel verwenden](/de/renters/api-quickstart/)
+    - [Credits, Abrechnung und Erstattungen](/de/renters/billing/)
+    - [Ein Problem lösen](/de/renters/troubleshooting/)
+  </Card>
+  <Card title="Ich möchte meine GPU vermieten" icon="laptop">
+    - [Ihre GPU online bringen](/de/providers/getting-started/)
+    - [Ein gutes Angebot schreiben](/de/providers/creating-listings/)
+    - [Den Preis für Ihre GPU festlegen](/de/providers/pricing/)
+    - [So werden Sie bezahlt](/de/providers/getting-paid/)
+  </Card>
+</CardGrid>
+
+<LinkCard
+  title="Brauchen Sie Hilfe?"
+  description="Eröffnen Sie ein Support-Ticket auf gpuflow.app. Sie bekommen die Antwort per E-Mail."
+  href="https://gpuflow.app/de/support"
+/>

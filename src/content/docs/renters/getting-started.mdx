@@ -1,134 +1,111 @@
 ---
-title: 'Getting Started'
-description: How to rent a GPU on GPUFlow — connect your MetaMask wallet, browse the marketplace, and start your first GPU rental in minutes.
+title: Rent a GPU, step by step
+description: Create a GPUFlow account, add credits by card, rent a GPU by the hour and get your API key. Every step with a screenshot.
 sidebar:
-  label: 'Getting Started'
+  label: Rent a GPU, step by step
   order: 1
 ---
-{/* File: src/content/docs/renters/getting-started.mdx */}
 
-import { Aside } from '@astrojs/starlight/components';
+import { Aside, Steps } from '@astrojs/starlight/components';
+import signup from '../../../assets/screens/en/renter-signup.png';
+import credits from '../../../assets/screens/en/renter-add-credits.png';
+import market from '../../../assets/screens/en/renter-marketplace.png';
+import rent from '../../../assets/screens/en/renter-rent.png';
+import key from '../../../assets/screens/en/renter-key.png';
+import notify from '../../../assets/screens/en/renter-notify.png';
+import { Image } from 'astro:assets';
 
-Rent GPU computing power from providers worldwide using cryptocurrency payments.
+Renting a GPU on GPUFlow takes about five minutes. You need an email address and a payment card.
 
-## Prerequisites
+**What you get:** an API key for one GPU, for the hours you choose. The key works like an OpenAI key, so any app or script that talks to the OpenAI API can use it. There is no server to log into and nothing to install.
 
-- Ethereum-compatible wallet (MetaMask, hardware wallet, or multi-sig)
-- Cryptocurrency for payments (MATIC on Polygon recommended)
-- WireGuard client for secure connections
+## 1. Create an account
 
-## Browse available GPUs
+<Steps>
 
-1. Visit the <a href="https://gpuflow.app/marketplace" target="_blank" rel="noopener noreferrer">marketplace</a>
-2. Filter by specifications:
-   - **VRAM**: Minimum memory required
-   - **Price**: Maximum hourly rate
-   - **Location**: Geographic preference
-   - **Use case**: AI training, mining, rendering
+1. Go to [gpuflow.app](https://gpuflow.app/en/join) and click **Sign Up** in the top right corner.
+2. Fill in a username, your email address and a password (twice).
+3. Click **Create Account**.
 
-3. View provider details and ratings
+</Steps>
 
-## Connect your wallet
+<Image src={signup} alt="The Create account form with the username, email and password fields and the Create Account button highlighted" />
 
-<Aside type="note">
-GPUFlow supports multiple wallets per account for flexible payment options.
+You can also click **Continue with Google** or **Continue with GitHub** instead of making a password.
+
+## 2. Confirm your email address
+
+GPUFlow sends you an email right away. Open it and click the link inside.
+
+<Aside type="caution">
+You can't add credits until your email address is confirmed. If the email doesn't arrive within a few minutes, check your spam folder, or click **Resend email** on the yellow banner at the top of your dashboard.
 </Aside>
 
-### First-time setup
+## 3. Add credits
 
-1. Click **Connect Wallet** in the top navigation
-2. Select your wallet provider (MetaMask, WalletConnect, etc.)
-3. Approve the connection request
-4. Switch to a supported network if prompted:
-   - **Polygon Amoy** (testnet)
-   - **Polygon** (mainnet, coming soon)
+Credits are what you pay for rentals with. **1 credit = $0.01**, so $25 buys 2,500 credits.
 
-### Network switching
+<Steps>
 
-GPUFlow automatically prompts network changes when required. Always approve network switches to ensure proper payment processing.
+1. Open your **Dashboard** and click **Payments** in the menu on the left.
+2. Under **Add credits**, click an amount, or type your own. You can add from $10 to $500 at a time. There is no fee.
+3. Click **Continue to payment**. You go to Stripe, our payment partner, to pay by card.
+4. After paying you come back to GPUFlow. Your credits show up within a minute, at the top of the Payments page and on the orange button in the header.
 
-## Complete your first rental
+</Steps>
 
-### Select a GPU
+<Image src={credits} alt="The Payments page: the amount buttons and the Continue to payment button highlighted" />
 
-1. Click **View Details** on any available GPU
-2. Review specifications and hourly rate
-3. Check provider reputation and uptime
-4. Verify the GPU status shows **Online**
+## 4. Pick a GPU
 
-### Configure rental
+Click **Browse GPUs** at the top of any page. GPUs that are ready right now are in the green **Instant Access Available** section.
 
-1. Click **Rent Now**
-2. Set rental duration (1-24 hours)
-3. Review cost breakdown:
-   - Base hourly rate
-   - Platform fee (2-3%)
-   - Network gas fees
+<Image src={market} alt="The marketplace with one GPU card and its Rent Now button highlighted" />
 
-### Payment process
+On each card, check:
 
-1. Confirm payment details
-2. Approve transaction in your wallet
-3. Wait for blockchain confirmation
-4. Receive access credentials
+- **The price per hour.** This is what one hour costs you.
+- **VRAM.** Bigger AI models need more. As a rough guide, a 7B model runs well on 8 GB or more, a 14B model on 16 GB or more.
+- **The model.** Click the GPU's name to open its page. Providers write which AI models they serve (for example `qwen2.5:7b`) in the description.
 
-<Aside type="tip">
-Transactions on Polygon typically confirm within 30 seconds.
+When you've picked one, click **Rent Now - Instant Access**.
+
+## 5. Choose how many hours
+
+<Steps>
+
+1. Type the number of hours you want. Most GPUs allow 1 to 168 hours (one week). You can add more hours later.
+2. Check the two lines under it: how much will be held from your credits, and how much you have.
+3. Click the orange button that starts the rental. It shows your number of hours, for example **Start 2-hour rental**.
+
+</Steps>
+
+<Image src={rent} alt="The rental page with the Hours field and the start button highlighted" />
+
+<Aside type="tip" title="You only pay for what you use">
+The full amount for your hours is held when you start. When the rental ends, you pay only for the time you actually used, to the second, and the rest goes back to your credits. [How billing works](/renters/billing/).
 </Aside>
 
-### Access your rental
+## 6. Copy your API key
 
-Once payment confirms:
+You land on **Current Rentals**. Your new rental is at the top.
 
-1. Download the WireGuard configuration file
-2. Import into your WireGuard client
-3. Connect to establish secure tunnel
-4. Access services through the provided URLs
+<Image src={key} alt="Current Rentals: the API key box, the endpoint box and the Add hours, New key and End now buttons highlighted" />
 
-## Payment methods
+1. **Your API key.** It starts with `gfk_`. Copy it now and keep it somewhere safe. **It is shown only once.**
+2. **The endpoint:** `https://gpuflow.app/v1`. Use it as the "base URL" in your app.
+3. **The buttons:** **Add hours** extends the rental, **New key** makes a new key and switches off the old one, **End now** stops the rental and returns the unused time to your credits.
 
-### Supported networks
+Lost the key? Click **New key**. The old key stops working and a new one appears.
 
-- **Polygon Amoy** (testnet): Free test tokens
-- **Polygon** (mainnet): Low fees, fast confirmation
+**Next:** [use your API key](/renters/api-quickstart/) with `curl`, Python, JavaScript or an app.
 
-### Supported tokens
+## If the GPU you want is offline
 
-- **MATIC**: Native network token (recommended)
-- **USDC**: Stable USD value
-- **USDT**: Alternative stablecoin
-- **ETH**: Wrapped Ethereum on Polygon
+GPUs whose owner is offline are in the yellow **Available - Provider Offline** section. Click **Notify When Online** on the card.
 
-### Multi-wallet configuration
+<Image src={notify} alt="A GPU card in the offline section with the Notify When Online button highlighted" />
 
-Add multiple payment addresses for:
-- **Hot wallets**: Daily transactions
-- **Hardware wallets**: Large payments
-- **Multi-sig wallets**: Team or DAO usage
-
-## What happens next
-
-After connecting:
-
-1. **Environment setup**: Provider deploys your isolated environment
-2. **Credential delivery**: Receive secure access details
-3. **Active monitoring**: Track usage and remaining time
-4. **Automatic cleanup**: Environment tears down at expiry
-
-Your rental includes:
-- Dedicated GPU allocation
-- Isolated compute environment  
-- Pre-installed software stack
-- Secure network tunnel
-- Real-time usage monitoring
-
-## Getting help
-
-- **Documentation**: Complete guides for all features
-- **Community**: [Discord server](https://discord.gg/gpuflow) for peer support
-- **Support**: [support@gpuflow.app](mailto:support@gpuflow.app) for technical issues
-
-Common first-time issues:
-- **Wallet connection failures**: Clear browser cache and retry
-- **Network switching problems**: Manually add network in wallet settings  
-- **Payment stuck**: Check wallet for pending transactions
+- You get an email and a notification (the bell in the header) as soon as that GPU comes online.
+- The owner is told that someone is waiting for their GPU.
+- Changed your mind? Click the button again (it now says **You'll be notified**) to stop.

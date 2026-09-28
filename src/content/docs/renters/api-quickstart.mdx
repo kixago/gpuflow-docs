@@ -1,0 +1,165 @@
+---
+title: Use your API key
+description: A GPUFlow rental is an OpenAI-compatible API key. Copy-paste examples for curl, Python and JavaScript, and how to use it in any app with an OpenAI setting.
+sidebar:
+  label: Use your API key
+  order: 2
+---
+
+import { Aside, Tabs, TabItem, Steps } from '@astrojs/starlight/components';
+
+Your rental comes with an API key that starts with `gfk_`. It works exactly like an OpenAI API key, only it points at the GPU you rented. Anything that can talk to the OpenAI API can use it: the official OpenAI libraries, LangChain, most chat apps, or a plain `curl` command.
+
+You need three things. You'll find all of them on **Dashboard → Current Rentals**.
+
+| What | Value |
+| --- | --- |
+| Base URL (also called endpoint or API base) | `https://gpuflow.app/v1` |
+| API key | your key, starting with `gfk_` |
+| Model | the AI model on that GPU, for example `qwen2.5:7b` (step 1 shows how to find it) |
+
+In the examples below, replace `gfk_your_key` with your own key.
+
+## 1. Check your key and find the model name
+
+Paste this into a terminal:
+
+```bash
+curl https://gpuflow.app/v1/models \
+  -H "Authorization: Bearer gfk_your_key"
+```
+
+You get an answer like this:
+
+```json
+{
+  "object": "list",
+  "data": [{ "id": "qwen2.5:7b", "object": "model", "owned_by": "gpuflow" }]
+}
+```
+
+The `id` (here `qwen2.5:7b`) is the model name to use. If the provider's description lists more models, you can use those names too.
+
+## 2. Send your first message
+
+<Tabs>
+<TabItem label="curl">
+
+```bash
+curl https://gpuflow.app/v1/chat/completions \
+  -H "Authorization: Bearer gfk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "qwen2.5:7b",
+    "messages": [
+      {"role": "system", "content": "You are a helpful assistant. Answer briefly."},
+      {"role": "user", "content": "Write a two-line product description for a steel water bottle."}
+    ]
+  }'
+```
+
+</TabItem>
+<TabItem label="Python">
+
+Install the library once: `pip install openai`
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://gpuflow.app/v1",
+    api_key="gfk_your_key",
+)
+
+reply = client.chat.completions.create(
+    model="qwen2.5:7b",
+    messages=[
+        {"role": "system", "content": "You are a helpful assistant. Answer briefly."},
+        {"role": "user", "content": "Write a two-line product description for a steel water bottle."},
+    ],
+)
+print(reply.choices[0].message.content)
+```
+
+</TabItem>
+<TabItem label="JavaScript">
+
+Install the library once: `npm install openai`
+
+```js
+import OpenAI from "openai";
+
+const client = new OpenAI({
+  baseURL: "https://gpuflow.app/v1",
+  apiKey: "gfk_your_key",
+});
+
+const reply = await client.chat.completions.create({
+  model: "qwen2.5:7b",
+  messages: [
+    { role: "system", content: "You are a helpful assistant. Answer briefly." },
+    { role: "user", content: "Write a two-line product description for a steel water bottle." },
+  ],
+});
+console.log(reply.choices[0].message.content);
+```
+
+</TabItem>
+</Tabs>
+
+## 3. Get the answer word by word (streaming)
+
+Add `"stream": true` to see the answer appear as it is written, like in a chat app.
+
+<Tabs>
+<TabItem label="curl">
+
+```bash
+curl https://gpuflow.app/v1/chat/completions \
+  -H "Authorization: Bearer gfk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{"model": "qwen2.5:7b", "stream": true,
+       "messages": [{"role": "user", "content": "Explain what a GPU is in three sentences."}]}'
+```
+
+</TabItem>
+<TabItem label="Python">
+
+```python
+stream = client.chat.completions.create(
+    model="qwen2.5:7b",
+    stream=True,
+    messages=[{"role": "user", "content": "Explain what a GPU is in three sentences."}],
+)
+for chunk in stream:
+    print(chunk.choices[0].delta.content or "", end="", flush=True)
+```
+
+</TabItem>
+</Tabs>
+
+## Use it in an app
+
+Many apps have a setting called "OpenAI-compatible", "Custom OpenAI" or "OpenAI API base". Fill it in like this:
+
+<Steps>
+
+1. **Base URL / API base / endpoint:** `https://gpuflow.app/v1`
+2. **API key:** your `gfk_…` key
+3. **Model:** the name from step 1, for example `qwen2.5:7b`
+
+</Steps>
+
+If the app asks for a "provider", pick "OpenAI" or "OpenAI-compatible".
+
+## What the key can and can't do
+
+- It works for chat: `/v1/models` and `/v1/chat/completions`.
+- It works until your rental ends. After that it answers with `invalid_api_key`.
+- It is yours alone. Anyone who has it can use your rental, so don't paste it into public code or chats. If it leaks, click **New key** on **Current Rentals**. The old key stops working at once.
+
+<Aside type="caution" title="Your prompts run on someone's own computer">
+The AI model runs on the provider's machine, so your prompts and the answers pass through it. Don't send passwords, card numbers or other secrets you wouldn't share with a stranger.
+</Aside>
+
+Something not working? See [fix a problem](/renters/troubleshooting/).

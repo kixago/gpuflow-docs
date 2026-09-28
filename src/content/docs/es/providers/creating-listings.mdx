@@ -1,0 +1,65 @@
+---
+title: Escribe un buen anuncio
+description: Rellena un anuncio de GPUFlow campo por campo, con ejemplos de nombres, descripciones y características que puedes copiar y adaptar.
+sidebar:
+  label: Escribe un buen anuncio
+  order: 2
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import { Image } from 'astro:assets';
+import form from '../../../../assets/screens/es/provider-list-gpu.png';
+
+Los inquilinos eligen una GPU en pocos segundos. Lo que marca la diferencia es un nombre claro, el modelo correcto y una descripción breve que diga qué modelos de IA ofreces.
+
+Abre **Panel → Listar una GPU** (o haz clic en **Ponerla en alquiler** en una máquina que esté en línea). El formulario se ve así:
+
+<Image src={form} alt="El formulario Listar una GPU rellenado con un ejemplo, con cada campo numerado" />
+
+## Campo por campo
+
+**1. Nombre de la GPU (Tu Nombre de Listado).** Es lo primero que ven los inquilinos. Incluye la GPU y el modelo principal.
+
+> `RTX 4090 · qwen2.5 7B`
+> `RTX 3060 12 GB · fast small models`
+> `RTX 3090 · qwen2.5 14B, evenings and weekends`
+
+**2. Modelo de GPU (Oficial).** Elige tu tarjeta exacta de la lista. Define la VRAM que se muestra en tu anuncio y te agrupa con las mismas tarjetas en el mercado. No puedes cambiarlo después.
+
+**3. Tarifa por Hora (USD).** Lo que paga un inquilino por una hora. Lee [cómo poner precio a tu GPU](/es/providers/pricing/) antes de decidir.
+
+**4. Ubicación.** Elige de la lista la ciudad más cercana. Los inquilinos pueden filtrar el mercado por ubicación.
+
+**5. Máquina.** La computadora que atiende este anuncio. Si llegaste desde **Ponerla en alquiler**, ya está elegida. Si no, elige una que esté en línea, o deja **Ninguna, vincular más tarde** y usa **Conectar** en **Mis GPUs** después.
+
+**6. Características Clave (separadas por comas).** Etiquetas cortas, separadas por comas:
+
+> `24 GB VRAM, qwen2.5:7b, llama3.1:8b, 1 Gbit upload`
+
+**7. Descripción.** Dos o tres frases. Di qué modelos ofreces, qué conexión tienes y cuándo suele estar encendida la máquina:
+
+> RTX 4090 con 24 GB de VRAM en una línea de 1 Gbit. Ofrece qwen2.5:7b y llama3.1:8b mediante una API compatible con OpenAI. En línea casi todos los días de 08:00 a 23:00 (UTC-7).
+
+> RTX 3060 con 12 GB de VRAM en fibra doméstica (500 Mbit). Ofrece qwen2.5:0.5b y qwen2.5:7b. Buena para pruebas, scripts pequeños y chatbots. Normalmente en línea 24/7.
+
+Luego haz clic en **Listar GPU**.
+
+<Aside type="tip" title="Promete solo lo que es verdad">
+Escribe solo los modelos que de verdad están instalados en tu máquina, y solo las horas en que de verdad estás en línea. Los inquilinos que reciben lo que esperaban vuelven.
+</Aside>
+
+## Después de publicar
+
+En **Mis GPUs** puedes:
+
+- **Editar:** cambiar el nombre, el precio, la ubicación, la descripción o la máquina.
+- **Ocultar:** sacar el anuncio del mercado sin borrarlo. **Publicar** lo vuelve a mostrar.
+- **Eliminar:** borrarlo para siempre. No puedes eliminar un anuncio mientras está alquilado.
+- **Conectar:** obtener el comando para un anuncio cuya máquina está desconectada.
+
+## Qué ven los inquilinos
+
+Tu anuncio aparece en el mercado:
+
+- en la sección verde **Acceso Instantáneo Disponible** mientras tu máquina está en línea,
+- en la sección amarilla **Disponible - Proveedor Desconectado** mientras está apagada. Ahí los inquilinos pueden hacer clic en **Notificar Cuando Esté en Línea**. Tú recibes un email avisándote de que alguien espera, y ellos reciben uno cuando vuelves.

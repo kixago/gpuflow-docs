@@ -1,0 +1,68 @@
+---
+title: 問題を解決する（プロバイダー）
+description: GPUFlow のマシンがオフラインと表示される、インストールでエラーが出る、モデルがダウンロードできないときの解決方法と、エージェントのアンインストール方法。
+sidebar:
+  label: 問題を解決する
+  order: 6
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+## まずエージェントの状態を見る
+
+GPU のコンピューターで、次のコマンドを実行します。
+
+```bash
+systemctl status gpuflow-agent      # should say "active (running)"
+journalctl -u gpuflow-agent -n 50   # the last 50 lines of its log
+```
+
+ほとんどの答えは、この 50 行の中にあります。
+
+## マシンがオフラインと表示される
+
+1. **コンピューターの電源が入っていて、インターネットにつながっていますか。** エージェントは、ポート 443（通常の HTTPS）で `gpuflow.app` と `ws.gpuflow.app` に接続できる必要があります。
+2. **エージェントは動いていますか。** `systemctl status gpuflow-agent` の結果に `active (running)` と出ていなければ、エージェントを起動します。
+
+   ```bash
+   sudo systemctl start gpuflow-agent
+   ```
+
+3. **それでもオフラインの場合:** **マイマシン** を開き、そのマシンのカードにあるコマンドをコピーして、もう一度実行します。エージェントが再インストールされ、同じマシンのまま戻るので、出品も自動で元に戻ります。
+
+オフラインだったマシンは、エージェントが接続してから 1 分ほどでオンラインと表示されます。
+
+## インストールのエラー
+
+| 表示 | 対処法 |
+| --- | --- |
+| `enrollment failed` と表示され、ログにトークンの期限切れと書かれている | コマンドの有効期限は 15 分です。ダッシュボードを再読み込みし、新しいコマンドをコピーして実行してください。 |
+| `this installer targets systemd Linux; systemctl not found` | インストーラーには systemd を使う Linux が必要です。Windows、macOS、systemd のないシステムには、まだ対応していません。 |
+| `unsupported CPU architecture` | 対応しているのは 64 ビットの PC（x86_64）と 64 ビットの ARM（arm64）だけです。 |
+| `no enrollment token` | `--token` とそのあとの部分も含めて、ダッシュボードからコマンド全体をコピーしてください。 |
+| `failed to pull model '…'` | モデル名が間違っているか、モデルが GPU に収まりません。`--model qwen2.5:0.5b` など、小さなモデルを試してください。 |
+
+## モデルが遅い、または読み込まれない
+
+- GPU のメモリに対して大きすぎるモデルは、動作が遅いか、まったく動きません。小さなモデルを選んでください（[AI モデルの選び方](/ja/providers/getting-started/#ai-モデルの選び方)を参照）。
+- 再起動後の最初のリクエストは、モデルをメモリに読み込むため遅くなります。
+- **マイマシン** で GPU の温度を確認してください。GPU は熱くなると自動で速度を落とします。
+
+## レンタルが早く終了した
+
+レンタル中にマシンが 10 分間オフラインになると、レンタルは終了します。報酬はオフラインになった時点までの分が支払われ、残りは借り手に戻ります。マシンが眠らないようにしてください。システム設定でスリープと休止状態をオフにします。
+
+## アンインストール
+
+```bash
+sudo systemctl disable --now gpuflow-agent
+sudo rm -f /usr/local/bin/gpuflow-agent /etc/systemd/system/gpuflow-agent.service
+sudo rm -rf /etc/gpuflow /var/lib/gpuflow /var/lib/private/gpuflow
+sudo systemctl daemon-reload
+```
+
+Ollama はインストールされたまま残ります。不要な場合は、別に削除してください。最後に、**マイマシン** のゴミ箱ボタンでマシンを削除します。
+
+<Aside>
+それでも解決しない場合は、[gpuflow.app/support](https://gpuflow.app/ja/support) でチケットを作成し、ログの最後の 50 行（`journalctl -u gpuflow-agent -n 50`）を貼り付けてください。
+</Aside>

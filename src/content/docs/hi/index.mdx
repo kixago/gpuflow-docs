@@ -1,0 +1,45 @@
+---
+title: GPUFlow दस्तावेज़
+description: GPUFlow पर घंटे के हिसाब से GPU किराये पर कैसे लें, या अपना GPU किराये पर देकर पैसे कैसे कमाएँ। स्क्रीनशॉट के साथ चरण-दर-चरण गाइड।
+template: splash
+hero:
+  tagline: घंटे के हिसाब से GPU किराये पर लें, या अपने GPU से पैसे कमाएँ। स्क्रीनशॉट के साथ छोटी, चरण-दर-चरण गाइड।
+  actions:
+    - text: GPU किराये पर लें
+      link: /hi/renters/getting-started/
+      variant: primary
+      icon: right-arrow
+    - text: अपना GPU किराये पर दें
+      link: /hi/providers/getting-started/
+      variant: secondary
+---
+
+import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+## GPUFlow क्या है
+
+GPUFlow एक मार्केटप्लेस है। यहाँ लोग दूसरे लोगों से घंटे के हिसाब से GPU किराये पर लेते हैं।
+
+- **किरायेदार** कार्ड से क्रेडिट जोड़ते हैं, एक GPU चुनते हैं और उसके लिए एक API कुंजी पाते हैं। यह कुंजी हर उस ऐप या कोड के साथ काम करती है जो OpenAI API इस्तेमाल करता है।
+- **प्रदाता** GPU वाले Linux कंप्यूटर पर एक कमांड चलाते हैं, प्रति घंटा कीमत तय करते हैं और पैसे सीधे अपने बैंक खाते में पाते हैं।
+
+<CardGrid>
+  <Card title="मुझे GPU किराये पर लेना है" icon="rocket">
+    - [GPU किराये पर लें, चरण-दर-चरण](/hi/renters/getting-started/)
+    - [अपनी API कुंजी इस्तेमाल करें](/hi/renters/api-quickstart/)
+    - [क्रेडिट, बिलिंग और रिफ़ंड](/hi/renters/billing/)
+    - [समस्या ठीक करें](/hi/renters/troubleshooting/)
+  </Card>
+  <Card title="मुझे अपना GPU किराये पर देना है" icon="laptop">
+    - [अपना GPU ऑनलाइन लाएँ](/hi/providers/getting-started/)
+    - [अच्छी लिस्टिंग लिखें](/hi/providers/creating-listings/)
+    - [अपने GPU की कीमत कैसे तय करें](/hi/providers/pricing/)
+    - [भुगतान पाना](/hi/providers/getting-paid/)
+  </Card>
+</CardGrid>
+
+<LinkCard
+  title="मदद चाहिए?"
+  description="gpuflow.app पर सपोर्ट टिकट खोलें। जवाब आपको ईमेल से मिलेगा।"
+  href="https://gpuflow.app/hi/support"
+/>

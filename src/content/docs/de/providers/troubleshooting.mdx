@@ -1,0 +1,68 @@
+---
+title: Ein Problem lösen (Anbieter)
+description: Lösungen für einen GPUFlow-Rechner, der Offline zeigt, für Installationsfehler und ein Modell, das sich nicht herunterladen lässt, und wie Sie den Agenten deinstallieren.
+sidebar:
+  label: Ein Problem lösen
+  order: 6
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+## Zuerst den Agenten ansehen
+
+Führen Sie diese Befehle auf dem GPU-Rechner aus:
+
+```bash
+systemctl status gpuflow-agent      # sollte "active (running)" anzeigen
+journalctl -u gpuflow-agent -n 50   # die letzten 50 Zeilen seines Logs
+```
+
+Die meisten Antworten stehen in diesen 50 Zeilen.
+
+## Mein Rechner zeigt Offline
+
+1. **Ist der Rechner eingeschaltet und mit dem Internet verbunden?** Der Agent muss `gpuflow.app` und `ws.gpuflow.app` über Port 443 (normales HTTPS) erreichen.
+2. **Läuft der Agent?** Zeigt `systemctl status gpuflow-agent` nicht `active (running)` an, starten Sie ihn:
+
+   ```bash
+   sudo systemctl start gpuflow-agent
+   ```
+
+3. **Immer noch offline?** Öffnen Sie **Meine Rechner**, kopieren Sie den Befehl auf der Karte dieses Rechners und führen Sie ihn erneut aus. Er installiert den Agenten neu und behält denselben Rechner bei. Das Angebot ist dann von selbst wieder da.
+
+Ein Rechner, der offline war, erscheint etwa eine Minute nach dem Verbinden des Agenten wieder als online.
+
+## Installationsfehler
+
+| Sie sehen | Was Sie tun |
+| --- | --- |
+| `enrollment failed`, und im Log steht, dass der Token abgelaufen ist | Der Befehl ist 15 Minuten gültig. Laden Sie das Dashboard neu, kopieren Sie einen neuen Befehl und führen Sie ihn aus. |
+| `this installer targets systemd Linux; systemctl not found` | Das Installationsprogramm braucht Linux mit systemd. Windows, macOS und Systeme ohne systemd werden noch nicht unterstützt. |
+| `unsupported CPU architecture` | Unterstützt werden nur 64-Bit-PCs (x86_64) und 64-Bit-ARM (arm64). |
+| `no enrollment token` | Kopieren Sie den ganzen Befehl aus dem Dashboard, einschließlich `--token` und allem, was danach kommt. |
+| `failed to pull model '…'` | Der Modellname ist falsch, oder das Modell passt nicht auf Ihre GPU. Versuchen Sie ein kleineres, zum Beispiel `--model qwen2.5:0.5b`. |
+
+## Das Modell ist langsam oder lädt nicht
+
+- Ein Modell, das zu groß für den Speicher Ihrer GPU ist, läuft langsam oder gar nicht. Wählen Sie ein kleineres (siehe [KI-Modell auswählen](/de/providers/getting-started/#ki-modell-auswählen)).
+- Die erste Anfrage nach einem Neustart dauert länger, weil das Modell erst in den Speicher geladen wird.
+- Prüfen Sie die GPU-Temperatur unter **Meine Rechner**. Eine heiße GPU drosselt sich selbst.
+
+## Eine Miete ist vorzeitig beendet worden
+
+Ist Ihr Rechner während einer Miete 10 Minuten offline, endet die Miete. Sie werden für die Zeit bis zu dem Moment bezahlt, in dem er offline ging. Der Mieter bekommt den Rest zurück. Halten Sie den Rechner wach: Schalten Sie Energiesparmodus und Ruhezustand in Ihren Systemeinstellungen aus.
+
+## Deinstallieren
+
+```bash
+sudo systemctl disable --now gpuflow-agent
+sudo rm -f /usr/local/bin/gpuflow-agent /etc/systemd/system/gpuflow-agent.service
+sudo rm -rf /etc/gpuflow /var/lib/gpuflow /var/lib/private/gpuflow
+sudo systemctl daemon-reload
+```
+
+Ollama bleibt installiert. Entfernen Sie es separat, wenn Sie es nicht brauchen. Entfernen Sie danach den Rechner unter **Meine Rechner** mit dem Papierkorb-Symbol.
+
+<Aside>
+Immer noch nicht gelöst? Eröffnen Sie ein Ticket unter [gpuflow.app/support](https://gpuflow.app/de/support) und fügen Sie die letzten 50 Zeilen des Logs ein (`journalctl -u gpuflow-agent -n 50`).
+</Aside>

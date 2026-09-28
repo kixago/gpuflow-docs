@@ -1,12 +1,68 @@
 ---
-title: Provider Troubleshooting
-description: Solutions for common GPUFlow provider setup and operational issues on Linux and Windows.
+title: Fix a problem (providers)
+description: Fixes for a GPUFlow machine that shows Offline, install errors, a model that won't download, and how to uninstall the agent.
 sidebar:
-  label: Troubleshooting
-  order: 99
+  label: Fix a problem
+  order: 6
 ---
 
-This page is being expanded. For now, please use the platform-specific guides:
+import { Aside } from '@astrojs/starlight/components';
 
-- [Linux Troubleshooting](/providers/troubleshooting-linux/)
-- [Windows Troubleshooting](/providers/troubleshooting-windows/)
+## First, look at the agent
+
+Run these on the GPU computer:
+
+```bash
+systemctl status gpuflow-agent      # should say "active (running)"
+journalctl -u gpuflow-agent -n 50   # the last 50 lines of its log
+```
+
+Most answers are in those 50 lines.
+
+## My machine shows Offline
+
+1. **Is the computer on and connected to the internet?** The agent needs to reach `gpuflow.app` and `ws.gpuflow.app` on port 443 (normal HTTPS).
+2. **Is the agent running?** If `systemctl status gpuflow-agent` doesn't say `active (running)`, start it:
+
+   ```bash
+   sudo systemctl start gpuflow-agent
+   ```
+
+3. **Still offline?** Open **My Machines**, copy the command on that machine's card and run it again. It reinstalls the agent and keeps the same machine, so its listing comes back by itself.
+
+A machine that was offline shows as online within about a minute of the agent connecting.
+
+## Install errors
+
+| You see | What to do |
+| --- | --- |
+| `enrollment failed` and the log says the token expired | The command is valid for 15 minutes. Reload the dashboard, copy a fresh command and run it. |
+| `this installer targets systemd Linux; systemctl not found` | The installer needs Linux with systemd. Windows, macOS and systems without systemd aren't supported yet. |
+| `unsupported CPU architecture` | Only 64-bit PCs (x86_64) and 64-bit ARM (arm64) are supported. |
+| `no enrollment token` | Copy the whole command from the dashboard, including `--token` and everything after it. |
+| `failed to pull model '…'` | The model name is wrong, or it doesn't fit your GPU. Try a smaller one, for example `--model qwen2.5:0.5b`. |
+
+## The model is slow or won't load
+
+- A model that's too big for your GPU's memory runs slowly or not at all. Pick a smaller one (see [choosing an AI model](/providers/getting-started/#choosing-an-ai-model)).
+- The first request after a restart is slower while the model loads into memory.
+- Check the GPU temperature on **My Machines**. A hot GPU slows itself down.
+
+## A rental ended early
+
+If your machine is offline for 10 minutes during a rental, the rental ends. You're paid for the time up to the moment it went offline, and the renter gets the rest back. Keep the machine awake: turn off sleep and hibernate in your system settings.
+
+## Uninstall
+
+```bash
+sudo systemctl disable --now gpuflow-agent
+sudo rm -f /usr/local/bin/gpuflow-agent /etc/systemd/system/gpuflow-agent.service
+sudo rm -rf /etc/gpuflow /var/lib/gpuflow /var/lib/private/gpuflow
+sudo systemctl daemon-reload
+```
+
+Ollama stays installed. Remove it separately if you don't want it. Then remove the machine on **My Machines** with the trash can button.
+
+<Aside>
+Still stuck? Open a ticket at [gpuflow.app/support](https://gpuflow.app/en/support) and paste the last 50 lines of the log (`journalctl -u gpuflow-agent -n 50`).
+</Aside>

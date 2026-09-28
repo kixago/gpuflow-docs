@@ -1,0 +1,111 @@
+---
+title: GPU mieten, Schritt für Schritt
+description: Ein GPUFlow-Konto anlegen, per Karte Credits aufladen, eine GPU stundenweise mieten und den API-Schlüssel erhalten. Jeder Schritt mit Screenshot.
+sidebar:
+  label: GPU mieten, Schritt für Schritt
+  order: 1
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+import signup from '../../../../assets/screens/de/renter-signup.png';
+import credits from '../../../../assets/screens/de/renter-add-credits.png';
+import market from '../../../../assets/screens/de/renter-marketplace.png';
+import rent from '../../../../assets/screens/de/renter-rent.png';
+import key from '../../../../assets/screens/de/renter-key.png';
+import notify from '../../../../assets/screens/de/renter-notify.png';
+import { Image } from 'astro:assets';
+
+Eine GPU bei GPUFlow zu mieten dauert etwa fünf Minuten. Sie brauchen eine E-Mail-Adresse und eine Zahlungskarte.
+
+**Was Sie bekommen:** einen API-Schlüssel für eine GPU, für die Stunden, die Sie wählen. Der Schlüssel funktioniert wie ein OpenAI-Schlüssel. Jede App und jedes Skript, das mit der OpenAI-API arbeitet, kann ihn also nutzen. Sie müssen sich auf keinem Server anmelden und nichts installieren.
+
+## 1. Konto anlegen
+
+<Steps>
+
+1. Gehen Sie auf [gpuflow.app](https://gpuflow.app/de/join) und klicken Sie oben rechts auf **Registrieren**.
+2. Geben Sie einen Benutzernamen, Ihre E-Mail-Adresse und ein Passwort (zweimal) ein.
+3. Klicken Sie auf **Konto erstellen**.
+
+</Steps>
+
+<Image src={signup} alt="Das Formular zum Anlegen eines Kontos mit hervorgehobenen Feldern für Benutzername, E-Mail und Passwort und der Schaltfläche Konto erstellen" />
+
+Statt ein Passwort festzulegen, können Sie auch auf **Weiter mit Google** oder **Weiter mit GitHub** klicken.
+
+## 2. E-Mail-Adresse bestätigen
+
+GPUFlow schickt Ihnen sofort eine E-Mail. Öffnen Sie sie und klicken Sie auf den Link darin.
+
+<Aside type="caution">
+Credits können Sie erst aufladen, wenn Ihre E-Mail-Adresse bestätigt ist. Kommt die E-Mail nicht innerhalb weniger Minuten an, sehen Sie im Spam-Ordner nach. Oder klicken Sie im gelben Hinweis oben in Ihrem Dashboard auf **E-Mail erneut senden**.
+</Aside>
+
+## 3. Credits aufladen
+
+Mit Credits bezahlen Sie Ihre Mieten. **1 Credit = $0.01**, für $25 bekommen Sie also 2.500 Credits.
+
+<Steps>
+
+1. Öffnen Sie Ihr **Dashboard** und klicken Sie im Menü links auf **Zahlungen**.
+2. Klicken Sie unter **Credits aufladen** auf einen Betrag oder geben Sie einen eigenen ein. Pro Aufladung sind $10 bis $500 möglich. Es fällt keine Gebühr an.
+3. Klicken Sie auf **Weiter zur Zahlung**. Sie gelangen zu Stripe, unserem Zahlungspartner, und zahlen dort per Karte.
+4. Nach der Zahlung kommen Sie zurück zu GPUFlow. Ihre Credits erscheinen innerhalb einer Minute, oben auf der Seite „Zahlungen“ und auf der orangefarbenen Schaltfläche in der Kopfzeile.
+
+</Steps>
+
+<Image src={credits} alt="Die Seite Zahlungen: die Betragsschaltflächen und die Schaltfläche Weiter zur Zahlung hervorgehoben" />
+
+## 4. GPU auswählen
+
+Klicken Sie oben auf einer beliebigen Seite auf **GPUs durchsuchen**. GPUs, die sofort bereit sind, stehen im grünen Bereich **Sofortzugriff Verfügbar**.
+
+<Image src={market} alt="Der Marktplatz mit einer GPU-Karte, deren Schaltfläche Jetzt Mieten hervorgehoben ist" />
+
+Prüfen Sie auf jeder Karte:
+
+- **Den Preis pro Stunde.** So viel kostet Sie eine Stunde.
+- **Den VRAM.** Größere KI-Modelle brauchen mehr davon. Als grobe Richtschnur: Ein 7B-Modell läuft gut ab 8 GB, ein 14B-Modell ab 16 GB.
+- **Das Modell.** Klicken Sie auf den Namen der GPU, um ihre Seite zu öffnen. Anbieter schreiben in die Beschreibung, welche KI-Modelle sie bereitstellen (zum Beispiel `qwen2.5:7b`).
+
+Wenn Sie sich entschieden haben, klicken Sie auf **Jetzt Mieten - Sofortzugriff**.
+
+## 5. Anzahl der Stunden wählen
+
+<Steps>
+
+1. Geben Sie ein, wie viele Stunden Sie möchten. Bei den meisten GPUs sind 1 bis 168 Stunden (eine Woche) möglich. Sie können später weitere Stunden hinzufügen.
+2. Prüfen Sie die beiden Zeilen darunter: wie viel von Ihren Credits reserviert wird und wie viel Sie haben.
+3. Klicken Sie auf die orangefarbene Schaltfläche, die die Miete startet. Sie zeigt Ihre Stundenzahl, zum Beispiel **2-Stunden-Miete starten**.
+
+</Steps>
+
+<Image src={rent} alt="Die Mietseite mit dem Feld Stunden und der Start-Schaltfläche hervorgehoben" />
+
+<Aside type="tip" title="Sie zahlen nur, was Sie nutzen">
+Beim Start wird der volle Betrag für Ihre Stunden reserviert. Wenn die Miete endet, zahlen Sie sekundengenau nur die tatsächlich genutzte Zeit. Der Rest geht zurück an Ihre Credits. [So funktioniert die Abrechnung](/de/renters/billing/).
+</Aside>
+
+## 6. API-Schlüssel kopieren
+
+Sie landen auf **Aktuelle Mieten**. Ihre neue Miete steht ganz oben.
+
+<Image src={key} alt="Aktuelle Mieten: das Feld mit dem API-Schlüssel, das Feld mit dem Endpunkt und die Schaltflächen Stunden hinzufügen, Neuer Schlüssel und Jetzt beenden hervorgehoben" />
+
+1. **Ihr API-Schlüssel.** Er beginnt mit `gfk_`. Kopieren Sie ihn jetzt und bewahren Sie ihn sicher auf. **Er wird nur einmal angezeigt.**
+2. **Der Endpunkt:** `https://gpuflow.app/v1`. Tragen Sie ihn in Ihrer App als „Basis-URL“ ein.
+3. **Die Schaltflächen:** **Stunden hinzufügen** verlängert die Miete. **Neuer Schlüssel** erzeugt einen neuen Schlüssel und schaltet den alten ab. **Jetzt beenden** beendet die Miete und bucht die ungenutzte Zeit zurück auf Ihre Credits.
+
+Schlüssel verloren? Klicken Sie auf **Neuer Schlüssel**. Der alte Schlüssel funktioniert dann nicht mehr, und ein neuer erscheint.
+
+**Weiter:** [Ihren API-Schlüssel verwenden](/de/renters/api-quickstart/), mit `curl`, Python, JavaScript oder in einer App.
+
+## Wenn die gewünschte GPU offline ist
+
+GPUs, deren Besitzer offline ist, stehen im gelben Bereich **Verfügbar - Anbieter Offline**. Klicken Sie auf der Karte auf **Benachrichtigen, wenn online**.
+
+<Image src={notify} alt="Eine GPU-Karte im Offline-Bereich mit hervorgehobener Schaltfläche Benachrichtigen, wenn online" />
+
+- Sobald diese GPU online ist, bekommen Sie eine E-Mail und eine Benachrichtigung (die Glocke in der Kopfzeile).
+- Der Besitzer erfährt, dass jemand auf seine GPU wartet.
+- Doch kein Interesse mehr? Klicken Sie erneut auf die Schaltfläche (sie heißt jetzt **Sie werden benachrichtigt**), um die Benachrichtigung abzubestellen.

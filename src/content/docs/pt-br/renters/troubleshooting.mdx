@@ -1,0 +1,49 @@
+---
+title: Resolva um problema (locatários)
+description: O que significa cada erro da API do GPUFlow e o que fazer, além de soluções para problemas ao adicionar créditos ou iniciar um aluguel.
+sidebar:
+  label: Resolva um problema
+  order: 4
+---
+
+## Erros da API
+
+Quando algo dá errado, a API responde com um código de erro. Procure o `code` na resposta:
+
+```json
+{ "error": { "message": "...", "type": "server_error", "code": "provider_offline" } }
+```
+
+| Status | `code` | O que significa | O que fazer |
+| --- | --- | --- | --- |
+| 401 | `invalid_api_key` | A chave está faltando, foi digitada errado, foi trocada por **Nova chave** ou o aluguel terminou. | Copie a chave de novo. Confira se o cabeçalho é `Authorization: Bearer gfk_…`. Se o aluguel terminou, inicie um novo. |
+| 400 | `invalid_body` | O que você enviou não é um JSON válido. | Confira as aspas e as vírgulas. Os exemplos em [Use sua chave de API](/pt-br/renters/api-quickstart/) são um bom ponto de partida. |
+| 503 | `provider_offline` | A máquina do provedor está offline agora. | Espere um minuto e tente de novo. Se ela ficar offline por 10 minutos, o aluguel termina sozinho e você paga só até o momento em que ela ficou offline. |
+| 503 | `relay_unreachable` | O GPUFlow não conseguiu acessar a conexão com a máquina. | Tente de novo daqui a pouco. Se continuar acontecendo, abra um chamado de suporte. |
+| 502 | `provider_error` | A máquina respondeu sem nenhum conteúdo. | Tente de novo. Se continuar acontecendo, relate o problema no aluguel. |
+| 503 | `provider_unbound` | Sua chave não está vinculada a uma GPU. | Abra um chamado de suporte. |
+
+**"model … not found":** você pediu um modelo que a máquina não tem. Faça o teste com `/v1/models` de [Use sua chave de API](/pt-br/renters/api-quickstart/) e use esse nome.
+
+## Adicionar créditos
+
+| Mensagem | Solução |
+| --- | --- |
+| Confirme seu e-mail antes de adicionar créditos. | Abra o e-mail do GPUFlow e clique no link. Não recebeu? Clique em **Reenviar e-mail** na faixa amarela do seu painel e olhe a pasta de spam. |
+| Informe um valor de $10 a $500. | Cada recarga precisa ficar entre $10 e $500. |
+| Pagamento cancelado. Nada foi cobrado. | Você saiu da página da Stripe antes de pagar. Tente de novo. |
+| Você pagou, mas os créditos ainda não apareceram | Espere um minuto e recarregue a página. Ainda nada depois de 10 minutos? Abra um chamado de suporte. |
+
+## Iniciar um aluguel
+
+| Mensagem | Solução |
+| --- | --- |
+| Créditos insuficientes: são necessários … | Adicione créditos ou alugue por menos horas. |
+| A máquina desta GPU está offline agora. | Escolha outra GPU ou clique em **Notificar Quando Online** no card dela para receber um e-mail quando ela voltar. |
+| Escolha de … a … horas. | Esta GPU tem seu próprio mínimo e máximo de horas. Escolha um número entre eles. |
+| Este é o seu próprio anúncio. | Você não pode alugar a sua própria GPU. |
+| Muitas tentativas. Tente novamente em uma hora. | Espere uma hora. Esse limite protege as contas contra scripts descontrolados. |
+
+## Ainda com problema?
+
+Abra um chamado em [gpuflow.app/support](https://gpuflow.app/pt-BR/support). Se for sobre um aluguel específico, use **Relatar um problema** ao lado dele para sabermos qual é. Informe o `code` do erro, a hora em que aconteceu e, se puder, o comando ou código que você executou (**sem a sua chave de API**).

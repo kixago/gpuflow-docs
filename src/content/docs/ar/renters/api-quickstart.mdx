@@ -1,0 +1,165 @@
+---
+title: استخدام مفتاح API
+description: استئجار وحدة GPU على GPUFlow يعطيك مفتاح API متوافقاً مع OpenAI. أمثلة جاهزة للنسخ لـ curl وPython وJavaScript، وطريقة استخدامه في أي تطبيق فيه إعداد لـ OpenAI.
+sidebar:
+  label: استخدام مفتاح API
+  order: 2
+---
+
+import { Aside, Tabs, TabItem, Steps } from '@astrojs/starlight/components';
+
+يأتي استئجارك مع مفتاح API يبدأ بـ `gfk_`. يعمل تماماً مثل مفتاح OpenAI API، لكنه يوجّه طلباتك إلى وحدة GPU التي استأجرتها. أي شيء يستطيع التعامل مع OpenAI API يمكنه استخدامه: مكتبات OpenAI الرسمية، وLangChain، ومعظم تطبيقات الدردشة، أو أمر `curl` بسيط.
+
+تحتاج إلى ثلاثة أشياء. تجدها كلها في **لوحة التحكم ← الإيجارات الحالية**.
+
+| ما تحتاجه | القيمة |
+| --- | --- |
+| العنوان الأساسي Base URL (يُسمّى أيضاً endpoint أو API base) | `https://gpuflow.app/v1` |
+| مفتاح API | مفتاحك، ويبدأ بـ `gfk_` |
+| النموذج | نموذج الذكاء الاصطناعي على تلك الوحدة، مثل `qwen2.5:7b` (توضّح الخطوة 1 كيف تجده) |
+
+في الأمثلة أدناه، استبدل `gfk_your_key` بمفتاحك.
+
+## 1. تحقق من مفتاحك واعرف اسم النموذج
+
+الصق هذا في الطرفية (terminal):
+
+```bash
+curl https://gpuflow.app/v1/models \
+  -H "Authorization: Bearer gfk_your_key"
+```
+
+ستحصل على رد مثل هذا:
+
+```json
+{
+  "object": "list",
+  "data": [{ "id": "qwen2.5:7b", "object": "model", "owned_by": "gpuflow" }]
+}
+```
+
+قيمة `id` (هنا `qwen2.5:7b`) هي اسم النموذج الذي تستخدمه. إذا ذكر وصف المزوّد نماذج أخرى، يمكنك استخدام أسمائها أيضاً.
+
+## 2. أرسل رسالتك الأولى
+
+<Tabs>
+<TabItem label="curl">
+
+```bash
+curl https://gpuflow.app/v1/chat/completions \
+  -H "Authorization: Bearer gfk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "qwen2.5:7b",
+    "messages": [
+      {"role": "system", "content": "You are a helpful assistant. Answer briefly."},
+      {"role": "user", "content": "Write a two-line product description for a steel water bottle."}
+    ]
+  }'
+```
+
+</TabItem>
+<TabItem label="Python">
+
+ثبّت المكتبة مرة واحدة: `pip install openai`
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://gpuflow.app/v1",
+    api_key="gfk_your_key",
+)
+
+reply = client.chat.completions.create(
+    model="qwen2.5:7b",
+    messages=[
+        {"role": "system", "content": "You are a helpful assistant. Answer briefly."},
+        {"role": "user", "content": "Write a two-line product description for a steel water bottle."},
+    ],
+)
+print(reply.choices[0].message.content)
+```
+
+</TabItem>
+<TabItem label="JavaScript">
+
+ثبّت المكتبة مرة واحدة: `npm install openai`
+
+```js
+import OpenAI from "openai";
+
+const client = new OpenAI({
+  baseURL: "https://gpuflow.app/v1",
+  apiKey: "gfk_your_key",
+});
+
+const reply = await client.chat.completions.create({
+  model: "qwen2.5:7b",
+  messages: [
+    { role: "system", content: "You are a helpful assistant. Answer briefly." },
+    { role: "user", content: "Write a two-line product description for a steel water bottle." },
+  ],
+});
+console.log(reply.choices[0].message.content);
+```
+
+</TabItem>
+</Tabs>
+
+## 3. احصل على الإجابة كلمة بكلمة (البث المباشر)
+
+أضف `"stream": true` لترى الإجابة تظهر أثناء كتابتها، كما في تطبيقات الدردشة.
+
+<Tabs>
+<TabItem label="curl">
+
+```bash
+curl https://gpuflow.app/v1/chat/completions \
+  -H "Authorization: Bearer gfk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{"model": "qwen2.5:7b", "stream": true,
+       "messages": [{"role": "user", "content": "Explain what a GPU is in three sentences."}]}'
+```
+
+</TabItem>
+<TabItem label="Python">
+
+```python
+stream = client.chat.completions.create(
+    model="qwen2.5:7b",
+    stream=True,
+    messages=[{"role": "user", "content": "Explain what a GPU is in three sentences."}],
+)
+for chunk in stream:
+    print(chunk.choices[0].delta.content or "", end="", flush=True)
+```
+
+</TabItem>
+</Tabs>
+
+## استخدامه في تطبيق
+
+في كثير من التطبيقات إعداد باسم "OpenAI-compatible" أو "Custom OpenAI" أو "OpenAI API base". املأه هكذا:
+
+<Steps>
+
+1. **العنوان الأساسي (Base URL / API base / endpoint):** `https://gpuflow.app/v1`
+2. **مفتاح API (API key):** مفتاحك `gfk_…`
+3. **النموذج (Model):** الاسم من الخطوة 1، مثل `qwen2.5:7b`
+
+</Steps>
+
+إذا طلب التطبيق اختيار "provider" (مزوّد)، فاختر "OpenAI" أو "OpenAI-compatible".
+
+## ما يستطيع المفتاح فعله وما لا يستطيعه
+
+- يعمل للدردشة: `/v1/models` و`/v1/chat/completions`.
+- يعمل حتى ينتهي استئجارك. بعد ذلك يرد بالخطأ `invalid_api_key`.
+- هو لك وحدك. أي شخص يملكه يستطيع استخدام استئجارك، فلا تلصقه في كود منشور للعامة أو في المحادثات. إذا تسرّب، فانقر على **مفتاح جديد** في **الإيجارات الحالية**. يتوقف المفتاح القديم عن العمل فوراً.
+
+<Aside type="caution" title="رسائلك تُعالَج على كمبيوتر شخص آخر">
+يعمل نموذج الذكاء الاصطناعي على جهاز المزوّد، لذا تمر عبره رسائلك إلى النموذج وإجاباته. لا ترسل كلمات مرور أو أرقام بطاقات أو أي أسرار أخرى لا تشاركها مع شخص غريب.
+</Aside>
+
+هل هناك ما لا يعمل؟ راجع [حل مشكلة](/ar/renters/troubleshooting/).

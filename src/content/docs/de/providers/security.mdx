@@ -1,0 +1,45 @@
+---
+title: Worauf Mieter zugreifen können und worauf nicht
+description: Was ein GPUFlow-Mieter auf Ihrem Rechner tun kann (KI-Anfragen an Ihre Modelle senden) und was nicht (Ihr Netzwerk, eine Shell, Ihre Dateien, Ihre Modelle). Wie der Agent abgesichert ist.
+sidebar:
+  label: Worauf Mieter zugreifen können
+  order: 5
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+Kurz gesagt: **Mieter können KI-Anfragen an die Modelle auf Ihrem Rechner senden, und sonst nichts.**
+
+## Was Mieter tun können
+
+Ein Mieter bekommt einen API-Schlüssel. Seine Anfragen gehen zuerst an GPUFlow. Die Liste der Modelle beantwortet GPUFlow selbst. An Ihren Rechner leitet GPUFlow nur eine einzige Art von Anfrage weiter:
+
+| Anfrage | Was sie tut |
+| --- | --- |
+| `POST /v1/chat/completions` | Chat mit einem Ihrer Modelle |
+
+Diese Anfrage geht über das Relay von GPUFlow an den Agenten auf Ihrem Rechner. Der Agent gibt sie an Ihre KI-Engine (Ollama) weiter.
+
+Der Agent hat zusätzlich eine eigene Liste, als zweites Schloss. Er nimmt nur `/v1/models`, `/v1/chat/completions`, `/v1/completions` und `/v1/embeddings` an und lehnt alles andere ab, ganz gleich, woher die Anfrage kommt.
+
+## Was Mieter nicht können
+
+- **Ihr Netzwerk erreichen.** Ihr Rechner baut nur ausgehende Verbindungen auf. An Ihrem Router wird nichts geöffnet, und Mieter erfahren nie Ihre IP-Adresse.
+- **Eine Shell öffnen** oder eigene Programme auf Ihrem Rechner ausführen.
+- **Ihre Dateien sehen oder ändern.**
+- **Ihre Modelle herunterladen, löschen oder ändern.**
+- **Die Werte Ihres Rechners sehen.** Die sehen nur Sie.
+
+## Wie der Agent abgesichert ist
+
+Das Installationsprogramm richtet den Agenten als Systemdienst mit strengen Beschränkungen ein. Er läuft als temporärer Benutzer ohne Passwort, kann sich keine zusätzlichen Rechte verschaffen, sieht den Rest des Systems nur lesend und sieht keine Home-Verzeichnisse. Seine Einstellungen liegen in `/etc/gpuflow/agent.env`, seine Daten in `/var/lib/private/gpuflow`.
+
+## Was Sie wissen sollten
+
+- **Prompts und Antworten laufen über Ihren Rechner.** So funktioniert die KI nun einmal. Respektieren Sie die Privatsphäre Ihrer Mieter: Zeichnen Sie ihre Prompts nicht auf und lesen Sie sie nicht.
+- **Halten Sie den Rechner aktuell.** Installieren Sie Ihre Linux-Updates und die Updates Ihres GPU-Treibers wie gewohnt. Der Agent startet danach von selbst neu.
+- **Achten Sie auf die Temperatur.** Mieter können Ihre GPU stundenlang auslasten. Die Live-Werte unter **Meine Rechner** zeigen ihre Temperatur. Sorgen Sie also dafür, dass das Gehäuse genug Luft bekommt.
+
+<Aside type="tip">
+Wenn Sie den Rechner eine Zeit lang nicht vermieten möchten, ziehen Sie sein Angebot unter **Meine GPUs** zurück oder stoppen Sie den Agenten mit `sudo systemctl stop gpuflow-agent`. Mit `sudo systemctl start gpuflow-agent` läuft er wieder. Stoppen Sie ihn während einer Miete, endet die Miete nach 10 Minuten, und Sie werden nur bis zu dem Moment bezahlt, in dem er offline ging.
+</Aside>

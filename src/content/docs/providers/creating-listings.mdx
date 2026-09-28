@@ -1,0 +1,65 @@
+---
+title: Write a good listing
+description: Fill in a GPUFlow listing field by field, with example names, descriptions and features you can copy and adapt.
+sidebar:
+  label: Write a good listing
+  order: 2
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import { Image } from 'astro:assets';
+import form from '../../../assets/screens/en/provider-list-gpu.png';
+
+Renters choose a GPU in a few seconds. A clear name, the right model and a short description that says which AI models you serve make the difference.
+
+Open **Dashboard → List a GPU** (or click **List it for rent** on a machine that is online). The form looks like this:
+
+<Image src={form} alt="The List a GPU form filled in with an example, each field numbered" />
+
+## Field by field
+
+**1. GPU Name (Your Listing Name).** What renters see first. Put the GPU and the main model in it.
+
+> `RTX 4090 · qwen2.5 7B`
+> `RTX 3060 12 GB · fast small models`
+> `RTX 3090 · qwen2.5 14B, evenings and weekends`
+
+**2. GPU Model (Official).** Pick your exact card from the list. It sets the VRAM shown on your listing and groups you with the same cards in the marketplace. You can't change it later.
+
+**3. Hourly Rate (USD).** What a renter pays for one hour. See [how to price your GPU](/providers/pricing/) before you choose.
+
+**4. Location.** Pick the nearest city from the list. Renters can filter the marketplace by location.
+
+**5. Machine.** The computer that serves this listing. If you came from **List it for rent**, it's already chosen. Otherwise pick one that is online, or leave **None, attach one later** and use **Bring Online** on **My GPUs** afterwards.
+
+**6. Key Features (comma-separated).** Short tags, separated by commas:
+
+> `24 GB VRAM, qwen2.5:7b, llama3.1:8b, 1 Gbit upload`
+
+**7. Description.** Two or three sentences. Say which models you serve, your connection and when the machine is usually on:
+
+> RTX 4090 with 24 GB VRAM on a 1 Gbit line. Serves qwen2.5:7b and llama3.1:8b through an OpenAI-compatible API. Online most days from 08:00 to 23:00 (UTC-7).
+
+> RTX 3060 with 12 GB VRAM on home fiber (500 Mbit). Serves qwen2.5:0.5b and qwen2.5:7b. Good for testing, small scripts and chat bots. Usually online 24/7.
+
+Then click **List GPU**.
+
+<Aside type="tip" title="Only promise what's true">
+Write only the models that are actually installed on your machine, and only the hours you're really online. Renters who get what they expected come back.
+</Aside>
+
+## After you've listed
+
+On **My GPUs** you can:
+
+- **Edit:** change the name, price, location, description or the machine.
+- **Unpublish:** hide the listing from the marketplace without deleting it. **Publish** brings it back.
+- **Delete:** remove it for good. You can't delete a listing while it's rented.
+- **Bring Online:** get the command for a listing whose machine is offline.
+
+## What renters see
+
+Your listing appears in the marketplace:
+
+- in the green **Instant Access Available** section while your machine is online,
+- in the yellow **Available - Provider Offline** section while it's off. Renters can click **Notify When Online** there. You get an email that someone is waiting, and they get one when you're back.

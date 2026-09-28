@@ -1,39 +1,29 @@
 ---
+// Starlight's head plus: an x-default language link (English), breadcrumb
+// structured data in the page's language, and the site analytics script.
 import Default from '@astrojs/starlight/components/Head.astro';
 
-// Build breadcrumb from URL path
-const parts = Astro.url.pathname.replace(/\/$/, '').split('/').filter(Boolean);
+const route = Astro.locals.starlightRoute;
+const locale = route.locale; // undefined for English (the root locale)
+const home = `https://docs.gpuflow.app/${locale ? `${locale}/` : ''}`;
+const path = Astro.url.pathname.replace(locale ? `/${locale}/` : '/', '/');
+const englishUrl = `https://docs.gpuflow.app${path}`;
 
-const breadcrumbs = [
+const crumbs = [
   { name: 'GPUFlow', url: 'https://gpuflow.app' },
-  { name: 'Documentation', url: 'https://docs.gpuflow.app' },
+  { name: route.siteTitle, url: home },
 ];
-
-let currentPath = 'https://docs.gpuflow.app';
-for (const part of parts) {
-  currentPath += `/${part}`;
-  const name = part
-    .replace(/-/g, ' ')
-    .replace(/\b\w/g, (c) => c.toUpperCase());
-  breadcrumbs.push({ name, url: `${currentPath}/` });
+if (!route.entry.data.template || route.entry.data.template === 'doc') {
+  crumbs.push({ name: route.entry.data.title, url: new URL(Astro.url.pathname, Astro.site).href });
 }
-
-const breadcrumbSchema = {
+const breadcrumbs = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
-  itemListElement: breadcrumbs.map((crumb, i) => ({
-    '@type': 'ListItem',
-    position: i + 1,
-    name: crumb.name,
-    item: crumb.url,
-  })),
+  itemListElement: crumbs.map((c, i) => ({ '@type': 'ListItem', position: i + 1, name: c.name, item: c.url })),
 };
 ---
 
-<Default {...Astro.props}><slot /></Default>
-<script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
-<script
-    src="https://anal.gpuflow.app/api/script.js"
-    data-site-id="5cede7db7be6"
-    defer
-></script>
+<Default><slot /></Default>
+<link rel="alternate" hreflang="x-default" href={englishUrl} />
+<script type="application/ld+json" set:html={JSON.stringify(breadcrumbs)} />
+<script src="https://anal.gpuflow.app/api/script.js" data-site-id="5cede7db7be6" defer></script>

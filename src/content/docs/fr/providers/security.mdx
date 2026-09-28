@@ -1,0 +1,45 @@
+---
+title: Ce à quoi les locataires ont accès, ou pas
+description: Ce qu'un locataire GPUFlow peut faire sur votre machine (envoyer des requêtes d'IA à vos modèles) et ce qu'il ne peut pas faire (accéder à votre réseau, à un shell, à vos fichiers, à vos modèles). Comment l'agent est verrouillé.
+sidebar:
+  label: Ce à quoi les locataires ont accès
+  order: 5
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+En bref : **les locataires peuvent envoyer des requêtes d'IA aux modèles de votre machine, et rien d'autre.**
+
+## Ce que les locataires peuvent faire
+
+Un locataire reçoit une clé API. Ses requêtes passent d'abord par GPUFlow. GPUFlow répond lui-même à la demande de liste des modèles et ne transmet à votre ordinateur qu'un seul type de requête :
+
+| Requête | Ce qu'elle fait |
+| --- | --- |
+| `POST /v1/chat/completions` | dialogue avec l'un de vos modèles |
+
+Cette requête passe par le relais de GPUFlow jusqu'à l'agent installé sur votre ordinateur, et l'agent la transmet à votre moteur d'IA (Ollama).
+
+L'agent a aussi sa propre liste, comme second verrou. Il n'accepte que `/v1/models`, `/v1/chat/completions`, `/v1/completions` et `/v1/embeddings`, et refuse tout le reste, quelle que soit l'origine de la requête.
+
+## Ce que les locataires ne peuvent pas faire
+
+- **Accéder à votre réseau.** Votre ordinateur n'établit que des connexions sortantes. Rien n'est ouvert sur votre routeur, et les locataires ne connaissent jamais votre adresse IP.
+- **Obtenir un shell** ou lancer leurs propres programmes sur votre machine.
+- **Voir ou modifier vos fichiers.**
+- **Télécharger, supprimer ou modifier vos modèles.**
+- **Voir les statistiques de votre machine.** Vous seul les voyez.
+
+## Comment l'agent est verrouillé
+
+L'installateur configure l'agent comme un service système soumis à des limites strictes. Il tourne sous un utilisateur temporaire sans mot de passe, ne peut pas obtenir de droits supplémentaires, voit le reste du système en lecture seule et ne voit pas les dossiers personnels. Ses réglages se trouvent dans `/etc/gpuflow/agent.env` et ses données dans `/var/lib/private/gpuflow`.
+
+## Ce que vous devez savoir
+
+- **Les prompts et les réponses passent par votre machine.** C'est ainsi que l'IA fonctionne. Respectez la vie privée de vos locataires : n'enregistrez pas et ne lisez pas leurs prompts.
+- **Gardez la machine à jour.** Installez vos mises à jour Linux et celles du pilote de votre GPU comme d'habitude. L'agent redémarre tout seul ensuite.
+- **Surveillez la température.** Les locataires peuvent faire travailler votre GPU pendant des heures. Les statistiques en direct dans **Mes machines** affichent sa température : assurez-vous que le boîtier est bien ventilé.
+
+<Aside type="tip">
+Pour arrêter de louer la machine pendant un temps, masquez son annonce dans **Mes GPU**, ou arrêtez l'agent avec `sudo systemctl stop gpuflow-agent`. `sudo systemctl start gpuflow-agent` le relance. Si vous l'arrêtez pendant une location, celle-ci se termine au bout de 10 minutes et vous n'êtes payé que jusqu'au moment où la machine est passée hors ligne.
+</Aside>

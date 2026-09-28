@@ -1,0 +1,165 @@
+---
+title: שימוש במפתח ה-API
+description: השכרה ב-GPUFlow היא מפתח API תואם OpenAI. דוגמאות להעתקה ל-curl, ל-Python ול-JavaScript, ואיך משתמשים בו בכל אפליקציה שיש בה הגדרת OpenAI.
+sidebar:
+  label: שימוש במפתח ה-API
+  order: 2
+---
+
+import { Aside, Tabs, TabItem, Steps } from '@astrojs/starlight/components';
+
+עם ההשכרה מקבלים מפתח API שמתחיל ב-`gfk_`. הוא עובד בדיוק כמו מפתח API של OpenAI, רק שהוא מפנה ל-GPU ששכרתם. כל מה שיודע לדבר עם ה-API של OpenAI יכול להשתמש בו: הספריות הרשמיות של OpenAI, LangChain, רוב אפליקציות הצ'אט, או פקודת `curl` פשוטה.
+
+צריך שלושה דברים. את כולם תמצאו ב-**לוח מחוונים ← השכרות נוכחיות**.
+
+| מה | ערך |
+| --- | --- |
+| Base URL (נקרא גם endpoint או API base) | `https://gpuflow.app/v1` |
+| מפתח API | המפתח שלכם, שמתחיל ב-`gfk_` |
+| מודל | מודל ה-AI שעל ה-GPU, למשל `qwen2.5:7b` (שלב 1 מראה איך למצוא אותו) |
+
+בדוגמאות שלמטה, החליפו את `gfk_your_key` במפתח שלכם.
+
+## 1. בדיקת המפתח ומציאת שם המודל
+
+הדביקו את זה בטרמינל:
+
+```bash
+curl https://gpuflow.app/v1/models \
+  -H "Authorization: Bearer gfk_your_key"
+```
+
+תקבלו תשובה כזו:
+
+```json
+{
+  "object": "list",
+  "data": [{ "id": "qwen2.5:7b", "object": "model", "owned_by": "gpuflow" }]
+}
+```
+
+ה-`id` (כאן `qwen2.5:7b`) הוא שם המודל שצריך להשתמש בו. אם בתיאור של הספק מופיעים מודלים נוספים, אפשר להשתמש גם בשמות שלהם.
+
+## 2. שליחת ההודעה הראשונה
+
+<Tabs>
+<TabItem label="curl">
+
+```bash
+curl https://gpuflow.app/v1/chat/completions \
+  -H "Authorization: Bearer gfk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "qwen2.5:7b",
+    "messages": [
+      {"role": "system", "content": "You are a helpful assistant. Answer briefly."},
+      {"role": "user", "content": "Write a two-line product description for a steel water bottle."}
+    ]
+  }'
+```
+
+</TabItem>
+<TabItem label="Python">
+
+מתקינים את הספרייה פעם אחת: `pip install openai`
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://gpuflow.app/v1",
+    api_key="gfk_your_key",
+)
+
+reply = client.chat.completions.create(
+    model="qwen2.5:7b",
+    messages=[
+        {"role": "system", "content": "You are a helpful assistant. Answer briefly."},
+        {"role": "user", "content": "Write a two-line product description for a steel water bottle."},
+    ],
+)
+print(reply.choices[0].message.content)
+```
+
+</TabItem>
+<TabItem label="JavaScript">
+
+מתקינים את הספרייה פעם אחת: `npm install openai`
+
+```js
+import OpenAI from "openai";
+
+const client = new OpenAI({
+  baseURL: "https://gpuflow.app/v1",
+  apiKey: "gfk_your_key",
+});
+
+const reply = await client.chat.completions.create({
+  model: "qwen2.5:7b",
+  messages: [
+    { role: "system", content: "You are a helpful assistant. Answer briefly." },
+    { role: "user", content: "Write a two-line product description for a steel water bottle." },
+  ],
+});
+console.log(reply.choices[0].message.content);
+```
+
+</TabItem>
+</Tabs>
+
+## 3. קבלת התשובה מילה אחר מילה (סטרימינג)
+
+הוסיפו `"stream": true` כדי לראות את התשובה מופיעה תוך כדי כתיבה, כמו באפליקציית צ'אט.
+
+<Tabs>
+<TabItem label="curl">
+
+```bash
+curl https://gpuflow.app/v1/chat/completions \
+  -H "Authorization: Bearer gfk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{"model": "qwen2.5:7b", "stream": true,
+       "messages": [{"role": "user", "content": "Explain what a GPU is in three sentences."}]}'
+```
+
+</TabItem>
+<TabItem label="Python">
+
+```python
+stream = client.chat.completions.create(
+    model="qwen2.5:7b",
+    stream=True,
+    messages=[{"role": "user", "content": "Explain what a GPU is in three sentences."}],
+)
+for chunk in stream:
+    print(chunk.choices[0].delta.content or "", end="", flush=True)
+```
+
+</TabItem>
+</Tabs>
+
+## שימוש באפליקציה
+
+בהרבה אפליקציות יש הגדרה בשם "OpenAI-compatible", "Custom OpenAI" או "OpenAI API base". מלאו אותה כך:
+
+<Steps>
+
+1. **Base URL / API base / endpoint:** `https://gpuflow.app/v1`
+2. **API key:** המפתח שלכם, `gfk_…`
+3. **Model:** השם משלב 1, למשל `qwen2.5:7b`
+
+</Steps>
+
+אם האפליקציה מבקשת לבחור "provider", בחרו "OpenAI" או "OpenAI-compatible".
+
+## מה המפתח יכול ומה לא
+
+- הוא עובד לצ'אט: `/v1/models` ו-`/v1/chat/completions`.
+- הוא עובד עד שההשכרה מסתיימת. אחרי זה הוא מחזיר `invalid_api_key`.
+- הוא שלכם בלבד. כל מי שמחזיק בו יכול להשתמש בהשכרה שלכם, אז אל תדביקו אותו בקוד ציבורי או בצ'אטים. אם הוא דלף, לחצו על **מפתח חדש** בדף **השכרות נוכחיות**. המפתח הישן מפסיק לעבוד מיד.
+
+<Aside type="caution" title="הפרומפטים שלכם רצים על המחשב של מישהו אחר">
+מודל ה-AI רץ על המכונה של הספק, ולכן הפרומפטים והתשובות עוברים דרכה. אל תשלחו סיסמאות, מספרי כרטיסי אשראי או סודות אחרים שלא הייתם משתפים עם אדם זר.
+</Aside>
+
+משהו לא עובד? ראו [פתרון בעיות](/he/renters/troubleshooting/).

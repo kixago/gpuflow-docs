@@ -1,0 +1,165 @@
+---
+title: API キーを使う
+description: GPUFlow のレンタルは、OpenAI 互換の API キーです。curl、Python、JavaScript でそのまま使えるサンプルと、OpenAI の設定があるアプリでの使い方。
+sidebar:
+  label: API キーを使う
+  order: 2
+---
+
+import { Aside, Tabs, TabItem, Steps } from '@astrojs/starlight/components';
+
+レンタルには、`gfk_` で始まる API キーが付いています。使い方は OpenAI の API キーとまったく同じで、接続先があなたの借りた GPU になるだけです。OpenAI API とやり取りできるものなら、どれでもこのキーを使えます。公式の OpenAI ライブラリ、LangChain、多くのチャットアプリ、ふつうの `curl` コマンドなどです。
+
+必要なものは 3 つです。どれも **ダッシュボード → 現在のレンタル** にあります。
+
+| 項目 | 値 |
+| --- | --- |
+| ベース URL（エンドポイント、API ベースとも呼ばれます） | `https://gpuflow.app/v1` |
+| API キー | あなたのキー（`gfk_` で始まります） |
+| モデル | その GPU で動いている AI モデル。例: `qwen2.5:7b`（調べ方は手順 1 を参照） |
+
+以下のサンプルでは、`gfk_your_key` をあなたのキーに置き換えてください。
+
+## 1. キーを確認し、モデル名を調べる
+
+ターミナルに次のコマンドを貼り付けます。
+
+```bash
+curl https://gpuflow.app/v1/models \
+  -H "Authorization: Bearer gfk_your_key"
+```
+
+次のような応答が返ってきます。
+
+```json
+{
+  "object": "list",
+  "data": [{ "id": "qwen2.5:7b", "object": "model", "owned_by": "gpuflow" }]
+}
+```
+
+`id`（ここでは `qwen2.5:7b`）が、使うモデル名です。プロバイダーの説明欄にほかのモデルも書かれていれば、その名前も使えます。
+
+## 2. 最初のメッセージを送る
+
+<Tabs>
+<TabItem label="curl">
+
+```bash
+curl https://gpuflow.app/v1/chat/completions \
+  -H "Authorization: Bearer gfk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "qwen2.5:7b",
+    "messages": [
+      {"role": "system", "content": "You are a helpful assistant. Answer briefly."},
+      {"role": "user", "content": "Write a two-line product description for a steel water bottle."}
+    ]
+  }'
+```
+
+</TabItem>
+<TabItem label="Python">
+
+最初に一度だけライブラリをインストールします: `pip install openai`
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://gpuflow.app/v1",
+    api_key="gfk_your_key",
+)
+
+reply = client.chat.completions.create(
+    model="qwen2.5:7b",
+    messages=[
+        {"role": "system", "content": "You are a helpful assistant. Answer briefly."},
+        {"role": "user", "content": "Write a two-line product description for a steel water bottle."},
+    ],
+)
+print(reply.choices[0].message.content)
+```
+
+</TabItem>
+<TabItem label="JavaScript">
+
+最初に一度だけライブラリをインストールします: `npm install openai`
+
+```js
+import OpenAI from "openai";
+
+const client = new OpenAI({
+  baseURL: "https://gpuflow.app/v1",
+  apiKey: "gfk_your_key",
+});
+
+const reply = await client.chat.completions.create({
+  model: "qwen2.5:7b",
+  messages: [
+    { role: "system", content: "You are a helpful assistant. Answer briefly." },
+    { role: "user", content: "Write a two-line product description for a steel water bottle." },
+  ],
+});
+console.log(reply.choices[0].message.content);
+```
+
+</TabItem>
+</Tabs>
+
+## 3. 回答を少しずつ受け取る（ストリーミング）
+
+`"stream": true` を加えると、チャットアプリのように、回答が書かれていく様子をそのまま表示できます。
+
+<Tabs>
+<TabItem label="curl">
+
+```bash
+curl https://gpuflow.app/v1/chat/completions \
+  -H "Authorization: Bearer gfk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{"model": "qwen2.5:7b", "stream": true,
+       "messages": [{"role": "user", "content": "Explain what a GPU is in three sentences."}]}'
+```
+
+</TabItem>
+<TabItem label="Python">
+
+```python
+stream = client.chat.completions.create(
+    model="qwen2.5:7b",
+    stream=True,
+    messages=[{"role": "user", "content": "Explain what a GPU is in three sentences."}],
+)
+for chunk in stream:
+    print(chunk.choices[0].delta.content or "", end="", flush=True)
+```
+
+</TabItem>
+</Tabs>
+
+## アプリで使う
+
+多くのアプリには、「OpenAI-compatible」「Custom OpenAI」「OpenAI API base」といった名前の設定があります。次のように入力してください。
+
+<Steps>
+
+1. **ベース URL / API ベース / エンドポイント:** `https://gpuflow.app/v1`
+2. **API キー:** あなたの `gfk_…` キー
+3. **モデル:** 手順 1 で調べた名前。例: `qwen2.5:7b`
+
+</Steps>
+
+アプリで「プロバイダー」を選ぶ場合は、「OpenAI」または「OpenAI-compatible」を選んでください。
+
+## キーでできること、できないこと
+
+- チャットに使えます: `/v1/models` と `/v1/chat/completions`。
+- レンタルが終わるまで使えます。終了後は `invalid_api_key` が返ります。
+- キーはあなた専用です。キーを持っている人は誰でもあなたのレンタルを使えてしまうので、公開するコードやチャットに貼り付けないでください。漏れてしまったら、**現在のレンタル** で **新しいキー** をクリックします。古いキーはすぐに使えなくなります。
+
+<Aside type="caution" title="プロンプトは他人のコンピューターで処理されます">
+AI モデルはプロバイダーのマシンで動いています。そのため、プロンプトと回答はそのマシンを通ります。パスワードやカード番号など、知らない人に教えたくない情報は送らないでください。
+</Aside>
+
+うまく動かない場合は、[問題を解決する](/ja/renters/troubleshooting/)をご覧ください。

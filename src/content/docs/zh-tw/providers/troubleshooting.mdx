@@ -1,0 +1,68 @@
+---
+title: 排解問題（提供者）
+description: GPUFlow 機器顯示離線、安裝錯誤、模型無法下載時的解決方法，以及如何解除安裝代理程式。
+sidebar:
+  label: 排解問題
+  order: 6
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+## 先檢查代理程式
+
+在 GPU 電腦上執行以下指令：
+
+```bash
+systemctl status gpuflow-agent      # 應該顯示 "active (running)"
+journalctl -u gpuflow-agent -n 50   # 日誌的最後 50 行
+```
+
+大多數問題的答案都在這 50 行裡。
+
+## 我的機器顯示離線
+
+1. **電腦有開機並連上網路嗎？** 代理程式需要能連到 `gpuflow.app` 和 `ws.gpuflow.app` 的 443 連接埠（一般的 HTTPS）。
+2. **代理程式有在執行嗎？** 如果 `systemctl status gpuflow-agent` 沒有顯示 `active (running)`，請啟動它：
+
+   ```bash
+   sudo systemctl start gpuflow-agent
+   ```
+
+3. **還是離線？** 打開 **我的機器**，複製那台機器卡片上的指令，再執行一次。它會重新安裝代理程式，並保留同一台機器，所以它的上架資訊會自動恢復。
+
+代理程式連線後，原本離線的機器大約一分鐘內就會顯示為在線。
+
+## 安裝錯誤
+
+| 您看到的訊息 | 怎麼處理 |
+| --- | --- |
+| `enrollment failed`，而且日誌顯示權杖已過期 | 指令的有效時間是 15 分鐘。請重新載入儀表板，複製新的指令再執行。 |
+| `this installer targets systemd Linux; systemctl not found` | 安裝程式需要使用 systemd 的 Linux。目前還不支援 Windows、macOS 和沒有 systemd 的系統。 |
+| `unsupported CPU architecture` | 只支援 64 位元 PC（x86_64）和 64 位元 ARM（arm64）。 |
+| `no enrollment token` | 從儀表板複製完整的指令，包括 `--token` 和它後面的所有內容。 |
+| `failed to pull model '…'` | 模型名稱錯誤，或模型放不進您的 GPU。請改用較小的模型，例如 `--model qwen2.5:0.5b`。 |
+
+## 模型很慢或無法載入
+
+- 模型太大、超出 GPU 記憶體時，會跑得很慢，甚至完全無法執行。請選較小的模型（請參閱[選擇 AI 模型](/zh-tw/providers/getting-started/#選擇-ai-模型)）。
+- 重新啟動後的第一個請求會比較慢，因為模型正在載入記憶體。
+- 在 **我的機器** 上查看 GPU 溫度。GPU 過熱時會自動降速。
+
+## 租用提早結束
+
+如果租用期間您的機器離線 10 分鐘，租用就會結束。您會收到到離線那一刻為止的款項，其餘的會退還給租用者。請讓機器保持運作：在系統設定中關閉睡眠和休眠。
+
+## 解除安裝
+
+```bash
+sudo systemctl disable --now gpuflow-agent
+sudo rm -f /usr/local/bin/gpuflow-agent /etc/systemd/system/gpuflow-agent.service
+sudo rm -rf /etc/gpuflow /var/lib/gpuflow /var/lib/private/gpuflow
+sudo systemctl daemon-reload
+```
+
+Ollama 會保留在電腦上。如果不需要，請另外移除。接著在 **我的機器** 用垃圾桶按鈕移除這台機器。
+
+<Aside>
+還是無法解決？請到 [gpuflow.app/support](https://gpuflow.app/zh-TW/support) 開一張工單，並貼上日誌的最後 50 行（`journalctl -u gpuflow-agent -n 50`）。
+</Aside>

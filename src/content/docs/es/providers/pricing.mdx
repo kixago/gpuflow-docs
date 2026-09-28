@@ -1,0 +1,92 @@
+---
+title: Cómo poner precio a tu GPU
+description: Cuánto cuesta por hora alquilar GPUs como la tuya (de la RTX 3060 a la RTX 5090, de la A4000 a la A6000), cuánto te queda después de la comisión de GPUFlow, tu costo de electricidad y una forma sencilla de elegir tu precio.
+sidebar:
+  label: Cómo poner precio a tu GPU
+  order: 3
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+import { Image } from 'astro:assets';
+import bar from '../../../../assets/screens/es/provider-price-bar.png';
+
+El precio es el motivo principal por el que un inquilino elige tu GPU o la de otra persona. Aquí tienes cuánto te queda, cuánto te cuesta tenerla en marcha y cuánto se paga hoy por GPUs como la tuya.
+
+## Cuánto te queda
+
+Tú fijas un precio por hora. El inquilino paga ese precio por el tiempo que usa. **GPUFlow se queda con el 12 % y tú recibes el 88 %.**
+
+| Tu precio por hora | Lo que ganas por hora | 8 horas al día durante 30 días |
+| --- | --- | --- |
+| $0.10 | $0.088 | $21.12 |
+| $0.20 | $0.176 | $42.24 |
+| $0.35 | $0.308 | $73.92 |
+| $0.50 | $0.44 | $105.60 |
+
+La última columna supone que tu GPU está alquilada 8 horas cada día. El uso real depende de tu precio, de los modelos que elijas y de cuánto tiempo estés en línea.
+
+## Cuánto te cuesta tenerla en marcha
+
+El costo principal es la electricidad. Puedes calcularlo en un minuto:
+
+<Steps>
+
+1. Abre **Mis máquinas** mientras tu GPU está trabajando. La tarjeta muestra su **consumo eléctrico** en vatios.
+2. Divide entre 1000 para obtener kilovatios. 350 W son 0.35 kW.
+3. Multiplica por el precio de la electricidad por kWh (aparece en tu factura de la luz).
+
+</Steps>
+
+Ejemplo: 0.35 kW × $0.15 por kWh = **$0.053 por hora**. Lo que ganas por hora debería estar muy por encima de eso.
+
+## Cuánto se paga hoy por una GPU
+
+Estos son precios bajo demanda por GPU y por hora que encontramos en otros sitios de alquiler de GPUs en **septiembre de 2026**: Vast.ai, RunPod, Salad, SimplePod, TensorDock, Hyperstack y Lambda, algunos a través del sitio comparador getdeploying.com. Cambian cada semana, así que tómalos como una referencia, no como una regla.
+
+| GPU | Precio habitual por hora |
+| --- | --- |
+| RTX 3060 12 GB | $0.05 – $0.08 |
+| RTX 3070 | $0.09 – $0.13 |
+| RTX 3080 | $0.14 – $0.17 |
+| RTX 3090 | $0.11 – $0.31 |
+| RTX 4060 Ti 16 GB | $0.10 – $0.14 |
+| RTX 4070 | $0.07 – $0.15 |
+| RTX 4070 Ti | $0.19 – $0.24 |
+| RTX 4080 | $0.23 – $0.27 |
+| RTX 4090 | $0.30 – $0.46 |
+| RTX 5080 | $0.22 – $0.39 |
+| RTX 5090 | $0.41 – $0.69 |
+| RTX A4000 | $0.08 – $0.17 |
+| RTX A5000 | $0.16 – $0.25 |
+| RTX A6000 | $0.40 – $0.53 |
+
+Las grandes empresas de la nube cobran mucho más por las GPUs de centro de datos. Por ejemplo, una NVIDIA L4 en AWS cuesta unos $0.80 por hora. Pero los inquilinos que llegan a un mercado como GPUFlow te comparan con los precios de arriba, no con AWS.
+
+<Aside type="note" title="Por qué empezar en la mitad baja">
+En la mayoría de esos sitios el inquilino recibe la máquina completa. En GPUFlow recibe tus modelos de IA a través de una API. Eso es más sencillo para él, pero permite hacer menos cosas, así que pon tu precio en la mitad baja del rango, al menos hasta que tengas tus primeros alquileres.
+</Aside>
+
+## La barra de precio del formulario del anuncio
+
+Cuando escribes una tarifa por hora en **Listar una GPU** o en **Editar**, una barra debajo del campo muestra dónde queda tu precio:
+
+<Image src={bar} alt="La barra de precio debajo del campo Tarifa por Hora, que indica un precio habitual para esta GPU" />
+
+- **Franja verde, "Otros sitios de alquiler":** el rango habitual para tu modelo de GPU en otros sitios de alquiler, según la tabla de arriba.
+- **Línea azul, "Otros anuncios de GPUFlow de este modelo":** el precio medio de otros anuncios de GPUFlow con el mismo modelo de GPU, con su precio más bajo y más alto. Solo aparece cuando hay alguno.
+- **Marcador naranja:** tu precio. La línea debajo de la barra dice **Precio bajo**, **Precio habitual** o **Precio alto**, y la última línea te indica cuánto ganas por hora después de la comisión del 12 %.
+
+Si tu GPU no está en la tabla y nadie más la ofrece todavía en GPUFlow, la barra no puede comparar. Usa como referencia la tarjeta más parecida de la tabla.
+
+## Elegir tu precio: un plan sencillo
+
+<Steps>
+
+1. **Empieza bajo.** Elige un precio en el tercio inferior del rango de tu GPU. Para una RTX 4090 son unos $0.30 – $0.35.
+2. **Mantente en línea.** Nadie puede alquilar una GPU desconectada. Las horas que estás en línea importan más que unos centavos.
+3. **Vuelve a mirar después de una semana.**
+   - ¿Está alquilada casi todo el tiempo? Sube el precio entre $0.02 y $0.05.
+   - ¿Ningún alquiler? Bájalo entre $0.02 y $0.05, y comprueba que tu descripción nombre tus modelos.
+4. **Revisa una vez al mes.** Los precios de otros sitios cambian. Cambia el tuyo en **Mis GPUs → Editar**.
+
+</Steps>

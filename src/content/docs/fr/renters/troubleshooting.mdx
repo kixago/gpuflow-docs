@@ -1,0 +1,49 @@
+---
+title: Résoudre un problème (locataires)
+description: Ce que signifie chaque erreur de l'API GPUFlow et que faire, ainsi que des solutions aux problèmes d'ajout de crédits ou de démarrage d'une location.
+sidebar:
+  label: Résoudre un problème
+  order: 4
+---
+
+## Erreurs de l'API
+
+Quand quelque chose ne va pas, l'API répond avec un code d'erreur. Cherchez le `code` dans la réponse :
+
+```json
+{ "error": { "message": "...", "type": "server_error", "code": "provider_offline" } }
+```
+
+| Statut | `code` | Ce que cela signifie | Que faire |
+| --- | --- | --- | --- |
+| 401 | `invalid_api_key` | La clé est absente, mal saisie, remplacée via **Nouvelle clé**, ou la location est terminée. | Copiez à nouveau la clé. Vérifiez que l'en-tête est `Authorization: Bearer gfk_…`. Si la location est terminée, démarrez-en une nouvelle. |
+| 400 | `invalid_body` | Ce que vous avez envoyé n'est pas du JSON valide. | Vérifiez vos guillemets et vos virgules. Les exemples de [Utiliser votre clé API](/fr/renters/api-quickstart/) sont un bon point de départ. |
+| 503 | `provider_offline` | La machine du fournisseur est hors ligne en ce moment. | Attendez une minute et réessayez. Si elle reste hors ligne 10 minutes, la location se termine d'elle-même et vous ne payez que jusqu'à la coupure. |
+| 503 | `relay_unreachable` | GPUFlow n'a pas pu joindre la connexion vers la machine. | Réessayez dans un instant. Si cela se répète, ouvrez un ticket d'assistance. |
+| 502 | `provider_error` | La machine a répondu sans rien renvoyer. | Réessayez. Si cela se répète, signalez la location. |
+| 503 | `provider_unbound` | Votre clé n'est rattachée à aucun GPU. | Ouvrez un ticket d'assistance. |
+
+**« model … not found » :** vous avez demandé un modèle que la machine n'a pas. Lancez la vérification `/v1/models` décrite dans [Utiliser votre clé API](/fr/renters/api-quickstart/) et utilisez ce nom.
+
+## Ajout de crédits
+
+| Message | Solution |
+| --- | --- |
+| Confirmez votre adresse email avant d'ajouter des crédits. | Ouvrez l'e-mail de GPUFlow et cliquez sur le lien. Pas d'e-mail ? Cliquez sur **Renvoyer l'email** dans le bandeau jaune de votre tableau de bord, et regardez dans vos spams. |
+| Saisissez un montant de $10 à $500. | Chaque recharge doit être comprise entre $10 et $500. |
+| Paiement annulé. Rien n'a été débité. | Vous avez quitté la page Stripe avant de payer. Réessayez. |
+| Vous avez payé, mais les crédits n'apparaissent pas | Attendez une minute et rechargez la page. Toujours rien au bout de 10 minutes ? Ouvrez un ticket d'assistance. |
+
+## Démarrage d'une location
+
+| Message | Solution |
+| --- | --- |
+| Crédits insuffisants : il faut … | Ajoutez des crédits, ou louez pour moins d'heures. |
+| La machine de ce GPU est hors ligne pour le moment. | Choisissez un autre GPU, ou cliquez sur **Me notifier quand en ligne** sur sa carte pour recevoir un e-mail à son retour. |
+| Choisissez de … à … heures. | Ce GPU a son propre minimum et son propre maximum d'heures. Choisissez un nombre entre les deux. |
+| C'est votre propre annonce. | Vous ne pouvez pas louer votre propre GPU. |
+| Trop de tentatives. Réessayez dans une heure. | Attendez une heure. Cette limite protège les comptes contre les scripts qui s'emballent. |
+
+## Toujours bloqué ?
+
+Ouvrez un ticket sur [gpuflow.app/support](https://gpuflow.app/fr/support). S'il concerne une location précise, utilisez **Signaler un problème** à côté de celle-ci pour que nous sachions laquelle. Indiquez le `code` d'erreur, l'heure à laquelle c'est arrivé et, si possible, la commande ou le code que vous avez lancé (**sans votre clé API**).

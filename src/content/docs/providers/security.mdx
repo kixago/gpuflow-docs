@@ -1,0 +1,45 @@
+---
+title: What renters can and can't reach
+description: What a GPUFlow renter can do on your machine (send AI requests to your models) and what they can't (your network, a shell, your files, your models). How the agent is locked down.
+sidebar:
+  label: What renters can reach
+  order: 5
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+Short version: **renters can send AI requests to the models on your machine, and nothing else.**
+
+## What renters can do
+
+A renter gets an API key. Their requests go to GPUFlow first. GPUFlow answers the list of models itself and sends only one kind of request on to your computer:
+
+| Request | What it does |
+| --- | --- |
+| `POST /v1/chat/completions` | chat with one of your models |
+
+That request goes through GPUFlow's relay to the agent on your computer, and the agent passes it to your AI engine (Ollama).
+
+The agent also has its own list, as a second lock. It accepts only `/v1/models`, `/v1/chat/completions`, `/v1/completions` and `/v1/embeddings`, and refuses everything else, no matter where the request came from.
+
+## What renters can't do
+
+- **Reach your network.** Your computer only makes outgoing connections. Nothing on your router is opened, and renters never learn your IP address.
+- **Get a shell** or run their own programs on your machine.
+- **See or change your files.**
+- **Download, delete or change your models.**
+- **See your machine's stats.** Only you see them.
+
+## How the agent is locked down
+
+The installer sets up the agent as a system service with strict limits. It runs as a temporary user with no password, can't gain extra rights, sees the rest of the system as read-only, and can't see home folders. Its settings live in `/etc/gpuflow/agent.env` and its data in `/var/lib/private/gpuflow`.
+
+## What you should know
+
+- **Prompts and answers pass through your machine.** That's how the AI runs. Respect your renters' privacy: don't record or read their prompts.
+- **Keep the machine updated.** Install your Linux updates and your GPU driver updates as usual. The agent restarts by itself afterwards.
+- **Watch the temperature.** Renters can keep your GPU busy for hours. The live stats on **My Machines** show its temperature, so make sure the case gets enough air.
+
+<Aside type="tip">
+To stop renting out the machine for a while, unpublish its listing on **My GPUs**, or stop the agent with `sudo systemctl stop gpuflow-agent`. `sudo systemctl start gpuflow-agent` brings it back. If you stop it during a rental, the rental ends after 10 minutes and you're paid only up to the moment it went offline.
+</Aside>

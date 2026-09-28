@@ -1,75 +1,140 @@
 ---
-title: 'Getting Started'
-description: How to list your GPU on GPUFlow and start earning passive income — complete setup guide for NVIDIA and AMD GPUs on Linux and Windows.
+title: Put your GPU online
+description: Run one command on a Linux computer with a GPU and it is online and rentable on GPUFlow. No Docker, no SSH, no open ports. Step by step with screenshots.
 sidebar:
-    label: 'Getting Started'
-    order: 1
+  label: Put your GPU online
+  order: 1
 ---
-{ /* File: providers/getting-started.mdx */}
 
-GPUFlow lets you earn money from your unused GPU. This guide helps you choose the right setup path for your hardware and operating system.
+import { Aside, Steps } from '@astrojs/starlight/components';
+import { Image } from 'astro:assets';
+import addMachine from '../../../assets/screens/en/provider-add-machine.png';
+import notListed from '../../../assets/screens/en/provider-not-listed.png';
+import myGpus from '../../../assets/screens/en/provider-my-gpus.png';
 
-## Before you begin
+You run **one command** on the computer with the GPU. It installs everything, connects the computer to GPUFlow and keeps it connected. You don't need Docker or SSH, and you don't open any ports on your router.
 
-Verify your hardware meets the minimum requirements:
+## What you need
 
-- Compatible GPU (NVIDIA or AMD)
-- Stable internet connection (25+ Mbps upload)
-- At least 100GB free disk space
+- A computer running **64-bit Linux with systemd**. Ubuntu, Debian, Fedora, Arch, openSUSE and their relatives all work. Both regular PCs (x86_64) and ARM (arm64) are fine.
+- A GPU. **NVIDIA is the tested path.** AMD cards work through Ollama's ROCm support, but the dashboard doesn't show AMD GPU details yet.
+- Permission to use `sudo` on that computer.
+- A GPUFlow account. [Create one here](https://gpuflow.app/en/join). Confirm your email address too; you need it to get paid.
 
-## Choose your path
+<Aside>
+There's no installer for Windows or macOS yet.
+</Aside>
 
-Your setup process depends on your GPU and operating system. Select the path that matches your hardware:
+## 1. Copy your install command
 
-### Step 1: Identify your GPU
+<Steps>
 
-Run this command to check your GPU:
+1. Open your **Dashboard** and click **My Machines** in the menu on the left.
+2. Under **Add a GPU in one command**, leave **What is this machine for?** on **A new listing (set it up once it's online)**.
+3. Click **Copy** next to the command.
+
+</Steps>
+
+<Image src={addMachine} alt="My Machines: the command box and its Copy button highlighted" />
+
+The command looks like this (yours has your own token at the end):
 
 ```bash
-# On Linux/macOS
-lspci | grep -i vga
-
-# On Windows (PowerShell)
-Get-WmiObject Win32_VideoController | Select-Object Name
+curl -fsSL https://gpuflow.app/downloads/install.sh | sudo bash -s -- --token eyJhbGciOi...
 ```
 
-### Step 2: Select your installation path
+<Aside type="caution" title="Use it within 15 minutes">
+The token in the command is only valid for 15 minutes. If you see `enrollment failed` and the log says the token expired, reload the dashboard and copy a fresh command.
+</Aside>
 
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-  <div class="border rounded-lg p-4">
-    <h4>NVIDIA GPU</h4>
-    <p>RTX, GTX, Tesla, Quadro series</p>
-    <ul>
-      <li><a href="/providers/installation/linux/nvidia">Linux + NVIDIA</a></li>
-      <li><a href="/providers/installation/windows/nvidia">Windows + NVIDIA</a></li>
-      <li><a href="/providers/installation/macos/overview">macOS + NVIDIA</a></li>
-    </ul>
-  </div>
-  
-  <div class="border rounded-lg p-4">
-    <h4>AMD GPU</h4>
-    <p>RX 6000, RX 7000, Radeon Pro series</p>
-    <ul>
-      <li><a href="/providers/installation/linux/amd">Linux + AMD</a></li>
-      <li><a href="/providers/installation/windows/amd">Windows + AMD</a></li>
-    </ul>
-  </div>
-</div>
+## 2. Run it on the GPU computer
 
-## What happens next
+<Steps>
 
-After following your installation guide, you will:
+1. On the computer with the GPU, open a terminal.
+2. Paste the command and press Enter. Type your password if `sudo` asks for it.
+3. Wait for this line:
 
-1. Install the container runtime (Docker or Podman)
-2. Set up GPU passthrough for containers
-3. Deploy the GPUFlow provider agent
-4. Create your provider account
-5. List your GPU and start earning
+   ```
+   Enrolled. gpuflow-agent is running.
+   ```
 
-The entire process takes 30-45 minutes for most users.
+   Your computer is online from this moment. The installer then downloads an AI model, which can take a few minutes the first time.
 
-## Need help?
+</Steps>
 
-- Check our [troubleshooting guide](/providers/troubleshooting)
-- Join the [community Discord](https://discord.gg/gpuflow)
-- Contact [support@gpuflow.app](mailto:support@gpuflow.app)
+## 3. Create your listing
+
+Back on **My Machines**, your computer now shows **Online** with the message **This machine is online but not listed**.
+
+<Image src={notListed} alt="A machine card that is online but not listed, with the List it for rent button highlighted" />
+
+Click **List it for rent**. The listing form opens with this machine already chosen. Fill in the name, GPU model and hourly price, then click **List GPU**.
+
+Not sure what to write or what to charge? See [write a good listing](/providers/creating-listings/) and [how to price your GPU](/providers/pricing/).
+
+## 4. Check that it's live
+
+Open **My GPUs**. Your listing shows the machine with a green dot. It now appears in the marketplace, and renters can rent it.
+
+<Image src={myGpus} alt="My GPUs: a listing with its machine online and the Edit button highlighted" />
+
+## Other ways to do it
+
+**Listing first:** click **List a GPU**, fill in the form and leave **Machine** on **None, attach one later**. On **My GPUs**, click **Bring Online** under the listing. That gives you a command that attaches the computer to *that* listing, so there is nothing to link afterwards.
+
+**A computer shows Offline:** every offline computer on **My Machines** has its own command right on its card. Run it on that computer. It reinstalls the agent and brings back **the same machine**, so its listing lights up again and no duplicate is created. Running a dashboard command twice on the same computer is always safe.
+
+## Choosing an AI model
+
+Renters use your GPU through AI models that run on it. The installer downloads `qwen2.5:7b` by default. To choose another one, add `--model` at the end of the command:
+
+```bash
+curl -fsSL https://gpuflow.app/downloads/install.sh | sudo bash -s -- --token <your token> --model llama3.1:8b
+```
+
+Common choices, from small to large: `qwen2.5:0.5b`, `deepseek-r1:1.5b`, `qwen2.5:7b`, `deepseek-r1:7b`, `llama3.1:8b`, `qwen2.5:14b`. A model has to fit in your GPU's memory (VRAM), so pick a small one for small cards.
+
+To add a model later on a computer that is already online, you don't need a new token:
+
+```bash
+curl -fsSL https://gpuflow.app/downloads/install.sh | sudo bash -s -- --model qwen2.5:14b
+```
+
+Already run your own OpenAI-compatible server? Add `--engine none --ollama-url http://127.0.0.1:<port>`.
+
+<Aside type="tip">
+Write the models you serve into your listing's description. Renters look for them there.
+</Aside>
+
+## Checking on it
+
+```bash
+systemctl status gpuflow-agent      # is it running?
+journalctl -u gpuflow-agent -f      # live log (Ctrl+C to stop)
+```
+
+The agent restarts itself after a crash or a reboot. It only makes **outgoing** connections, to `gpuflow.app` and `ws.gpuflow.app`, so it works behind any home router without port forwarding.
+
+## Live stats
+
+Each machine card on **My Machines** shows, updated every 15 seconds:
+
+- **Speed (benchmark):** tokens per second for each of your models, measured on your machine. The agent tests a model once when it appears and again every day, but only when nobody has used the machine for 5 minutes. A renter always interrupts the test.
+- **Served to renters:** real speed and time to first token from actual rentals.
+- **GPU:** temperature, load, VRAM, power draw, fan, clock speeds, PCIe link.
+- **System and models:** CPU temperature and load, RAM, operating system, uptime, installed models, and the model loaded right now.
+
+Only you can see these stats.
+
+## What you'll be told
+
+You get **an email and a notification** (the bell at the top of the site) when:
+
+- **your GPU is rented,**
+- **a renter is waiting** for your GPU while it's offline (at most once a day per GPU). Start the machine to take the rental.
+- **a cash-out is sent,** or didn't go through.
+
+You get **a notification** when a rental ends, with what you earned, and when earnings become ready to cash out.
+
+Next: [write a good listing](/providers/creating-listings/).

@@ -1,0 +1,7 @@
+{
+  "copy.markdown": "نسخ Markdown",
+  "open": "فتح",
+  "open.chatgpt": "فتح في ChatGPT",
+  "open.claude": "فتح في Claude",
+  "heading.anchorLabel": "رابط القسم «{{title}}»"
+}

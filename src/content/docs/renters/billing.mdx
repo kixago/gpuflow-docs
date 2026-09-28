@@ -1,0 +1,55 @@
+---
+title: Credits, billing and refunds
+description: How GPUFlow credits work, how a rental is billed to the second, when unused time is refunded, and what happens if a GPU goes offline.
+sidebar:
+  label: Credits, billing and refunds
+  order: 3
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+## Credits
+
+- You pay for rentals with credits. **1 credit = $0.01.**
+- You buy credits by card on **Dashboard → Payments → Add credits**. Payment runs through Stripe.
+- Each top-up is between **$10 and $500**. There is **no fee**.
+- Credits don't expire.
+
+## What happens when you rent
+
+Say you rent a GPU that costs **$0.40 per hour** for **3 hours**.
+
+| When | What happens | Your credits |
+| --- | --- | --- |
+| You click **Start 3-hour rental** | $1.20 (3 × $0.40) is **held**. It shows as "In use" on the Payments page. | $1.20 held |
+| You use it for 1 hour 30 minutes, then click **End now** | You pay for exactly 1 h 30 min: **$0.60**. | $0.60 comes back |
+| Or: you let the 3 hours run out | The rental ends on its own. You pay $1.20. | nothing comes back |
+
+The rules:
+
+- **Billed to the second.** The shortest charge is 1 minute.
+- **You never pay more than what was held.**
+- **Ending early is free.** Unused time goes straight back to your credits.
+- **Need more time?** Click **Add hours** on **Current Rentals** before your time runs out. More credits are held and the same API key keeps working.
+
+## If the GPU goes offline
+
+If the provider's machine stops answering for **10 minutes**, the rental ends by itself. You pay only up to the moment it went offline, and the rest goes back to your credits. You get a notification when this happens.
+
+## Where to see your money
+
+- **Dashboard → Payments** shows what's available, what's held for running rentals, and a history of every top-up, rental and refund.
+- **Dashboard → Rental History** lists your finished rentals.
+- **The orange button in the header** always shows your available credits. Click it to add more.
+
+## Something went wrong with a rental
+
+On **Current Rentals** or **Rental History**, click **Report a problem** next to the rental. This opens a support ticket with the rental already filled in. Describe what happened, for example:
+
+> Rental #1042 on "RTX 4090 · qwen2.5 7B". From 14:10 to 14:35 every request returned `provider_offline`, but the rental kept running. Please check whether I should be refunded for that time.
+
+We answer by email. If we agree the time wasn't usable, we refund it to your credits.
+
+<Aside type="caution" title="Please talk to us before you dispute a card payment">
+If you dispute a GPUFlow payment with your bank, the disputed amount is taken back from your credits and your account is suspended until the dispute is settled. Opening a support ticket first is almost always faster.
+</Aside>

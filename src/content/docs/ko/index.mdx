@@ -1,0 +1,45 @@
+---
+title: GPUFlow 문서
+description: GPUFlow에서 GPU를 시간 단위로 대여하거나, 내 GPU를 빌려주고 수익을 얻는 방법입니다. 스크린샷과 함께 단계별로 안내합니다.
+template: splash
+hero:
+  tagline: GPU를 시간 단위로 빌리거나, 내 GPU로 돈을 벌어 보세요. 스크린샷이 있는 짧은 단계별 가이드입니다.
+  actions:
+    - text: GPU 대여하기
+      link: /ko/renters/getting-started/
+      variant: primary
+      icon: right-arrow
+    - text: 내 GPU 빌려주기
+      link: /ko/providers/getting-started/
+      variant: secondary
+---
+
+import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+## GPUFlow란
+
+GPUFlow는 다른 사람의 GPU를 시간 단위로 빌려 쓰는 마켓플레이스입니다.
+
+- **대여자**는 카드로 크레딧을 충전하고 GPU를 고른 뒤 그 GPU용 API 키를 받습니다. 이 키는 OpenAI API를 쓰는 앱이나 코드라면 어디서든 작동합니다.
+- **제공자**는 GPU가 있는 Linux 컴퓨터에서 명령어 하나를 실행하고 시간당 가격을 정합니다. 수익은 은행 계좌로 받습니다.
+
+<CardGrid>
+  <Card title="GPU를 빌리고 싶어요" icon="rocket">
+    - [GPU 대여, 단계별 안내](/ko/renters/getting-started/)
+    - [API 키 사용하기](/ko/renters/api-quickstart/)
+    - [크레딧, 결제, 환불](/ko/renters/billing/)
+    - [문제 해결](/ko/renters/troubleshooting/)
+  </Card>
+  <Card title="내 GPU를 빌려주고 싶어요" icon="laptop">
+    - [GPU를 온라인으로 연결하기](/ko/providers/getting-started/)
+    - [좋은 리스팅 작성하기](/ko/providers/creating-listings/)
+    - [GPU 가격 정하는 방법](/ko/providers/pricing/)
+    - [수익 받기](/ko/providers/getting-paid/)
+  </Card>
+</CardGrid>
+
+<LinkCard
+  title="도움이 필요하신가요?"
+  description="gpuflow.app에서 지원 티켓을 여세요. 답변은 이메일로 받습니다."
+  href="https://gpuflow.app/ko/support"
+/>

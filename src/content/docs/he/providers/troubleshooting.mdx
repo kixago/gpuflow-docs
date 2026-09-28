@@ -1,0 +1,68 @@
+---
+title: פתרון בעיות (ספקים)
+description: פתרונות למכונת GPUFlow שמופיעה כלא מקוונת, לשגיאות התקנה, למודל שלא יורד, ואיך מסירים את הסוכן.
+sidebar:
+  label: פתרון בעיות
+  order: 6
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+## קודם כול, בדקו את הסוכן
+
+הריצו את הפקודות האלה במחשב עם ה-GPU:
+
+```bash
+systemctl status gpuflow-agent      # should say "active (running)"
+journalctl -u gpuflow-agent -n 50   # the last 50 lines of its log
+```
+
+רוב התשובות נמצאות ב-50 השורות האלה.
+
+## המכונה שלי מופיעה כלא מקוונת
+
+1. **המחשב דלוק ומחובר לאינטרנט?** הסוכן צריך להגיע אל `gpuflow.app` ואל `ws.gpuflow.app` בפורט 443 (HTTPS רגיל).
+2. **הסוכן רץ?** אם `systemctl status gpuflow-agent` לא מציג `active (running)`, הפעילו אותו:
+
+   ```bash
+   sudo systemctl start gpuflow-agent
+   ```
+
+3. **עדיין מנותקת?** פתחו את **המכונות שלי**, העתיקו את הפקודה מהכרטיס של המכונה הזו והריצו אותה שוב. היא מתקינה מחדש את הסוכן ושומרת על אותה מכונה, כך שהמודעה שלה חוזרת מעצמה.
+
+מכונה שהייתה מנותקת מופיעה כמחוברת בערך דקה אחרי שהסוכן מתחבר.
+
+## שגיאות התקנה
+
+| מה מופיע | מה לעשות |
+| --- | --- |
+| `enrollment failed` והלוג אומר שתוקף הטוקן פג | הפקודה תקפה 15 דקות. רעננו את לוח המחוונים, העתיקו פקודה חדשה והריצו אותה. |
+| `this installer targets systemd Linux; systemctl not found` | המתקין צריך Linux עם systemd. Windows, macOS ומערכות בלי systemd עדיין לא נתמכות. |
+| `unsupported CPU architecture` | נתמכים רק מחשבי 64 ביט (x86_64) ו-ARM 64 ביט (arm64). |
+| `no enrollment token` | העתיקו את כל הפקודה מלוח המחוונים, כולל `--token` וכל מה שאחריו. |
+| `failed to pull model '…'` | שם המודל שגוי, או שהוא לא נכנס ב-GPU שלכם. נסו מודל קטן יותר, למשל `--model qwen2.5:0.5b`. |
+
+## המודל איטי או לא נטען
+
+- מודל גדול מדי לזיכרון של ה-GPU רץ לאט או לא רץ בכלל. בחרו מודל קטן יותר (ראו [בחירת מודל AI](/he/providers/getting-started/#בחירת-מודל-ai)).
+- הבקשה הראשונה אחרי הפעלה מחדש איטית יותר, כי המודל נטען לזיכרון.
+- בדקו את טמפרטורת ה-GPU בדף **המכונות שלי**. GPU חם מאט את עצמו.
+
+## השכרה הסתיימה מוקדם
+
+אם המכונה שלכם מנותקת 10 דקות במהלך השכרה, ההשכרה מסתיימת. מקבלים תשלום על הזמן עד הרגע שבו היא התנתקה, והשוכר מקבל בחזרה את השאר. דאגו שהמכונה תישאר ערה: כבו את מצבי השינה וה-hibernate בהגדרות המערכת.
+
+## הסרת התקנה
+
+```bash
+sudo systemctl disable --now gpuflow-agent
+sudo rm -f /usr/local/bin/gpuflow-agent /etc/systemd/system/gpuflow-agent.service
+sudo rm -rf /etc/gpuflow /var/lib/gpuflow /var/lib/private/gpuflow
+sudo systemctl daemon-reload
+```
+
+Ollama נשאר מותקן. אם אתם לא צריכים אותו, הסירו אותו בנפרד. אחר כך הסירו את המכונה בדף **המכונות שלי** עם כפתור הפח.
+
+<Aside>
+עדיין תקועים? פתחו פנייה בכתובת [gpuflow.app/support](https://gpuflow.app/he/support) והדביקו את 50 השורות האחרונות של הלוג (`journalctl -u gpuflow-agent -n 50`).
+</Aside>

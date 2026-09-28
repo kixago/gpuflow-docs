@@ -1,0 +1,45 @@
+---
+title: GPUFlow ドキュメント
+description: GPUFlow で GPU を時間単位で借りる方法と、自分の GPU を貸して収入を得る方法。スクリーンショット付きの手順ガイドです。
+template: splash
+hero:
+  tagline: GPU を時間単位で借りる。または、自分の GPU で収入を得る。スクリーンショット付きの短い手順ガイドです。
+  actions:
+    - text: GPU を借りる
+      link: /ja/renters/getting-started/
+      variant: primary
+      icon: right-arrow
+    - text: 自分の GPU を貸す
+      link: /ja/providers/getting-started/
+      variant: secondary
+---
+
+import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+## GPUFlow とは
+
+GPUFlow は、人から人へ GPU を時間単位で貸し借りするマーケットプレイスです。
+
+- **借り手**は、カードでクレジットを追加し、GPU を選び、その GPU 用の API キーを受け取ります。このキーは、OpenAI API に対応したアプリやコードならどれでも使えます。
+- **プロバイダー**は、GPU を搭載した Linux コンピューターでコマンドを 1 つ実行し、1 時間あたりの料金を決めます。報酬は銀行口座に支払われます。
+
+<CardGrid>
+  <Card title="GPU を借りたい" icon="rocket">
+    - [GPU を借りる手順](/ja/renters/getting-started/)
+    - [API キーを使う](/ja/renters/api-quickstart/)
+    - [クレジット、請求、返金](/ja/renters/billing/)
+    - [問題を解決する](/ja/renters/troubleshooting/)
+  </Card>
+  <Card title="自分の GPU を貸したい" icon="laptop">
+    - [GPU をオンラインにする](/ja/providers/getting-started/)
+    - [わかりやすい出品を書く](/ja/providers/creating-listings/)
+    - [GPU の価格の決め方](/ja/providers/pricing/)
+    - [報酬の受け取り](/ja/providers/getting-paid/)
+  </Card>
+</CardGrid>
+
+<LinkCard
+  title="お困りですか？"
+  description="gpuflow.app でサポートチケットを作成してください。回答はメールで届きます。"
+  href="https://gpuflow.app/ja/support"
+/>

@@ -1,0 +1,111 @@
+---
+title: 逐步租用 GPU
+description: 建立 GPUFlow 帳戶、用信用卡儲值額度、按小時租用 GPU 並取得 API 金鑰。每一步都附截圖。
+sidebar:
+  label: 逐步租用 GPU
+  order: 1
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+import signup from '../../../../assets/screens/zh-tw/renter-signup.png';
+import credits from '../../../../assets/screens/zh-tw/renter-add-credits.png';
+import market from '../../../../assets/screens/zh-tw/renter-marketplace.png';
+import rent from '../../../../assets/screens/zh-tw/renter-rent.png';
+import key from '../../../../assets/screens/zh-tw/renter-key.png';
+import notify from '../../../../assets/screens/zh-tw/renter-notify.png';
+import { Image } from 'astro:assets';
+
+在 GPUFlow 租用 GPU 大約需要五分鐘。您需要一個電子郵件地址和一張信用卡或簽帳金融卡。
+
+**您會得到**：一組 API 金鑰，可在您選擇的時數內使用一張 GPU。這組金鑰的用法和 OpenAI 金鑰一樣，所以任何連接 OpenAI API 的應用程式或指令碼都能使用。您不需要登入任何伺服器，也不需要安裝任何東西。
+
+## 1. 建立帳戶
+
+<Steps>
+
+1. 前往 [gpuflow.app](https://gpuflow.app/zh-TW/join)，點擊右上角的 **註冊**。
+2. 填寫使用者名稱、電子郵件地址和密碼（密碼輸入兩次）。
+3. 點擊 **建立帳戶**。
+
+</Steps>
+
+<Image src={signup} alt="建立帳戶表單，使用者名稱、電子郵件和密碼欄位以及「建立帳戶」按鈕已標示出來" />
+
+您也可以不設定密碼，改為點擊 **使用 Google 繼續** 或 **使用 GitHub 繼續**。
+
+## 2. 驗證您的電子郵件地址
+
+GPUFlow 會立刻寄一封電子郵件給您。打開郵件，點擊裡面的連結。
+
+<Aside type="caution">
+電子郵件地址驗證完成前，您無法儲值額度。如果幾分鐘內沒收到郵件，請檢查垃圾郵件資料夾，或點擊儀表板頂端黃色橫幅上的 **重新寄送郵件**。
+</Aside>
+
+## 3. 儲值額度
+
+租用費用以額度支付。**1 額度 = $0.01**，所以 $25 可以買 2,500 額度。
+
+<Steps>
+
+1. 打開您的 **儀表板**，點擊左側選單中的 **支付**。
+2. 在 **儲值額度** 下方點擊一個金額，或自行輸入。每次可儲值 $10 至 $500，不收手續費。
+3. 點擊 **前往付款**。系統會帶您到我們的付款合作夥伴 Stripe，以信用卡付款。
+4. 付款後會回到 GPUFlow。一分鐘內，額度會出現在「支付」頁面頂端，以及頁首的橘色按鈕上。
+
+</Steps>
+
+<Image src={credits} alt="「支付」頁面：金額按鈕和「前往付款」按鈕已標示出來" />
+
+## 4. 挑選 GPU
+
+點擊任何頁面頂端的 **瀏覽 GPU**。現在就能使用的 GPU 列在綠色的 **可即時存取** 區塊。
+
+<Image src={market} alt="市集頁面，一張 GPU 卡片及其「立即租用」按鈕已標示出來" />
+
+請查看每張卡片上的：
+
+- **每小時價格**。這是您每小時要付的費用。
+- **VRAM**。AI 模型越大，需要的 VRAM 越多。大致來說，7B 模型在 8 GB 以上可以順暢執行，14B 模型則需要 16 GB 以上。
+- **模型**。點擊 GPU 名稱可開啟它的頁面。提供者會在描述中寫出他們提供哪些 AI 模型（例如 `qwen2.5:7b`）。
+
+選好之後，點擊 **立即租用 - 即時存取**。
+
+## 5. 選擇時數
+
+<Steps>
+
+1. 輸入您想租用的時數。大多數 GPU 可租 1 到 168 小時（一週）。之後還可以再加時。
+2. 查看下方兩行：會從您的額度中預留多少，以及您目前有多少額度。
+3. 點擊開始租用的橘色按鈕。按鈕上會顯示您的時數，例如 **開始 2 小時租用**。
+
+</Steps>
+
+<Image src={rent} alt="租用頁面，「時數」欄位和開始按鈕已標示出來" />
+
+<Aside type="tip" title="只為實際使用的時間付費">
+開始租用時，會先預留全部時數的金額。租用結束時，您只需按秒支付實際使用的時間，其餘的會退回您的額度。[計費方式說明](/zh-tw/renters/billing/)。
+</Aside>
+
+## 6. 複製您的 API 金鑰
+
+接著您會來到 **目前租用** 頁面。新的租用顯示在最上方。
+
+<Image src={key} alt="「目前租用」頁面：API 金鑰欄、端點欄，以及「加時」、「新金鑰」和「立即結束」按鈕已標示出來" />
+
+1. **您的 API 金鑰**。金鑰以 `gfk_` 開頭。請現在就複製，並存放在安全的地方。**它只會顯示一次**。
+2. **端點**：`https://gpuflow.app/v1`。請在您的應用程式中把它設為「base URL」（基礎 URL）。
+3. **按鈕**：**加時** 可以延長租用，**新金鑰** 會產生一組新金鑰並停用舊金鑰，**立即結束** 會停止租用，並把未使用的時間退回您的額度。
+
+金鑰弄丟了？點擊 **新金鑰**。舊金鑰會失效，並出現一組新金鑰。
+
+**下一步**：搭配 `curl`、Python、JavaScript 或應用程式[使用您的 API 金鑰](/zh-tw/renters/api-quickstart/)。
+
+## 如果您想要的 GPU 目前離線
+
+擁有者離線的 GPU 會列在黃色的 **可用 - 提供者離線** 區塊。點擊卡片上的 **上線時通知我**。
+
+<Image src={notify} alt="離線區塊中的一張 GPU 卡片，「上線時通知我」按鈕已標示出來" />
+
+- 那張 GPU 一上線，您就會收到電子郵件和通知（頁首的鈴鐺圖示）。
+- 擁有者會收到通知，得知有人在等他的 GPU。
+- 改變主意了？再點擊一次該按鈕（此時會顯示 **上線時會通知你**）即可取消。

@@ -1,0 +1,45 @@
+---
+title: Документация GPUFlow
+description: Как арендовать GPU с почасовой оплатой на GPUFlow или зарабатывать, сдавая в аренду свой. Пошаговые инструкции со скриншотами.
+template: splash
+hero:
+  tagline: Арендуйте GPU с почасовой оплатой или зарабатывайте на своём. Короткие пошаговые инструкции со скриншотами.
+  actions:
+    - text: Арендовать GPU
+      link: /ru/renters/getting-started/
+      variant: primary
+      icon: right-arrow
+    - text: Сдать свой GPU в аренду
+      link: /ru/providers/getting-started/
+      variant: secondary
+---
+
+import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+## Что такое GPUFlow
+
+GPUFlow — это площадка, где люди арендуют GPU друг у друга с почасовой оплатой.
+
+- **Арендаторы** пополняют кредиты картой, выбирают GPU и получают к нему API-ключ. Ключ работает с любым приложением или кодом, который поддерживает API OpenAI.
+- **Провайдеры** запускают одну команду на Linux-компьютере с GPU, назначают цену за час и получают деньги на банковский счёт.
+
+<CardGrid>
+  <Card title="Я хочу арендовать GPU" icon="rocket">
+    - [Аренда GPU по шагам](/ru/renters/getting-started/)
+    - [Как пользоваться API-ключом](/ru/renters/api-quickstart/)
+    - [Кредиты, оплата и возвраты](/ru/renters/billing/)
+    - [Решение проблем](/ru/renters/troubleshooting/)
+  </Card>
+  <Card title="Я хочу сдать свой GPU в аренду" icon="laptop">
+    - [Подключите свой GPU](/ru/providers/getting-started/)
+    - [Как написать хорошее объявление](/ru/providers/creating-listings/)
+    - [Как назначить цену за GPU](/ru/providers/pricing/)
+    - [Получение выплат](/ru/providers/getting-paid/)
+  </Card>
+</CardGrid>
+
+<LinkCard
+  title="Нужна помощь?"
+  description="Создайте обращение в поддержку на gpuflow.app. Ответ придёт на email."
+  href="https://gpuflow.app/ru/support"
+/>

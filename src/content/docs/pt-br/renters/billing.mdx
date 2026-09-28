@@ -1,0 +1,55 @@
+---
+title: Créditos, cobrança e reembolsos
+description: Como funcionam os créditos do GPUFlow, como um aluguel é cobrado por segundo, quando o tempo não usado é devolvido e o que acontece se uma GPU ficar offline.
+sidebar:
+  label: Créditos, cobrança e reembolsos
+  order: 3
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+## Créditos
+
+- Você paga os aluguéis com créditos. **1 crédito = $0.01.**
+- Você compra créditos com cartão em **Painel → Pagamentos → Adicionar créditos**. O pagamento é feito pela Stripe.
+- Cada recarga fica entre **$10 e $500**. **Não há taxa**.
+- Os créditos não expiram.
+
+## O que acontece quando você aluga
+
+Digamos que você alugue uma GPU que custa **$0.40 por hora** por **3 horas**.
+
+| Quando | O que acontece | Seus créditos |
+| --- | --- | --- |
+| Você clica em **Iniciar aluguel de 3 h** | $1.20 (3 × $0.40) ficam **reservados**. Eles aparecem como "Em uso" na página Pagamentos. | $1.20 reservados |
+| Você usa por 1 hora e 30 minutos e clica em **Encerrar agora** | Você paga exatamente 1 h 30 min: **$0.60**. | $0.60 voltam |
+| Ou: você deixa as 3 horas acabarem | O aluguel termina sozinho. Você paga $1.20. | nada volta |
+
+As regras:
+
+- **Cobrança por segundo.** A cobrança mínima é de 1 minuto.
+- **Você nunca paga mais do que o valor reservado.**
+- **Encerrar antes não custa nada.** O tempo não usado volta direto para os seus créditos.
+- **Precisa de mais tempo?** Clique em **Adicionar horas** em **Aluguéis Atuais** antes de o tempo acabar. Mais créditos ficam reservados e a mesma chave de API continua funcionando.
+
+## Se a GPU ficar offline
+
+Se a máquina do provedor parar de responder por **10 minutos**, o aluguel termina sozinho. Você paga só até o momento em que ela ficou offline, e o restante volta para os seus créditos. Você recebe uma notificação quando isso acontece.
+
+## Onde ver o seu dinheiro
+
+- **Painel → Pagamentos** mostra o que está disponível, o que está reservado para aluguéis em andamento e um histórico de cada recarga, aluguel e reembolso.
+- **Painel → Histórico de Aluguéis** lista seus aluguéis encerrados.
+- **O botão laranja no cabeçalho** sempre mostra seus créditos disponíveis. Clique nele para adicionar mais.
+
+## Algo deu errado em um aluguel
+
+Em **Aluguéis Atuais** ou **Histórico de Aluguéis**, clique em **Relatar um problema** ao lado do aluguel. Isso abre um chamado de suporte com o aluguel já preenchido. Descreva o que aconteceu, por exemplo:
+
+> Aluguel nº 1042 em "RTX 4090 · qwen2.5 7B". Das 14:10 às 14:35, todas as requisições retornaram `provider_offline`, mas o aluguel continuou rodando. Vocês podem verificar se tenho direito a reembolso por esse tempo?
+
+Respondemos por e-mail. Se concordarmos que o tempo não pôde ser usado, devolvemos o valor aos seus créditos.
+
+<Aside type="caution" title="Fale com a gente antes de contestar um pagamento com cartão">
+Se você contestar um pagamento do GPUFlow com o seu banco, o valor contestado é retirado dos seus créditos e sua conta fica suspensa até a contestação ser resolvida. Abrir um chamado de suporte antes quase sempre é mais rápido.
+</Aside>

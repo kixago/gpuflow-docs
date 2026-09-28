@@ -1,0 +1,68 @@
+---
+title: 解决问题（提供者）
+description: GPUFlow 机器显示离线、安装出错、模型无法下载时的解决办法，以及如何卸载代理。
+sidebar:
+  label: 解决问题
+  order: 6
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+## 先看看代理
+
+在装有 GPU 的电脑上运行：
+
+```bash
+systemctl status gpuflow-agent      # should say "active (running)"
+journalctl -u gpuflow-agent -n 50   # the last 50 lines of its log
+```
+
+大多数问题的答案都在这 50 行里。
+
+## 我的机器显示离线
+
+1. **电脑是否开着并已连接互联网**？代理需要通过 443 端口（普通 HTTPS）访问 `gpuflow.app` 和 `ws.gpuflow.app`。
+2. **代理是否在运行**？如果 `systemctl status gpuflow-agent` 没有显示 `active (running)`，请启动它：
+
+   ```bash
+   sudo systemctl start gpuflow-agent
+   ```
+
+3. **仍然离线**？打开 **我的机器**，复制这台机器卡片上的命令，再运行一次。它会重新安装代理，并保留同一台机器，因此它的上架信息会自动恢复。
+
+代理连接后，原本离线的机器大约一分钟内就会显示为在线。
+
+## 安装错误
+
+| 您看到的 | 处理方法 |
+| --- | --- |
+| `enrollment failed`，并且日志显示令牌已过期 | 命令的有效期是 15 分钟。刷新仪表板，复制一条新命令并运行。 |
+| `this installer targets systemd Linux; systemctl not found` | 安装程序需要带 systemd 的 Linux。Windows、macOS 和没有 systemd 的系统暂不支持。 |
+| `unsupported CPU architecture` | 只支持 64 位 PC（x86_64）和 64 位 ARM（arm64）。 |
+| `no enrollment token` | 从仪表板复制完整的命令，包括 `--token` 及其后面的所有内容。 |
+| `failed to pull model '…'` | 模型名称有误，或者模型装不进您的 GPU。换一个小一点的试试，例如 `--model qwen2.5:0.5b`。 |
+
+## 模型很慢或无法加载
+
+- 模型太大、超出 GPU 显存时，会运行得很慢，甚至无法运行。请选一个小一点的（参见[选择 AI 模型](/zh-cn/providers/getting-started/#选择-ai-模型)）。
+- 重启后的第一个请求会慢一些，因为模型要先加载到内存中。
+- 在 **我的机器** 中查看 GPU 温度。GPU 过热时会自动降频。
+
+## 租用提前结束了
+
+如果租用期间您的机器离线 10 分钟，租用就会结束。您能拿到离线那一刻之前的收益，其余部分退还给租用者。请让机器保持唤醒状态：在系统设置中关闭睡眠和休眠。
+
+## 卸载
+
+```bash
+sudo systemctl disable --now gpuflow-agent
+sudo rm -f /usr/local/bin/gpuflow-agent /etc/systemd/system/gpuflow-agent.service
+sudo rm -rf /etc/gpuflow /var/lib/gpuflow /var/lib/private/gpuflow
+sudo systemctl daemon-reload
+```
+
+Ollama 仍会保留。如果不需要，请另行卸载。然后在 **我的机器** 中用垃圾桶按钮移除这台机器。
+
+<Aside>
+仍然无法解决？在 [gpuflow.app/support](https://gpuflow.app/zh-CN/support) 提交工单，并粘贴日志的最后 50 行（`journalctl -u gpuflow-agent -n 50`）。
+</Aside>

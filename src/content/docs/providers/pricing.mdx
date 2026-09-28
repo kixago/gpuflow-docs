@@ -1,0 +1,92 @@
+---
+title: How to price your GPU
+description: What GPUs like yours rent for per hour (RTX 3060 to RTX 5090, A4000 to A6000), what you keep after GPUFlow's fee, your electricity cost, and a simple way to choose your price.
+sidebar:
+  label: How to price your GPU
+  order: 3
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+import { Image } from 'astro:assets';
+import bar from '../../../assets/screens/en/provider-price-bar.png';
+
+Your price is the single biggest reason a renter picks your GPU or someone else's. Here is what you keep, what it costs you to run, and what GPUs like yours rent for today.
+
+## What you keep
+
+You set an hourly price. The renter pays that price for the time they use. **GPUFlow keeps 12%, you get 88%.**
+
+| Your price per hour | You earn per hour | 8 hours a day for 30 days |
+| --- | --- | --- |
+| $0.10 | $0.088 | $21.12 |
+| $0.20 | $0.176 | $42.24 |
+| $0.35 | $0.308 | $73.92 |
+| $0.50 | $0.44 | $105.60 |
+
+The last column assumes your GPU is rented 8 hours every day. Real use depends on your price, your model choice and how often you're online.
+
+## What it costs you to run
+
+The main cost is electricity. You can work it out in one minute:
+
+<Steps>
+
+1. Open **My Machines** while your GPU is busy. The card shows its **power draw** in watts.
+2. Divide by 1,000 to get kilowatts. 350 W is 0.35 kW.
+3. Multiply by your electricity price per kWh (it's on your power bill).
+
+</Steps>
+
+Example: 0.35 kW × $0.15 per kWh = **$0.053 per hour**. Your earnings per hour should be well above that.
+
+## What GPUs rent for right now
+
+These are on-demand prices per GPU per hour that we found on other GPU rental sites in **September 2026**: Vast.ai, RunPod, Salad, SimplePod, TensorDock, Hyperstack and Lambda, some of them through the comparison site getdeploying.com. They change every week, so take them as a guide, not a rule.
+
+| GPU | Typical price per hour |
+| --- | --- |
+| RTX 3060 12 GB | $0.05 – $0.08 |
+| RTX 3070 | $0.09 – $0.13 |
+| RTX 3080 | $0.14 – $0.17 |
+| RTX 3090 | $0.11 – $0.31 |
+| RTX 4060 Ti 16 GB | $0.10 – $0.14 |
+| RTX 4070 | $0.07 – $0.15 |
+| RTX 4070 Ti | $0.19 – $0.24 |
+| RTX 4080 | $0.23 – $0.27 |
+| RTX 4090 | $0.30 – $0.46 |
+| RTX 5080 | $0.22 – $0.39 |
+| RTX 5090 | $0.41 – $0.69 |
+| RTX A4000 | $0.08 – $0.17 |
+| RTX A5000 | $0.16 – $0.25 |
+| RTX A6000 | $0.40 – $0.53 |
+
+Big cloud companies charge a lot more for data-center GPUs. For example, one NVIDIA L4 on AWS costs about $0.80 per hour. But renters who come to a marketplace like GPUFlow compare you with the prices above, not with AWS.
+
+<Aside type="note" title="Why start in the lower half">
+On most of those sites a renter gets the whole machine. On GPUFlow they get your AI models through an API. That's simpler for them, but it can do less, so price yourself in the lower half of the range, at least until you have your first few rentals.
+</Aside>
+
+## The price bar on the listing form
+
+When you type an hourly rate on **List a GPU** or **Edit**, a bar under the field shows where your price sits:
+
+<Image src={bar} alt="The price bar under the Hourly Rate field, showing the price as typical for this GPU" />
+
+- **Green band, "Other rental sites":** the usual range for your GPU model on other rental sites, from the table above.
+- **Blue line, "Other GPUFlow listings of this model":** the average price of other GPUFlow listings with the same GPU model, with their lowest and highest price. It only shows when there are some.
+- **Orange marker:** your price. The line under the bar says **Priced low**, **Typical price** or **Priced high**, and the last line tells you what you earn per hour after the 12% fee.
+
+If your GPU isn't in the table and nobody else on GPUFlow lists it yet, the bar can't compare. Use the closest card in the table as a guide.
+
+## Choosing your price: a simple plan
+
+<Steps>
+
+1. **Start low.** Pick a price in the lower third of the range for your GPU. For an RTX 4090 that's around $0.30 – $0.35.
+2. **Stay online.** Renters can't rent an offline GPU. The hours you're online matter more than a few cents.
+3. **Look again after a week.**
+   - Rented most of the time? Raise the price by $0.02 – $0.05.
+   - No rentals at all? Lower it by $0.02 – $0.05, and check that your description names your models.
+4. **Check once a month.** Prices on other sites move. Change yours on **My GPUs → Edit**.
+
+</Steps>

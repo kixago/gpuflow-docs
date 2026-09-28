@@ -1,0 +1,55 @@
+---
+title: Crédits, facturation et remboursements
+description: Comment fonctionnent les crédits GPUFlow, comment une location est facturée à la seconde, quand le temps non utilisé est remboursé, et ce qui se passe si un GPU passe hors ligne.
+sidebar:
+  label: Crédits, facturation et remboursements
+  order: 3
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+## Crédits
+
+- Vous payez vos locations avec des crédits. **1 crédit = $0.01.**
+- Vous achetez des crédits par carte dans **Tableau de bord → Paiements → Ajouter des crédits**. Le paiement passe par Stripe.
+- Chaque recharge est comprise **entre $10 et $500**. Il n'y a **pas de frais**.
+- Les crédits n'expirent pas.
+
+## Ce qui se passe quand vous louez
+
+Prenons un exemple : vous louez un GPU à **$0.40 de l'heure** pendant **3 heures**.
+
+| Quand | Ce qui se passe | Vos crédits |
+| --- | --- | --- |
+| Vous cliquez sur **Démarrer une location de 3 h** | $1.20 (3 × $0.40) sont **réservés**. Ce montant apparaît sous « En cours d'utilisation » sur la page Paiements. | $1.20 réservés |
+| Vous l'utilisez 1 h 30 min, puis vous cliquez sur **Terminer maintenant** | Vous payez exactement 1 h 30 min : **$0.60**. | $0.60 vous reviennent |
+| Ou : vous laissez les 3 heures s'écouler | La location se termine d'elle-même. Vous payez $1.20. | rien ne vous revient |
+
+Les règles :
+
+- **Facturation à la seconde.** La durée minimale facturée est de 1 minute.
+- **Vous ne payez jamais plus que le montant réservé.**
+- **Arrêter plus tôt ne coûte rien.** Le temps non utilisé revient directement sur vos crédits.
+- **Besoin de plus de temps ?** Cliquez sur **Ajouter des heures** dans **Locations Actuelles** avant la fin de votre temps. D'autres crédits sont réservés et la même clé API continue de fonctionner.
+
+## Si le GPU passe hors ligne
+
+Si la machine du fournisseur ne répond plus pendant **10 minutes**, la location se termine d'elle-même. Vous ne payez que jusqu'au moment où elle est passée hors ligne, et le reste revient sur vos crédits. Vous recevez une notification quand cela arrive.
+
+## Où voir votre argent
+
+- **Tableau de bord → Paiements** affiche ce qui est disponible, ce qui est réservé pour les locations en cours, et l'historique de chaque recharge, location et remboursement.
+- **Tableau de bord → Historique des locations** liste vos locations terminées.
+- **Le bouton orange dans l'en-tête** affiche toujours vos crédits disponibles. Cliquez dessus pour en ajouter.
+
+## Un problème avec une location
+
+Dans **Locations Actuelles** ou **Historique des locations**, cliquez sur **Signaler un problème** à côté de la location. Cela ouvre un ticket d'assistance où la location est déjà indiquée. Décrivez ce qui s'est passé, par exemple :
+
+> Location #1042 sur « RTX 4090 · qwen2.5 7B ». De 14:10 à 14:35, chaque requête a renvoyé `provider_offline`, mais la location a continué. Pouvez-vous vérifier si ce temps doit m'être remboursé ?
+
+Nous répondons par e-mail. Si nous constatons que ce temps n'était pas utilisable, nous le remboursons sur vos crédits.
+
+<Aside type="caution" title="Contactez-nous avant de contester un paiement par carte">
+Si vous contestez un paiement GPUFlow auprès de votre banque, le montant contesté est repris sur vos crédits et votre compte est suspendu jusqu'au règlement du litige. Ouvrir d'abord un ticket d'assistance est presque toujours plus rapide.
+</Aside>

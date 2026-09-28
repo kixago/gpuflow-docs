@@ -1,0 +1,55 @@
+---
+title: Credits, Abrechnung und Erstattungen
+description: Wie GPUFlow-Credits funktionieren, wie eine Miete sekundengenau abgerechnet wird, wann ungenutzte Zeit erstattet wird und was passiert, wenn eine GPU offline geht.
+sidebar:
+  label: Credits, Abrechnung und Erstattungen
+  order: 3
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+## Credits
+
+- Sie bezahlen Mieten mit Credits. **1 Credit = $0.01.**
+- Credits kaufen Sie per Karte unter **Dashboard → Zahlungen → Credits aufladen**. Die Zahlung läuft über Stripe.
+- Jede Aufladung liegt zwischen **$10 und $500**. Es fällt **keine Gebühr** an.
+- Credits verfallen nicht.
+
+## Was bei einer Miete passiert
+
+Angenommen, Sie mieten eine GPU für **$0.40 pro Stunde** für **3 Stunden**.
+
+| Wann | Was passiert | Ihre Credits |
+| --- | --- | --- |
+| Sie klicken auf **3-Stunden-Miete starten** | $1.20 (3 × $0.40) werden **reserviert**. Auf der Seite „Zahlungen“ steht der Betrag unter „In Verwendung“. | $1.20 reserviert |
+| Sie nutzen die GPU 1 Stunde 30 Minuten und klicken dann auf **Jetzt beenden** | Sie zahlen genau 1 Std. 30 Min.: **$0.60**. | $0.60 kommen zurück |
+| Oder: Sie lassen die 3 Stunden ablaufen | Die Miete endet von selbst. Sie zahlen $1.20. | nichts kommt zurück |
+
+Die Regeln:
+
+- **Sekundengenaue Abrechnung.** Mindestens berechnet wird 1 Minute.
+- **Sie zahlen nie mehr als den reservierten Betrag.**
+- **Vorzeitiges Beenden kostet nichts.** Ungenutzte Zeit geht direkt zurück an Ihre Credits.
+- **Sie brauchen mehr Zeit?** Klicken Sie unter **Aktuelle Mieten** auf **Stunden hinzufügen**, bevor Ihre Zeit abläuft. Dann werden weitere Credits reserviert, und derselbe API-Schlüssel funktioniert weiter.
+
+## Wenn die GPU offline geht
+
+Antwortet der Rechner des Anbieters **10 Minuten** lang nicht, endet die Miete von selbst. Sie zahlen nur bis zu dem Moment, in dem er offline ging. Der Rest geht zurück an Ihre Credits. Sie bekommen in diesem Fall eine Benachrichtigung.
+
+## Wo Sie Ihr Geld sehen
+
+- **Dashboard → Zahlungen** zeigt, was verfügbar ist, was für laufende Mieten reserviert ist, und einen Verlauf aller Aufladungen, Mieten und Erstattungen.
+- **Dashboard → Mietverlauf** listet Ihre beendeten Mieten auf.
+- **Die orangefarbene Schaltfläche in der Kopfzeile** zeigt immer Ihre verfügbaren Credits. Klicken Sie darauf, um weitere aufzuladen.
+
+## Bei einer Miete ist etwas schiefgelaufen
+
+Klicken Sie unter **Aktuelle Mieten** oder **Mietverlauf** neben der Miete auf **Problem melden**. Damit öffnen Sie ein Support-Ticket, in dem die Miete schon eingetragen ist. Beschreiben Sie, was passiert ist, zum Beispiel:
+
+> Miete #1042 auf „RTX 4090 · qwen2.5 7B“. Von 14:10 bis 14:35 Uhr lieferte jede Anfrage `provider_offline`, aber die Miete lief weiter. Bitte prüfen Sie, ob mir diese Zeit erstattet werden kann.
+
+Wir antworten per E-Mail. Wenn wir feststellen, dass die Zeit nicht nutzbar war, erstatten wir sie auf Ihre Credits.
+
+<Aside type="caution" title="Bitte sprechen Sie mit uns, bevor Sie eine Kartenzahlung anfechten">
+Wenn Sie eine GPUFlow-Zahlung bei Ihrer Bank anfechten, wird der angefochtene Betrag von Ihren Credits abgezogen und Ihr Konto gesperrt, bis die Anfechtung geklärt ist. Ein Support-Ticket geht fast immer schneller.
+</Aside>

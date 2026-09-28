@@ -1,0 +1,111 @@
+---
+title: Alugue uma GPU, passo a passo
+description: Crie uma conta no GPUFlow, adicione créditos com cartão, alugue uma GPU por hora e receba sua chave de API. Cada passo com uma captura de tela.
+sidebar:
+  label: Alugue uma GPU, passo a passo
+  order: 1
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+import signup from '../../../../assets/screens/pt-br/renter-signup.png';
+import credits from '../../../../assets/screens/pt-br/renter-add-credits.png';
+import market from '../../../../assets/screens/pt-br/renter-marketplace.png';
+import rent from '../../../../assets/screens/pt-br/renter-rent.png';
+import key from '../../../../assets/screens/pt-br/renter-key.png';
+import notify from '../../../../assets/screens/pt-br/renter-notify.png';
+import { Image } from 'astro:assets';
+
+Alugar uma GPU no GPUFlow leva uns cinco minutos. Você precisa de um endereço de e-mail e de um cartão de pagamento.
+
+**O que você recebe:** uma chave de API para uma GPU, pelas horas que você escolher. A chave funciona como uma chave da OpenAI. Então qualquer app ou script que use a API da OpenAI pode usá-la. Não há servidor para acessar e nada para instalar.
+
+## 1. Crie uma conta
+
+<Steps>
+
+1. Acesse [gpuflow.app](https://gpuflow.app/pt-BR/join) e clique em **Cadastrar-se** no canto superior direito.
+2. Preencha um nome de usuário, seu endereço de e-mail e uma senha (duas vezes).
+3. Clique em **Criar Conta**.
+
+</Steps>
+
+<Image src={signup} alt="O formulário Criar conta com os campos de nome de usuário, e-mail e senha e o botão Criar Conta em destaque" />
+
+Em vez de criar uma senha, você também pode clicar em **Continuar com Google** ou **Continuar com GitHub**.
+
+## 2. Confirme seu endereço de e-mail
+
+O GPUFlow envia um e-mail na hora. Abra o e-mail e clique no link.
+
+<Aside type="caution">
+Você só pode adicionar créditos depois de confirmar seu endereço de e-mail. Se o e-mail não chegar em alguns minutos, olhe a pasta de spam ou clique em **Reenviar e-mail** na faixa amarela no topo do seu painel.
+</Aside>
+
+## 3. Adicione créditos
+
+Você paga os aluguéis com créditos. **1 crédito = $0.01**. Então $25 compram 2500 créditos.
+
+<Steps>
+
+1. Abra seu **Painel** e clique em **Pagamentos** no menu à esquerda.
+2. Em **Adicionar créditos**, clique em um valor ou digite o seu. Você pode adicionar de $10 a $500 por vez. Não há taxa.
+3. Clique em **Continuar para o pagamento**. Você vai para a Stripe, nossa parceira de pagamentos, para pagar com cartão.
+4. Depois de pagar, você volta para o GPUFlow. Seus créditos aparecem em até um minuto, no topo da página Pagamentos e no botão laranja do cabeçalho.
+
+</Steps>
+
+<Image src={credits} alt="A página Pagamentos: os botões de valor e o botão Continuar para o pagamento em destaque" />
+
+## 4. Escolha uma GPU
+
+Clique em **Procurar GPUs** no topo de qualquer página. As GPUs prontas para uso agora ficam na seção verde **Acesso Instantâneo Disponível**.
+
+<Image src={market} alt="O marketplace com o card de uma GPU e o botão Alugar Agora em destaque" />
+
+Em cada card, confira:
+
+- **O preço por hora.** É quanto uma hora custa para você.
+- **VRAM.** Modelos de IA maiores precisam de mais. Como referência, um modelo 7B roda bem com 8 GB ou mais, e um modelo 14B com 16 GB ou mais.
+- **O modelo.** Clique no nome da GPU para abrir a página dela. Os provedores escrevem na descrição quais modelos de IA oferecem (por exemplo `qwen2.5:7b`).
+
+Depois de escolher, clique em **Alugar Agora - Acesso Instantâneo**.
+
+## 5. Escolha quantas horas
+
+<Steps>
+
+1. Digite o número de horas que você quer. A maioria das GPUs permite de 1 a 168 horas (uma semana). Você pode adicionar mais horas depois.
+2. Confira as duas linhas abaixo: quanto será reservado dos seus créditos e quanto você tem.
+3. Clique no botão laranja que inicia o aluguel. Ele mostra o seu número de horas, por exemplo **Iniciar aluguel de 2 h**.
+
+</Steps>
+
+<Image src={rent} alt="A página de aluguel com o campo Horas e o botão de início em destaque" />
+
+<Aside type="tip" title="Você só paga o que usa">
+O valor total das suas horas fica reservado quando você começa. Quando o aluguel termina, você paga só o tempo que realmente usou, por segundo, e o restante volta para os seus créditos. [Como funciona a cobrança](/pt-br/renters/billing/).
+</Aside>
+
+## 6. Copie sua chave de API
+
+Você cai na página **Aluguéis Atuais**. Seu novo aluguel está no topo.
+
+<Image src={key} alt="Aluguéis Atuais: a caixa da chave de API, a caixa do endpoint e os botões Adicionar horas, Nova chave e Encerrar agora em destaque" />
+
+1. **Sua chave de API.** Ela começa com `gfk_`. Copie agora e guarde em um lugar seguro. **Ela aparece só uma vez.**
+2. **O endpoint:** `https://gpuflow.app/v1`. Use como "base URL" no seu app.
+3. **Os botões:** **Adicionar horas** estende o aluguel, **Nova chave** cria uma chave nova e desativa a antiga, **Encerrar agora** termina o aluguel e devolve o tempo não usado para os seus créditos.
+
+Perdeu a chave? Clique em **Nova chave**. A chave antiga para de funcionar e aparece uma nova.
+
+**Próximo passo:** [use sua chave de API](/pt-br/renters/api-quickstart/) com `curl`, Python, JavaScript ou um app.
+
+## Se a GPU que você quer estiver offline
+
+As GPUs cujo dono está offline ficam na seção amarela **Disponível - Fornecedor Offline**. Clique em **Notificar Quando Online** no card.
+
+<Image src={notify} alt="O card de uma GPU na seção offline com o botão Notificar Quando Online em destaque" />
+
+- Você recebe um e-mail e uma notificação (o sino no cabeçalho) assim que essa GPU ficar online.
+- O dono fica sabendo que alguém está esperando pela GPU dele.
+- Mudou de ideia? Clique no botão de novo (agora ele diz **Você será avisado**) para cancelar.

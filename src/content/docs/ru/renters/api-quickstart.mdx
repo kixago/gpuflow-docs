@@ -1,0 +1,165 @@
+---
+title: Как пользоваться API-ключом
+description: Аренда на GPUFlow — это API-ключ, совместимый с OpenAI. Готовые примеры для curl, Python и JavaScript и настройка в любом приложении с поддержкой OpenAI.
+sidebar:
+  label: Как пользоваться API-ключом
+  order: 2
+---
+
+import { Aside, Tabs, TabItem, Steps } from '@astrojs/starlight/components';
+
+Вместе с арендой вы получаете API-ключ, который начинается с `gfk_`. Он работает точно так же, как API-ключ OpenAI, только ведёт на арендованный вами GPU. Им может пользоваться всё, что умеет работать с API OpenAI: официальные библиотеки OpenAI, LangChain, большинство чат-приложений или обычная команда `curl`.
+
+Вам нужны три вещи. Все они есть на странице **Панель управления → Текущие аренды**.
+
+| Что | Значение |
+| --- | --- |
+| Базовый URL (его также называют endpoint или API base) | `https://gpuflow.app/v1` |
+| API-ключ | ваш ключ, начинается с `gfk_` |
+| Модель | модель ИИ на этом GPU, например `qwen2.5:7b` (как её узнать, показано в шаге 1) |
+
+В примерах ниже замените `gfk_your_key` на свой ключ.
+
+## 1. Проверьте ключ и узнайте название модели
+
+Вставьте это в терминал:
+
+```bash
+curl https://gpuflow.app/v1/models \
+  -H "Authorization: Bearer gfk_your_key"
+```
+
+Ответ будет примерно таким:
+
+```json
+{
+  "object": "list",
+  "data": [{ "id": "qwen2.5:7b", "object": "model", "owned_by": "gpuflow" }]
+}
+```
+
+Значение `id` (здесь `qwen2.5:7b`) — это название модели, которое нужно указывать. Если в описании провайдера перечислены и другие модели, их названия тоже можно использовать.
+
+## 2. Отправьте первое сообщение
+
+<Tabs>
+<TabItem label="curl">
+
+```bash
+curl https://gpuflow.app/v1/chat/completions \
+  -H "Authorization: Bearer gfk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "qwen2.5:7b",
+    "messages": [
+      {"role": "system", "content": "You are a helpful assistant. Answer briefly."},
+      {"role": "user", "content": "Write a two-line product description for a steel water bottle."}
+    ]
+  }'
+```
+
+</TabItem>
+<TabItem label="Python">
+
+Один раз установите библиотеку: `pip install openai`
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://gpuflow.app/v1",
+    api_key="gfk_your_key",
+)
+
+reply = client.chat.completions.create(
+    model="qwen2.5:7b",
+    messages=[
+        {"role": "system", "content": "You are a helpful assistant. Answer briefly."},
+        {"role": "user", "content": "Write a two-line product description for a steel water bottle."},
+    ],
+)
+print(reply.choices[0].message.content)
+```
+
+</TabItem>
+<TabItem label="JavaScript">
+
+Один раз установите библиотеку: `npm install openai`
+
+```js
+import OpenAI from "openai";
+
+const client = new OpenAI({
+  baseURL: "https://gpuflow.app/v1",
+  apiKey: "gfk_your_key",
+});
+
+const reply = await client.chat.completions.create({
+  model: "qwen2.5:7b",
+  messages: [
+    { role: "system", content: "You are a helpful assistant. Answer briefly." },
+    { role: "user", content: "Write a two-line product description for a steel water bottle." },
+  ],
+});
+console.log(reply.choices[0].message.content);
+```
+
+</TabItem>
+</Tabs>
+
+## 3. Получайте ответ по словам (потоковая передача)
+
+Добавьте `"stream": true`, и ответ будет появляться по мере написания, как в чат-приложении.
+
+<Tabs>
+<TabItem label="curl">
+
+```bash
+curl https://gpuflow.app/v1/chat/completions \
+  -H "Authorization: Bearer gfk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{"model": "qwen2.5:7b", "stream": true,
+       "messages": [{"role": "user", "content": "Explain what a GPU is in three sentences."}]}'
+```
+
+</TabItem>
+<TabItem label="Python">
+
+```python
+stream = client.chat.completions.create(
+    model="qwen2.5:7b",
+    stream=True,
+    messages=[{"role": "user", "content": "Explain what a GPU is in three sentences."}],
+)
+for chunk in stream:
+    print(chunk.choices[0].delta.content or "", end="", flush=True)
+```
+
+</TabItem>
+</Tabs>
+
+## Как подключить ключ в приложении
+
+Во многих приложениях есть настройка «OpenAI-compatible», «Custom OpenAI» или «OpenAI API base». Заполните её так:
+
+<Steps>
+
+1. **Base URL / API base / endpoint:** `https://gpuflow.app/v1`
+2. **API-ключ:** ваш ключ `gfk_…`
+3. **Модель:** название из шага 1, например `qwen2.5:7b`
+
+</Steps>
+
+Если приложение просит выбрать «провайдера» (provider), выберите «OpenAI» или «OpenAI-compatible».
+
+## Что ключ может и чего не может
+
+- Он работает для чата: `/v1/models` и `/v1/chat/completions`.
+- Он работает, пока не закончилась аренда. После этого он отвечает ошибкой `invalid_api_key`.
+- Он только ваш. Любой, у кого он есть, может пользоваться вашей арендой, поэтому не вставляйте его в открытый код или в чаты. Если ключ утёк, нажмите **Новый ключ** на странице **Текущие аренды**. Старый ключ сразу перестанет работать.
+
+<Aside type="caution" title="Ваши запросы обрабатываются на чужом компьютере">
+Модель ИИ работает на компьютере провайдера, поэтому ваши запросы и ответы проходят через него. Не отправляйте пароли, номера карт и другие данные, которые вы не доверили бы незнакомому человеку.
+</Aside>
+
+Что-то не работает? Смотрите [решение проблем](/ru/renters/troubleshooting/).

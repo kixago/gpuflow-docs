@@ -1,0 +1,165 @@
+---
+title: Utiliser votre clé API
+description: Une location GPUFlow, c'est une clé API compatible OpenAI. Des exemples à copier-coller pour curl, Python et JavaScript, et comment l'utiliser dans toute application qui a un réglage OpenAI.
+sidebar:
+  label: Utiliser votre clé API
+  order: 2
+---
+
+import { Aside, Tabs, TabItem, Steps } from '@astrojs/starlight/components';
+
+Votre location est livrée avec une clé API qui commence par `gfk_`. Elle fonctionne exactement comme une clé API OpenAI, sauf qu'elle pointe vers le GPU que vous avez loué. Tout ce qui sait parler à l'API OpenAI peut l'utiliser : les bibliothèques officielles d'OpenAI, LangChain, la plupart des applications de chat, ou une simple commande `curl`.
+
+Il vous faut trois choses. Vous les trouverez toutes dans **Tableau de bord → Locations Actuelles**.
+
+| Quoi | Valeur |
+| --- | --- |
+| URL de base (aussi appelée endpoint ou API base) | `https://gpuflow.app/v1` |
+| Clé API | votre clé, qui commence par `gfk_` |
+| Modèle | le modèle d'IA installé sur ce GPU, par exemple `qwen2.5:7b` (l'étape 1 explique comment le trouver) |
+
+Dans les exemples ci-dessous, remplacez `gfk_your_key` par votre propre clé.
+
+## 1. Vérifier votre clé et trouver le nom du modèle
+
+Collez ceci dans un terminal :
+
+```bash
+curl https://gpuflow.app/v1/models \
+  -H "Authorization: Bearer gfk_your_key"
+```
+
+Vous obtenez une réponse de ce type :
+
+```json
+{
+  "object": "list",
+  "data": [{ "id": "qwen2.5:7b", "object": "model", "owned_by": "gpuflow" }]
+}
+```
+
+L'`id` (ici `qwen2.5:7b`) est le nom du modèle à utiliser. Si la description du fournisseur cite d'autres modèles, vous pouvez aussi utiliser ces noms.
+
+## 2. Envoyer votre premier message
+
+<Tabs>
+<TabItem label="curl">
+
+```bash
+curl https://gpuflow.app/v1/chat/completions \
+  -H "Authorization: Bearer gfk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "qwen2.5:7b",
+    "messages": [
+      {"role": "system", "content": "Tu es un assistant utile. Réponds brièvement."},
+      {"role": "user", "content": "Écris une description produit de deux lignes pour une gourde en acier."}
+    ]
+  }'
+```
+
+</TabItem>
+<TabItem label="Python">
+
+Installez la bibliothèque une seule fois : `pip install openai`
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://gpuflow.app/v1",
+    api_key="gfk_your_key",
+)
+
+reply = client.chat.completions.create(
+    model="qwen2.5:7b",
+    messages=[
+        {"role": "system", "content": "Tu es un assistant utile. Réponds brièvement."},
+        {"role": "user", "content": "Écris une description produit de deux lignes pour une gourde en acier."},
+    ],
+)
+print(reply.choices[0].message.content)
+```
+
+</TabItem>
+<TabItem label="JavaScript">
+
+Installez la bibliothèque une seule fois : `npm install openai`
+
+```js
+import OpenAI from "openai";
+
+const client = new OpenAI({
+  baseURL: "https://gpuflow.app/v1",
+  apiKey: "gfk_your_key",
+});
+
+const reply = await client.chat.completions.create({
+  model: "qwen2.5:7b",
+  messages: [
+    { role: "system", content: "Tu es un assistant utile. Réponds brièvement." },
+    { role: "user", content: "Écris une description produit de deux lignes pour une gourde en acier." },
+  ],
+});
+console.log(reply.choices[0].message.content);
+```
+
+</TabItem>
+</Tabs>
+
+## 3. Recevoir la réponse mot par mot (streaming)
+
+Ajoutez `"stream": true` pour voir la réponse s'afficher au fur et à mesure, comme dans une application de chat.
+
+<Tabs>
+<TabItem label="curl">
+
+```bash
+curl https://gpuflow.app/v1/chat/completions \
+  -H "Authorization: Bearer gfk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{"model": "qwen2.5:7b", "stream": true,
+       "messages": [{"role": "user", "content": "Explique ce qu’est un GPU en trois phrases."}]}'
+```
+
+</TabItem>
+<TabItem label="Python">
+
+```python
+stream = client.chat.completions.create(
+    model="qwen2.5:7b",
+    stream=True,
+    messages=[{"role": "user", "content": "Explique ce qu’est un GPU en trois phrases."}],
+)
+for chunk in stream:
+    print(chunk.choices[0].delta.content or "", end="", flush=True)
+```
+
+</TabItem>
+</Tabs>
+
+## L'utiliser dans une application
+
+Beaucoup d'applications ont un réglage appelé « OpenAI-compatible », « Custom OpenAI » ou « OpenAI API base ». Remplissez-le ainsi :
+
+<Steps>
+
+1. **URL de base / API base / endpoint :** `https://gpuflow.app/v1`
+2. **Clé API :** votre clé `gfk_…`
+3. **Modèle :** le nom trouvé à l'étape 1, par exemple `qwen2.5:7b`
+
+</Steps>
+
+Si l'application demande un « fournisseur » (provider), choisissez « OpenAI » ou « OpenAI-compatible ».
+
+## Ce que la clé permet, et ce qu'elle ne permet pas
+
+- Elle fonctionne pour le chat : `/v1/models` et `/v1/chat/completions`.
+- Elle fonctionne jusqu'à la fin de votre location. Ensuite, elle répond `invalid_api_key`.
+- Elle n'est qu'à vous. Toute personne qui l'a peut utiliser votre location : ne la collez donc pas dans du code public ou dans des conversations. Si elle a fuité, cliquez sur **Nouvelle clé** dans **Locations Actuelles**. L'ancienne clé cesse aussitôt de fonctionner.
+
+<Aside type="caution" title="Vos prompts tournent sur l'ordinateur d'un particulier">
+Le modèle d'IA tourne sur la machine du fournisseur : vos prompts et les réponses y passent donc. N'envoyez pas de mots de passe, de numéros de carte ni d'autres secrets que vous ne confieriez pas à un inconnu.
+</Aside>
+
+Quelque chose ne marche pas ? Consultez [Résoudre un problème](/fr/renters/troubleshooting/).

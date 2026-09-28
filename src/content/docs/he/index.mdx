@@ -1,0 +1,45 @@
+---
+title: התיעוד של GPUFlow
+description: איך שוכרים GPU לפי שעה ב-GPUFlow, או מרוויחים כסף מהשכרת ה-GPU שלכם. מדריכים צעד אחר צעד עם צילומי מסך.
+template: splash
+hero:
+  tagline: שכרו GPU לפי שעה, או הרוויחו כסף מה-GPU שלכם. מדריכים קצרים, צעד אחר צעד, עם צילומי מסך.
+  actions:
+    - text: שכירת GPU
+      link: /he/renters/getting-started/
+      variant: primary
+      icon: right-arrow
+    - text: השכרת ה-GPU שלי
+      link: /he/providers/getting-started/
+      variant: secondary
+---
+
+import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+## מה זה GPUFlow
+
+GPUFlow הוא שוק שבו אנשים שוכרים GPU מאנשים אחרים, לפי שעה.
+
+- **שוכרים** מוסיפים קרדיטים בכרטיס אשראי, בוחרים GPU ומקבלים עבורו מפתח API. המפתח עובד עם כל אפליקציה או קוד שמדברים עם ה-API של OpenAI.
+- **ספקים** מריצים פקודה אחת על מחשב Linux עם GPU, קובעים מחיר לשעה ומקבלים את הכסף לחשבון הבנק.
+
+<CardGrid>
+  <Card title="אני רוצה לשכור GPU" icon="rocket">
+    - [שכירת GPU, צעד אחר צעד](/he/renters/getting-started/)
+    - [שימוש במפתח ה-API](/he/renters/api-quickstart/)
+    - [קרדיטים, חיובים והחזרים](/he/renters/billing/)
+    - [פתרון בעיות](/he/renters/troubleshooting/)
+  </Card>
+  <Card title="אני רוצה להשכיר את ה-GPU שלי" icon="laptop">
+    - [העלאת ה-GPU שלכם לאוויר](/he/providers/getting-started/)
+    - [כתיבת מודעה טובה](/he/providers/creating-listings/)
+    - [איך לתמחר את ה-GPU שלכם](/he/providers/pricing/)
+    - [קבלת תשלום](/he/providers/getting-paid/)
+  </Card>
+</CardGrid>
+
+<LinkCard
+  title="צריכים עזרה?"
+  description="פתחו פנייה לתמיכה ב-gpuflow.app. התשובה תגיע אליכם באימייל."
+  href="https://gpuflow.app/he/support"
+/>

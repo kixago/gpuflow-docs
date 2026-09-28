@@ -1,0 +1,68 @@
+---
+title: 문제 해결(제공자)
+description: GPUFlow 머신이 오프라인으로 표시될 때, 설치 오류가 날 때, 모델이 내려받아지지 않을 때의 해결 방법과 에이전트를 제거하는 방법입니다.
+sidebar:
+  label: 문제 해결
+  order: 6
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+## 먼저 에이전트를 확인하세요
+
+GPU 컴퓨터에서 다음을 실행하세요.
+
+```bash
+systemctl status gpuflow-agent      # "active (running)"이라고 나와야 합니다
+journalctl -u gpuflow-agent -n 50   # 로그의 마지막 50줄
+```
+
+대부분의 답은 그 50줄 안에 있습니다.
+
+## 머신이 오프라인으로 표시됩니다
+
+1. **컴퓨터가 켜져 있고 인터넷에 연결되어 있나요?** 에이전트는 443번 포트(일반 HTTPS)로 `gpuflow.app`과 `ws.gpuflow.app`에 접속할 수 있어야 합니다.
+2. **에이전트가 실행 중인가요?** `systemctl status gpuflow-agent`에 `active (running)`이 나오지 않으면 에이전트를 시작하세요.
+
+   ```bash
+   sudo systemctl start gpuflow-agent
+   ```
+
+3. **그래도 오프라인인가요?** **내 머신**을 열고 그 머신 카드에 있는 명령어를 복사해 다시 실행하세요. 에이전트를 다시 설치하면서 같은 머신을 유지하므로, 리스팅도 저절로 돌아옵니다.
+
+오프라인이던 머신은 에이전트가 연결되고 1분 정도 안에 온라인으로 표시됩니다.
+
+## 설치 오류
+
+| 나오는 메시지 | 해결 방법 |
+| --- | --- |
+| `enrollment failed`가 나오고 로그에 토큰이 만료되었다고 나옴 | 명령어는 15분 동안만 유효합니다. 대시보드를 새로고침하고 새 명령어를 복사해 실행하세요. |
+| `this installer targets systemd Linux; systemctl not found` | 설치 프로그램에는 systemd를 쓰는 Linux가 필요합니다. Windows, macOS, systemd가 없는 시스템은 아직 지원하지 않습니다. |
+| `unsupported CPU architecture` | 64비트 PC(x86_64)와 64비트 ARM(arm64)만 지원합니다. |
+| `no enrollment token` | `--token`과 그 뒤의 내용까지 포함해 대시보드의 명령어 전체를 복사하세요. |
+| `failed to pull model '…'` | 모델 이름이 틀렸거나 GPU에 맞지 않는 모델입니다. 더 작은 모델을 써 보세요. 예: `--model qwen2.5:0.5b`. |
+
+## 모델이 느리거나 로드되지 않습니다
+
+- GPU 메모리보다 큰 모델은 느리게 돌거나 아예 돌지 않습니다. 더 작은 모델을 고르세요([AI 모델 선택하기](/ko/providers/getting-started/#ai-모델-선택하기) 참고).
+- 재시작 후 첫 요청은 모델을 메모리에 올리는 동안 더 느립니다.
+- **내 머신**에서 GPU 온도를 확인하세요. GPU가 뜨거우면 스스로 속도를 낮춥니다.
+
+## 대여가 일찍 끝났습니다
+
+대여 중에 머신이 10분 동안 오프라인이면 대여가 끝납니다. 오프라인이 된 시점까지의 수익은 받고, 나머지는 대여자에게 돌아갑니다. 머신이 잠들지 않게 하세요. 시스템 설정에서 절전 모드와 최대 절전 모드를 끄세요.
+
+## 제거하기
+
+```bash
+sudo systemctl disable --now gpuflow-agent
+sudo rm -f /usr/local/bin/gpuflow-agent /etc/systemd/system/gpuflow-agent.service
+sudo rm -rf /etc/gpuflow /var/lib/gpuflow /var/lib/private/gpuflow
+sudo systemctl daemon-reload
+```
+
+Ollama는 그대로 설치되어 있습니다. 필요 없다면 따로 제거하세요. 그다음 **내 머신**에서 휴지통 버튼으로 머신을 삭제하세요.
+
+<Aside>
+그래도 해결되지 않나요? [gpuflow.app/support](https://gpuflow.app/ko/support)에서 티켓을 열고 로그의 마지막 50줄(`journalctl -u gpuflow-agent -n 50`)을 붙여 넣으세요.
+</Aside>

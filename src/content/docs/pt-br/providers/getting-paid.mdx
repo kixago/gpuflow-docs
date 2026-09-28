@@ -1,0 +1,71 @@
+---
+title: Como receber
+description: Como os provedores do GPUFlow recebem - a taxa de 12%, a retenção de 7 dias dos ganhos, a configuração dos saques com a Stripe e o saque para o seu banco (mínimo de $25, taxa de $2.50).
+sidebar:
+  label: Como receber
+  order: 4
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+import { Image } from 'astro:assets';
+import setup from '../../../../assets/screens/pt-br/provider-payout-setup.png';
+import cashout from '../../../../assets/screens/pt-br/provider-cash-out.png';
+
+## Como o dinheiro chega até você
+
+<Steps>
+
+1. **Um aluguel termina.** O locatário paga pelo tempo usado. O GPUFlow fica com 12%, e os outros 88% são seus.
+2. **Seus ganhos ficam retidos por 7 dias.** Eles aparecem em **Ganhos retidos** em **Painel → Pagamentos**. Se a sua conta tem menos de 30 dias, a retenção é de 14 dias. A retenção protege contra fraudes com cartão e contestações.
+3. **Eles ficam disponíveis para saque.** Depois da retenção, eles passam para **Disponível para saque**, e você recebe uma notificação.
+4. **Você saca** para o seu banco pela Stripe, nossa parceira de pagamentos.
+
+</Steps>
+
+Você também pode usar seus ganhos para alugar outras GPUs. Créditos que você comprou com cartão podem ser usados, mas não podem ser sacados.
+
+## Configure os saques (uma vez)
+
+Você precisa de um endereço de e-mail confirmado e de uma conta de recebimento na Stripe. A Stripe verifica a sua identidade e pede seus dados bancários. Isso leva alguns minutos.
+
+<Steps>
+
+1. Abra **Painel → Pagamentos**.
+2. Em **Sacar**, escolha o país onde você mora ou onde a sua empresa está registrada.
+3. Clique em **Configurar saques com a Stripe** e siga os passos da Stripe. Tenha em mãos um documento de identidade e seus dados bancários.
+4. Quando você terminar, a Stripe manda você de volta para o GPUFlow.
+
+</Steps>
+
+<Image src={setup} alt="A caixa Sacar: a lista de países e o botão Configurar saques com a Stripe em destaque" />
+
+Às vezes a Stripe analisa seus dados antes. Isso costuma levar alguns minutos, às vezes um ou dois dias. Se ainda faltar algum passo, você vai ver **Continuar a configuração na Stripe**.
+
+**Países onde os saques funcionam:** Estados Unidos, Canadá, Reino Unido, Suíça e o Espaço Econômico Europeu: Áustria, Bélgica, Bulgária, Croácia, Chipre, Tchéquia, Dinamarca, Estônia, Finlândia, França, Alemanha, Grécia, Hungria, Islândia, Irlanda, Itália, Letônia, Liechtenstein, Lituânia, Luxemburgo, Malta, Países Baixos, Noruega, Polônia, Portugal, Romênia, Eslováquia, Eslovênia, Espanha e Suécia.
+
+## Saque
+
+<Steps>
+
+1. Abra **Painel → Pagamentos**.
+2. Em **Sacar**, digite o valor ou deixe o valor total que já vem preenchido.
+3. Confira a linha abaixo: ela mostra a taxa de $2.50 e quanto você recebe.
+4. Clique em **Sacar**.
+
+</Steps>
+
+<Image src={cashout} alt="A caixa Sacar com o campo de valor e o botão Sacar em destaque" />
+
+- **Mínimo:** $25 por saque.
+- **Taxa:** $2.50 por saque, seja qual for o valor. Sacar com menos frequência economiza taxas.
+- O dinheiro é enviado em dólares americanos para a sua conta de recebimento na Stripe, e a Stripe paga no seu banco.
+- Você recebe um e-mail e uma notificação quando o saque é enviado. Se ele não for concluído, o valor total volta para o seu saldo.
+- Altere seus dados bancários quando quiser em **Gerenciar dados de recebimento na Stripe**.
+
+## Se um locatário contestar um pagamento com cartão
+
+Às vezes um locatário pede ao banco para estornar um pagamento com cartão. Quando isso acontece, o GPUFlow retira os ganhos dos aluguéis desse locatário que **ainda estão retidos**, e você recebe um e-mail sobre isso. Se a contestação for resolvida a nosso favor, os ganhos voltam para você. Ganhos que já passaram pela retenção não são afetados.
+
+<Aside type="note">
+Seus ganhos são renda. A forma como eles são tributados depende de onde você mora. Se tiver dúvida, fale com um contador.
+</Aside>

@@ -1,0 +1,140 @@
+---
+title: 让您的 GPU 上线
+description: 在装有 GPU 的 Linux 电脑上运行一条命令，它就会上线，并可在 GPUFlow 上出租。无需 Docker、无需 SSH、无需开放端口。附截图的分步说明。
+sidebar:
+  label: 让您的 GPU 上线
+  order: 1
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+import { Image } from 'astro:assets';
+import addMachine from '../../../../assets/screens/zh-cn/provider-add-machine.png';
+import notListed from '../../../../assets/screens/zh-cn/provider-not-listed.png';
+import myGpus from '../../../../assets/screens/zh-cn/provider-my-gpus.png';
+
+您只需在装有 GPU 的电脑上运行 **一条命令**。它会安装所需的一切，把电脑连接到 GPUFlow，并保持连接。您不需要 Docker 或 SSH，也不需要在路由器上开放任何端口。
+
+## 您需要准备
+
+- 一台运行 **带 systemd 的 64 位 Linux** 的电脑。Ubuntu、Debian、Fedora、Arch、openSUSE 及其衍生发行版都可以。普通 PC（x86_64）和 ARM（arm64）都支持。
+- 一块 GPU。**NVIDIA 是经过测试的方案**。AMD 显卡可以通过 Ollama 的 ROCm 支持运行，但仪表板暂时不显示 AMD GPU 的详细信息。
+- 在这台电脑上使用 `sudo` 的权限。
+- 一个 GPUFlow 账户。[在这里创建](https://gpuflow.app/zh-CN/join)。也请验证您的电子邮件地址，收款时需要用到。
+
+<Aside>
+目前还没有 Windows 或 macOS 的安装程序。
+</Aside>
+
+## 1. 复制您的安装命令
+
+<Steps>
+
+1. 打开您的 **仪表板**，点击左侧菜单中的 **我的机器**。
+2. 在 **一条命令添加 GPU** 下，**这台机器用于什么？** 保持为 **新的上架信息（上线后再设置）**。
+3. 点击命令旁边的 **复制**。
+
+</Steps>
+
+<Image src={addMachine} alt="我的机器：命令框及其“复制”按钮已高亮" />
+
+命令看起来像这样（您的命令末尾是您自己的令牌）：
+
+```bash
+curl -fsSL https://gpuflow.app/downloads/install.sh | sudo bash -s -- --token eyJhbGciOi...
+```
+
+<Aside type="caution" title="请在 15 分钟内使用">
+命令中的令牌只在 15 分钟内有效。如果您看到 `enrollment failed`，并且日志显示令牌已过期，请刷新仪表板，复制一条新命令。
+</Aside>
+
+## 2. 在 GPU 电脑上运行命令
+
+<Steps>
+
+1. 在装有 GPU 的电脑上打开终端。
+2. 粘贴命令并按回车。如果 `sudo` 要求输入密码，请输入您的密码。
+3. 等待出现这一行：
+
+   ```
+   Enrolled. gpuflow-agent is running.
+   ```
+
+   从这一刻起，您的电脑就上线了。随后安装程序会下载一个 AI 模型，第一次可能需要几分钟。
+
+</Steps>
+
+## 3. 创建上架信息
+
+回到 **我的机器**，您的电脑现在显示为 **在线**，并带有提示 **这台机器在线，但尚未上架**。
+
+<Image src={notListed} alt="一张在线但尚未上架的机器卡片，“上架出租”按钮已高亮" />
+
+点击 **上架出租**。上架表单会打开，并且已经选好了这台机器。填写名称、GPU 型号和每小时价格，然后点击 **上架 GPU**。
+
+不确定该写什么、该收多少钱？请参阅[写好上架信息](/zh-cn/providers/creating-listings/)和[如何为您的 GPU 定价](/zh-cn/providers/pricing/)。
+
+## 4. 确认已上线
+
+打开 **我的 GPU**。您的上架信息会显示这台机器，旁边有一个绿点。它现在已出现在市场中，租用者可以租用它了。
+
+<Image src={myGpus} alt="我的 GPU：一条机器在线的上架信息，“编辑”按钮已高亮" />
+
+## 其他方式
+
+**先创建上架信息**：点击 **上架 GPU**，填写表单，**机器** 保持为 **无，稍后绑定**。在 **我的 GPU** 中，点击该上架信息下方的 **上线**。您会得到一条命令，它会把电脑关联到*这条*上架信息，之后不需要再做关联。
+
+**电脑显示离线**：**我的机器** 中每台离线电脑的卡片上都有它自己的命令。在那台电脑上运行它。它会重新安装代理，并恢复**同一台机器**，因此它的上架信息会重新生效，不会产生重复。在同一台电脑上把仪表板中的命令运行两次，也始终是安全的。
+
+## 选择 AI 模型
+
+租用者通过运行在您 GPU 上的 AI 模型来使用它。安装程序默认下载 `qwen2.5:7b`。要选择其他模型，请在命令末尾加上 `--model`：
+
+```bash
+curl -fsSL https://gpuflow.app/downloads/install.sh | sudo bash -s -- --token <your token> --model llama3.1:8b
+```
+
+常见的选择，从小到大依次为：`qwen2.5:0.5b`、`deepseek-r1:1.5b`、`qwen2.5:7b`、`deepseek-r1:7b`、`llama3.1:8b`、`qwen2.5:14b`。模型必须能装进 GPU 的显存（VRAM），所以显卡较小就选小模型。
+
+之后要在已上线的电脑上添加模型，不需要新的令牌：
+
+```bash
+curl -fsSL https://gpuflow.app/downloads/install.sh | sudo bash -s -- --model qwen2.5:14b
+```
+
+已经在运行您自己的兼容 OpenAI 的服务器？请加上 `--engine none --ollama-url http://127.0.0.1:<port>`。
+
+<Aside type="tip">
+把您提供的模型写进上架信息的描述中。租用者会在那里找。
+</Aside>
+
+## 查看运行状态
+
+```bash
+systemctl status gpuflow-agent      # is it running?
+journalctl -u gpuflow-agent -f      # live log (Ctrl+C to stop)
+```
+
+代理在崩溃或重启后会自动重新启动。它只建立**出站**连接，连接到 `gpuflow.app` 和 `ws.gpuflow.app`，所以在任何家用路由器后面都能工作，不需要端口转发。
+
+## 实时数据
+
+**我的机器** 中的每张机器卡片都会显示以下数据，每 15 秒更新一次：
+
+- **速度（基准测试）**：您每个模型每秒生成的 token 数，在您的机器上测得。模型出现时，代理会测试一次，之后每天再测一次，但只在机器 5 分钟无人使用时才测。租用者的请求总会中断测试。
+- **为租户提供**：实际租用中的真实速度和首个 token 的响应时间。
+- **GPU**：温度、负载、显存、功耗、风扇、时钟频率、PCIe 链路。
+- **系统和模型**：CPU 温度和负载、内存、操作系统、运行时间、已安装的模型，以及当前加载的模型。
+
+这些数据只有您能看到。
+
+## 您会收到哪些通知
+
+在以下情况下，您会收到**一封邮件和一条通知**（网站顶部的铃铛）：
+
+- **您的 GPU 被租用**，
+- **有租用者在等**您离线的 GPU（每块 GPU 每天最多一次）。启动机器即可接下这次租用。
+- **提现已发出**，或未成功。
+
+租用结束时，您会收到**一条通知**，其中写明您的收益；收益变为可提现时，您也会收到通知。
+
+下一步：[写好上架信息](/zh-cn/providers/creating-listings/)。

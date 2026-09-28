@@ -1,0 +1,45 @@
+---
+title: A qué pueden acceder los inquilinos y a qué no
+description: Qué puede hacer un inquilino de GPUFlow en tu máquina (enviar solicitudes de IA a tus modelos) y qué no (tu red, una shell, tus archivos, tus modelos). Cómo se protege el agente.
+sidebar:
+  label: A qué pueden acceder los inquilinos
+  order: 5
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+En resumen: **los inquilinos pueden enviar solicitudes de IA a los modelos de tu máquina, y nada más.**
+
+## Qué pueden hacer los inquilinos
+
+Un inquilino recibe una clave API. Sus solicitudes llegan primero a GPUFlow. GPUFlow responde por sí mismo con la lista de modelos y solo reenvía a tu computadora un tipo de solicitud:
+
+| Solicitud | Qué hace |
+| --- | --- |
+| `POST /v1/chat/completions` | chatear con uno de tus modelos |
+
+Esa solicitud pasa por el relay de GPUFlow hasta el agente de tu computadora, y el agente la entrega a tu motor de IA (Ollama).
+
+El agente tiene además su propia lista, como segundo cerrojo. Solo acepta `/v1/models`, `/v1/chat/completions`, `/v1/completions` y `/v1/embeddings`, y rechaza todo lo demás, venga de donde venga la solicitud.
+
+## Qué no pueden hacer los inquilinos
+
+- **Entrar en tu red.** Tu computadora solo hace conexiones salientes. No se abre nada en tu router y los inquilinos nunca conocen tu dirección IP.
+- **Obtener una shell** ni ejecutar sus propios programas en tu máquina.
+- **Ver ni cambiar tus archivos.**
+- **Descargar, borrar ni cambiar tus modelos.**
+- **Ver las estadísticas de tu máquina.** Solo tú las ves.
+
+## Cómo se protege el agente
+
+El instalador configura el agente como un servicio del sistema con límites estrictos. Se ejecuta con un usuario temporal sin contraseña, no puede obtener permisos adicionales, ve el resto del sistema en modo de solo lectura y no puede ver las carpetas personales. Su configuración está en `/etc/gpuflow/agent.env` y sus datos en `/var/lib/private/gpuflow`.
+
+## Lo que debes saber
+
+- **Los prompts y las respuestas pasan por tu máquina.** Así es como funciona la IA. Respeta la privacidad de tus inquilinos: no guardes ni leas sus prompts.
+- **Mantén la máquina actualizada.** Instala las actualizaciones de Linux y del controlador de la GPU como siempre. Después, el agente se reinicia solo.
+- **Vigila la temperatura.** Los inquilinos pueden mantener tu GPU ocupada durante horas. Las estadísticas en vivo de **Mis máquinas** muestran su temperatura, así que asegúrate de que la caja tenga buena ventilación.
+
+<Aside type="tip">
+Para dejar de alquilar la máquina durante un tiempo, oculta su anuncio en **Mis GPUs** o detén el agente con `sudo systemctl stop gpuflow-agent`. `sudo systemctl start gpuflow-agent` lo vuelve a poner en marcha. Si lo detienes durante un alquiler, el alquiler termina a los 10 minutos y solo cobras hasta el momento en que se desconectó.
+</Aside>

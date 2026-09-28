@@ -1,0 +1,49 @@
+---
+title: Ein Problem lösen (Mieter)
+description: Was jeder GPUFlow-API-Fehler bedeutet und was Sie dagegen tun, dazu Lösungen für Probleme beim Aufladen von Credits oder beim Starten einer Miete.
+sidebar:
+  label: Ein Problem lösen
+  order: 4
+---
+
+## API-Fehler
+
+Wenn etwas schiefgeht, antwortet die API mit einem Fehlercode. Achten Sie in der Antwort auf den `code`:
+
+```json
+{ "error": { "message": "...", "type": "server_error", "code": "provider_offline" } }
+```
+
+| Status | `code` | Was es bedeutet | Was Sie tun |
+| --- | --- | --- | --- |
+| 401 | `invalid_api_key` | Der Schlüssel fehlt, ist falsch geschrieben, wurde durch **Neuer Schlüssel** ersetzt, oder die Miete ist beendet. | Kopieren Sie den Schlüssel erneut. Prüfen Sie, dass der Header `Authorization: Bearer gfk_…` lautet. Ist die Miete beendet, starten Sie eine neue. |
+| 400 | `invalid_body` | Was Sie gesendet haben, ist kein gültiges JSON. | Prüfen Sie Anführungszeichen und Kommas. Die Beispiele unter [Ihren API-Schlüssel verwenden](/de/renters/api-quickstart/) sind ein guter Ausgangspunkt. |
+| 503 | `provider_offline` | Der Rechner des Anbieters ist gerade offline. | Warten Sie eine Minute und versuchen Sie es erneut. Bleibt er 10 Minuten offline, endet die Miete von selbst, und Sie zahlen nur bis zu dem Zeitpunkt, an dem er offline ging. |
+| 503 | `relay_unreachable` | GPUFlow konnte die Verbindung zum Rechner nicht erreichen. | Versuchen Sie es gleich noch einmal. Passiert es immer wieder, eröffnen Sie ein Support-Ticket. |
+| 502 | `provider_error` | Der Rechner hat eine leere Antwort geliefert. | Versuchen Sie es erneut. Passiert es immer wieder, melden Sie die Miete. |
+| 503 | `provider_unbound` | Ihr Schlüssel ist mit keiner GPU verknüpft. | Eröffnen Sie ein Support-Ticket. |
+
+**„model … not found“:** Sie haben ein Modell angefragt, das auf dem Rechner nicht vorhanden ist. Führen Sie die `/v1/models`-Prüfung aus [Ihren API-Schlüssel verwenden](/de/renters/api-quickstart/) aus und verwenden Sie den Namen, der dort steht.
+
+## Credits aufladen
+
+| Meldung | Lösung |
+| --- | --- |
+| Bestätigen Sie Ihre E-Mail-Adresse, bevor Sie Credits aufladen. | Öffnen Sie die E-Mail von GPUFlow und klicken Sie auf den Link. Keine E-Mail bekommen? Klicken Sie im gelben Hinweis auf Ihrem Dashboard auf **E-Mail erneut senden** und sehen Sie im Spam-Ordner nach. |
+| Geben Sie einen Betrag von $10 bis $500 ein. | Jede Aufladung muss zwischen $10 und $500 liegen. |
+| Zahlung abgebrochen. Es wurde nichts belastet. | Sie haben die Stripe-Seite vor dem Bezahlen verlassen. Versuchen Sie es erneut. |
+| Sie haben bezahlt, aber die Credits sind nicht erschienen | Warten Sie eine Minute und laden Sie die Seite neu. Nach 10 Minuten immer noch nichts? Eröffnen Sie ein Support-Ticket. |
+
+## Miete starten
+
+| Meldung | Lösung |
+| --- | --- |
+| Nicht genug Credits: benötigt werden … | Laden Sie Credits auf oder mieten Sie für weniger Stunden. |
+| Der Rechner dieser GPU ist gerade offline. | Wählen Sie eine andere GPU. Oder klicken Sie auf ihrer Karte auf **Benachrichtigen, wenn online**, dann bekommen Sie eine E-Mail, sobald sie wieder da ist. |
+| Wählen Sie … bis … Stunden. | Diese GPU hat eine eigene Mindest- und Höchstdauer. Wählen Sie eine Zahl dazwischen. |
+| Das ist Ihr eigenes Angebot. | Ihre eigene GPU können Sie nicht mieten. |
+| Zu viele Versuche. Versuchen Sie es in einer Stunde erneut. | Warten Sie eine Stunde. Diese Grenze schützt Konten vor außer Kontrolle geratenen Skripten. |
+
+## Immer noch nicht gelöst?
+
+Eröffnen Sie ein Ticket unter [gpuflow.app/support](https://gpuflow.app/de/support). Geht es um eine bestimmte Miete, nutzen Sie **Problem melden** neben dieser Miete, damit wir sehen, welche es ist. Geben Sie den Fehler-`code` an, den Zeitpunkt und, wenn möglich, den Befehl oder Code, den Sie ausgeführt haben (**ohne Ihren API-Schlüssel**).

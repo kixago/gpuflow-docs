@@ -1,0 +1,165 @@
+---
+title: 使用您的 API 密钥
+description: GPUFlow 的每次租用都附带一个兼容 OpenAI 的 API 密钥。这里有可直接复制的 curl、Python 和 JavaScript 示例，以及如何在任何带 OpenAI 设置的应用中使用它。
+sidebar:
+  label: 使用您的 API 密钥
+  order: 2
+---
+
+import { Aside, Tabs, TabItem, Steps } from '@astrojs/starlight/components';
+
+您的租用附带一个以 `gfk_` 开头的 API 密钥。它的用法和 OpenAI API 密钥完全一样，只是请求会发到您租用的 GPU 上。任何能调用 OpenAI API 的东西都能使用它：官方 OpenAI 库、LangChain、大多数聊天应用，或者一条简单的 `curl` 命令。
+
+您需要三样东西，都可以在 **仪表板 → 当前租用** 中找到。
+
+| 项目 | 值 |
+| --- | --- |
+| Base URL（也叫 endpoint、接口地址或 API base） | `https://gpuflow.app/v1` |
+| API 密钥 | 您的密钥，以 `gfk_` 开头 |
+| 模型 | 这块 GPU 上的 AI 模型，例如 `qwen2.5:7b`（第 1 步说明如何查找） |
+
+在下面的示例中，请把 `gfk_your_key` 换成您自己的密钥。
+
+## 1. 检查密钥并查找模型名称
+
+把下面的命令粘贴到终端中：
+
+```bash
+curl https://gpuflow.app/v1/models \
+  -H "Authorization: Bearer gfk_your_key"
+```
+
+您会得到类似这样的回复：
+
+```json
+{
+  "object": "list",
+  "data": [{ "id": "qwen2.5:7b", "object": "model", "owned_by": "gpuflow" }]
+}
+```
+
+`id`（这里是 `qwen2.5:7b`）就是要使用的模型名称。如果提供者的描述中列出了更多模型，您也可以使用那些名称。
+
+## 2. 发送第一条消息
+
+<Tabs>
+<TabItem label="curl">
+
+```bash
+curl https://gpuflow.app/v1/chat/completions \
+  -H "Authorization: Bearer gfk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "qwen2.5:7b",
+    "messages": [
+      {"role": "system", "content": "You are a helpful assistant. Answer briefly."},
+      {"role": "user", "content": "Write a two-line product description for a steel water bottle."}
+    ]
+  }'
+```
+
+</TabItem>
+<TabItem label="Python">
+
+先安装一次库：`pip install openai`
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://gpuflow.app/v1",
+    api_key="gfk_your_key",
+)
+
+reply = client.chat.completions.create(
+    model="qwen2.5:7b",
+    messages=[
+        {"role": "system", "content": "You are a helpful assistant. Answer briefly."},
+        {"role": "user", "content": "Write a two-line product description for a steel water bottle."},
+    ],
+)
+print(reply.choices[0].message.content)
+```
+
+</TabItem>
+<TabItem label="JavaScript">
+
+先安装一次库：`npm install openai`
+
+```js
+import OpenAI from "openai";
+
+const client = new OpenAI({
+  baseURL: "https://gpuflow.app/v1",
+  apiKey: "gfk_your_key",
+});
+
+const reply = await client.chat.completions.create({
+  model: "qwen2.5:7b",
+  messages: [
+    { role: "system", content: "You are a helpful assistant. Answer briefly." },
+    { role: "user", content: "Write a two-line product description for a steel water bottle." },
+  ],
+});
+console.log(reply.choices[0].message.content);
+```
+
+</TabItem>
+</Tabs>
+
+## 3. 逐字获取回答（流式输出）
+
+加上 `"stream": true`，回答会边生成边显示，就像在聊天应用里一样。
+
+<Tabs>
+<TabItem label="curl">
+
+```bash
+curl https://gpuflow.app/v1/chat/completions \
+  -H "Authorization: Bearer gfk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{"model": "qwen2.5:7b", "stream": true,
+       "messages": [{"role": "user", "content": "Explain what a GPU is in three sentences."}]}'
+```
+
+</TabItem>
+<TabItem label="Python">
+
+```python
+stream = client.chat.completions.create(
+    model="qwen2.5:7b",
+    stream=True,
+    messages=[{"role": "user", "content": "Explain what a GPU is in three sentences."}],
+)
+for chunk in stream:
+    print(chunk.choices[0].delta.content or "", end="", flush=True)
+```
+
+</TabItem>
+</Tabs>
+
+## 在应用中使用
+
+很多应用都有名为“OpenAI-compatible”“Custom OpenAI”或“OpenAI API base”的设置。按下面这样填写：
+
+<Steps>
+
+1. **Base URL / API base / endpoint**：`https://gpuflow.app/v1`
+2. **API 密钥**：您的 `gfk_…` 密钥
+3. **模型**：第 1 步中查到的名称，例如 `qwen2.5:7b`
+
+</Steps>
+
+如果应用要求选择“provider”（服务商），请选“OpenAI”或“OpenAI-compatible”。
+
+## 密钥能做什么，不能做什么
+
+- 它可用于聊天：`/v1/models` 和 `/v1/chat/completions`。
+- 在租用结束前一直有效。租用结束后，它会返回 `invalid_api_key`。
+- 它只属于您。任何拿到它的人都能使用您的租用，所以不要把它粘贴到公开的代码或聊天中。如果泄露了，请在 **当前租用** 中点击 **新密钥**。旧密钥会立即失效。
+
+<Aside type="caution" title="您的提示词运行在别人自己的电脑上">
+AI 模型运行在提供者的机器上，所以您的提示词和回答都会经过这台机器。不要发送密码、银行卡号，或其他您不会告诉陌生人的机密信息。
+</Aside>
+
+遇到问题？请参阅[解决问题](/zh-cn/renters/troubleshooting/)。

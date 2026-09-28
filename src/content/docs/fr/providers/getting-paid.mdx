@@ -1,0 +1,71 @@
+---
+title: Être payé
+description: Comment les fournisseurs GPUFlow sont payés - la commission de 12 %, la retenue de 7 jours sur les gains, la configuration des versements avec Stripe, et le retrait vers votre banque ($25 minimum, $2.50 de frais).
+sidebar:
+  label: Être payé
+  order: 4
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+import { Image } from 'astro:assets';
+import setup from '../../../../assets/screens/fr/provider-payout-setup.png';
+import cashout from '../../../../assets/screens/fr/provider-cash-out.png';
+
+## Comment l'argent vous parvient
+
+<Steps>
+
+1. **Une location se termine.** Le locataire paie le temps utilisé. GPUFlow garde 12 % et les 88 % restants sont pour vous.
+2. **Vos gains sont retenus 7 jours.** Ils apparaissent sous **Gains en attente** dans **Tableau de bord → Paiements**. Si votre compte a moins de 30 jours, la retenue dure 14 jours. Elle protège contre la fraude à la carte et les contestations de paiement.
+3. **Ils deviennent disponibles au retrait.** Après la retenue, ils passent dans **Disponible au retrait**, et vous recevez une notification.
+4. **Vous les retirez** vers votre banque via Stripe, notre partenaire de paiement.
+
+</Steps>
+
+Vous pouvez aussi dépenser vos gains pour louer d'autres GPU. Les crédits achetés par carte peuvent être dépensés, mais pas retirés.
+
+## Configurer les versements (une seule fois)
+
+Il vous faut une adresse e-mail confirmée et un compte de versement chez Stripe. Stripe vérifie votre identité et vous demande vos coordonnées bancaires. Cela prend quelques minutes.
+
+<Steps>
+
+1. Ouvrez **Tableau de bord → Paiements**.
+2. Dans la section **Retirer**, choisissez le pays où vous résidez ou où votre entreprise est immatriculée.
+3. Cliquez sur **Configurer les retraits avec Stripe** et suivez les étapes de Stripe. Ayez sous la main une pièce d'identité et vos coordonnées bancaires.
+4. Une fois terminé, Stripe vous renvoie sur GPUFlow.
+
+</Steps>
+
+<Image src={setup} alt="Le cadre Retirer : la liste des pays et le bouton Configurer les retraits avec Stripe mis en évidence" />
+
+Il arrive que Stripe examine d'abord vos informations. Cela prend en général quelques minutes, parfois un ou deux jours. S'il manque encore une étape, vous verrez **Continuer la configuration sur Stripe**.
+
+**Pays où les versements sont possibles :** États-Unis, Canada, Royaume-Uni, Suisse et l'Espace économique européen : Allemagne, Autriche, Belgique, Bulgarie, Chypre, Croatie, Danemark, Espagne, Estonie, Finlande, France, Grèce, Hongrie, Irlande, Islande, Italie, Lettonie, Liechtenstein, Lituanie, Luxembourg, Malte, Norvège, Pays-Bas, Pologne, Portugal, Roumanie, Slovaquie, Slovénie, Suède et Tchéquie.
+
+## Retirer
+
+<Steps>
+
+1. Ouvrez **Tableau de bord → Paiements**.
+2. Dans la section **Retirer**, saisissez le montant, ou laissez le montant total déjà rempli.
+3. Vérifiez la ligne en dessous : elle indique les frais de $2.50 et ce que vous recevez.
+4. Cliquez sur **Retirer**.
+
+</Steps>
+
+<Image src={cashout} alt="Le cadre Retirer avec le champ du montant et le bouton Retirer mis en évidence" />
+
+- **Minimum :** $25 par retrait.
+- **Frais :** $2.50 par retrait, quel que soit le montant. Retirer moins souvent vous fait économiser des frais.
+- L'argent est envoyé en dollars US sur votre compte de versement Stripe, et Stripe le verse sur votre compte bancaire.
+- Vous recevez un e-mail et une notification quand il est envoyé. Si le retrait n'aboutit pas, le montant total revient sur votre solde.
+- Vous pouvez changer vos coordonnées bancaires à tout moment avec **Gérer mes informations de versement sur Stripe**.
+
+## Si un locataire conteste un paiement par carte
+
+Il arrive qu'un locataire demande à sa banque d'annuler un paiement par carte. Dans ce cas, GPUFlow reprend les gains issus des locations de ce locataire qui sont **encore en attente**, et vous recevez un e-mail à ce sujet. Si le litige est tranché en notre faveur, ces gains vous sont rendus. Les gains dont la retenue est terminée ne sont pas touchés.
+
+<Aside type="note">
+Vos gains sont des revenus. Leur imposition dépend de votre pays de résidence. En cas de doute, demandez conseil à un expert fiscal.
+</Aside>

@@ -1,50 +1,45 @@
 ---
-title: Welcome to the GPUFlow Docs
+title: GPUFlow Docs
+description: How to rent a GPU by the hour on GPUFlow, or earn money by renting out your own. Step-by-step guides with screenshots.
 template: splash
 hero:
-  tagline: Your guide to the decentralized GPU marketplace. Find what you need to get started as a renter, provider, or developer.
+  tagline: Rent a GPU by the hour, or earn money from yours. Short, step-by-step guides with screenshots.
   actions:
-    - text: 'For Renters: Quick Start'
+    - text: Rent a GPU
       link: /renters/getting-started/
       variant: primary
-    - text: 'For Providers: Get Started'
+      icon: right-arrow
+    - text: Rent out my GPU
       link: /providers/getting-started/
       variant: secondary
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components';
+import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
 
-<CardGrid stagger>
-	<Card title="Renters" icon="credit-card">
-		Learn how to connect your wallet, find the right GPU, and access your instance in under 60 seconds.
-		<br /><br />
-        **Key Guides:**
-        - [How to Rent a GPU](/renters/how-to-rent-gpu/)
-        - [Wallet Setup Guide](/renters/wallet-setup/)
-        - [Access Methods: Terminal, SSH & WireGuard](/renters/access-methods/)
-	</Card>
-	<Card title="Providers" icon="server">
-		Turn your idle hardware into a passive income stream. See our guides on installation, security, and maximizing your earnings.
-		<br /><br />
-        **Key Guides:**
-        - [Getting Started Guide](/providers/getting-started/)
-        - [Linux NVIDIA Installation](/providers/installation/linux/nvidia/)
-        - [Creating Your GPU Listing](/providers/configuration/creating-listings/)
-	</Card>
-    <Card title="Configuration" icon="setting">
-		Set up your account, manage your wallet, and configure your GPU listings for maximum earnings.
-		<br /><br />
-        **Key Guides:**
-        - [Account Setup](/providers/configuration/account-setup/)
-        - [Wallet Management](/providers/configuration/wallet-management/)
-        - [Security Best Practices](/providers/configuration/security-best-practices/)
-	</Card>
-    <Card title="Networking" icon="laptop">
-		Configure secure peer-to-peer connections between renters and GPU hardware using WireGuard.
-		<br /><br />
-        **Key Guides:**
-        - [WireGuard P2P Setup (Providers)](/providers/networking/wireguard-p2p/)
-        - [WireGuard Client (Renters)](/renters/wireguard-client/)
-        - [Performance Monitoring](/providers/operations/performance-monitoring/)
-	</Card>
+## What GPUFlow is
+
+GPUFlow is a marketplace where people rent GPUs from other people, by the hour.
+
+- **Renters** add credits with a card, pick a GPU and get an API key for it. The key works with any app or code that speaks the OpenAI API.
+- **Providers** run one command on a Linux computer with a GPU, set an hourly price, and get paid to their bank account.
+
+<CardGrid>
+  <Card title="I want to rent a GPU" icon="rocket">
+    - [Rent a GPU, step by step](/renters/getting-started/)
+    - [Use your API key](/renters/api-quickstart/)
+    - [Credits, billing and refunds](/renters/billing/)
+    - [Fix a problem](/renters/troubleshooting/)
+  </Card>
+  <Card title="I want to rent out my GPU" icon="laptop">
+    - [Put your GPU online](/providers/getting-started/)
+    - [Write a good listing](/providers/creating-listings/)
+    - [How to price your GPU](/providers/pricing/)
+    - [Getting paid](/providers/getting-paid/)
+  </Card>
 </CardGrid>
+
+<LinkCard
+  title="Need a hand?"
+  description="Open a support ticket on gpuflow.app. You get an answer by email."
+  href="https://gpuflow.app/en/support"
+/>

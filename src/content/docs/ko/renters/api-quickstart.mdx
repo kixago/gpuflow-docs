@@ -1,0 +1,165 @@
+---
+title: API 키 사용하기
+description: GPUFlow 대여는 OpenAI 호환 API 키입니다. curl, Python, JavaScript용 복사해서 쓰는 예제와, OpenAI 설정이 있는 앱에서 쓰는 방법을 안내합니다.
+sidebar:
+  label: API 키 사용하기
+  order: 2
+---
+
+import { Aside, Tabs, TabItem, Steps } from '@astrojs/starlight/components';
+
+대여하면 `gfk_`로 시작하는 API 키를 받습니다. OpenAI API 키와 똑같이 작동하고, 대여한 GPU로 연결된다는 점만 다릅니다. OpenAI API를 쓸 수 있는 것이라면 무엇이든 이 키를 쓸 수 있습니다. 공식 OpenAI 라이브러리, LangChain, 대부분의 채팅 앱, 간단한 `curl` 명령어도 됩니다.
+
+필요한 것은 세 가지입니다. 모두 **대시보드 → 현재 대여**에 있습니다.
+
+| 항목 | 값 |
+| --- | --- |
+| Base URL(엔드포인트 또는 API base라고도 합니다) | `https://gpuflow.app/v1` |
+| API 키 | `gfk_`로 시작하는 내 키 |
+| 모델 | 그 GPU에 있는 AI 모델. 예: `qwen2.5:7b` (찾는 방법은 1단계에 있습니다) |
+
+아래 예제에서 `gfk_your_key`를 내 키로 바꾸세요.
+
+## 1. 키 확인하고 모델 이름 찾기
+
+터미널에 다음을 붙여 넣으세요.
+
+```bash
+curl https://gpuflow.app/v1/models \
+  -H "Authorization: Bearer gfk_your_key"
+```
+
+다음과 같은 응답이 옵니다.
+
+```json
+{
+  "object": "list",
+  "data": [{ "id": "qwen2.5:7b", "object": "model", "owned_by": "gpuflow" }]
+}
+```
+
+`id`(여기서는 `qwen2.5:7b`)가 사용할 모델 이름입니다. 제공자의 설명에 다른 모델도 적혀 있다면 그 이름도 쓸 수 있습니다.
+
+## 2. 첫 메시지 보내기
+
+<Tabs>
+<TabItem label="curl">
+
+```bash
+curl https://gpuflow.app/v1/chat/completions \
+  -H "Authorization: Bearer gfk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "qwen2.5:7b",
+    "messages": [
+      {"role": "system", "content": "당신은 도움이 되는 어시스턴트입니다. 짧게 답하세요."},
+      {"role": "user", "content": "스테인리스 물병의 상품 설명을 두 줄로 써 주세요."}
+    ]
+  }'
+```
+
+</TabItem>
+<TabItem label="Python">
+
+라이브러리를 한 번 설치합니다: `pip install openai`
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://gpuflow.app/v1",
+    api_key="gfk_your_key",
+)
+
+reply = client.chat.completions.create(
+    model="qwen2.5:7b",
+    messages=[
+        {"role": "system", "content": "당신은 도움이 되는 어시스턴트입니다. 짧게 답하세요."},
+        {"role": "user", "content": "스테인리스 물병의 상품 설명을 두 줄로 써 주세요."},
+    ],
+)
+print(reply.choices[0].message.content)
+```
+
+</TabItem>
+<TabItem label="JavaScript">
+
+라이브러리를 한 번 설치합니다: `npm install openai`
+
+```js
+import OpenAI from "openai";
+
+const client = new OpenAI({
+  baseURL: "https://gpuflow.app/v1",
+  apiKey: "gfk_your_key",
+});
+
+const reply = await client.chat.completions.create({
+  model: "qwen2.5:7b",
+  messages: [
+    { role: "system", content: "당신은 도움이 되는 어시스턴트입니다. 짧게 답하세요." },
+    { role: "user", content: "스테인리스 물병의 상품 설명을 두 줄로 써 주세요." },
+  ],
+});
+console.log(reply.choices[0].message.content);
+```
+
+</TabItem>
+</Tabs>
+
+## 3. 답변을 한 단어씩 받기(스트리밍)
+
+`"stream": true`를 추가하면 채팅 앱처럼 답변이 작성되는 대로 나타납니다.
+
+<Tabs>
+<TabItem label="curl">
+
+```bash
+curl https://gpuflow.app/v1/chat/completions \
+  -H "Authorization: Bearer gfk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{"model": "qwen2.5:7b", "stream": true,
+       "messages": [{"role": "user", "content": "GPU가 무엇인지 세 문장으로 설명해 주세요."}]}'
+```
+
+</TabItem>
+<TabItem label="Python">
+
+```python
+stream = client.chat.completions.create(
+    model="qwen2.5:7b",
+    stream=True,
+    messages=[{"role": "user", "content": "GPU가 무엇인지 세 문장으로 설명해 주세요."}],
+)
+for chunk in stream:
+    print(chunk.choices[0].delta.content or "", end="", flush=True)
+```
+
+</TabItem>
+</Tabs>
+
+## 앱에서 사용하기
+
+많은 앱에 "OpenAI-compatible", "Custom OpenAI", "OpenAI API base" 같은 이름의 설정이 있습니다. 다음과 같이 입력하세요.
+
+<Steps>
+
+1. **Base URL / API base / 엔드포인트:** `https://gpuflow.app/v1`
+2. **API 키:** `gfk_…`로 시작하는 내 키
+3. **모델:** 1단계에서 찾은 이름. 예: `qwen2.5:7b`
+
+</Steps>
+
+앱에서 "provider"(공급자)를 물으면 "OpenAI" 또는 "OpenAI-compatible"을 고르세요.
+
+## 키로 할 수 있는 일과 없는 일
+
+- 채팅에 쓸 수 있습니다: `/v1/models`와 `/v1/chat/completions`.
+- 대여가 끝날 때까지 작동합니다. 그 뒤에는 `invalid_api_key`로 응답합니다.
+- 키는 나만의 것입니다. 키를 가진 사람은 누구나 내 대여를 쓸 수 있으니 공개 코드나 채팅에 붙여 넣지 마세요. 키가 유출되었다면 **현재 대여**에서 **새 키**를 클릭하세요. 이전 키는 즉시 작동을 멈춥니다.
+
+<Aside type="caution" title="프롬프트는 다른 사람의 컴퓨터에서 실행됩니다">
+AI 모델은 제공자의 머신에서 실행되므로 프롬프트와 답변이 그 머신을 거칩니다. 비밀번호, 카드 번호처럼 모르는 사람에게 알려 주지 않을 정보는 보내지 마세요.
+</Aside>
+
+잘 안 되나요? [문제 해결](/ko/renters/troubleshooting/)을 참고하세요.

@@ -1,0 +1,140 @@
+---
+title: Ihre GPU online bringen
+description: Führen Sie auf einem Linux-Rechner mit GPU einen einzigen Befehl aus, und er ist auf GPUFlow online und mietbar. Kein Docker, kein SSH, keine offenen Ports. Schritt für Schritt mit Screenshots.
+sidebar:
+  label: Ihre GPU online bringen
+  order: 1
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+import { Image } from 'astro:assets';
+import addMachine from '../../../../assets/screens/de/provider-add-machine.png';
+import notListed from '../../../../assets/screens/de/provider-not-listed.png';
+import myGpus from '../../../../assets/screens/de/provider-my-gpus.png';
+
+Sie führen auf dem Rechner mit der GPU **einen einzigen Befehl** aus. Er installiert alles, verbindet den Rechner mit GPUFlow und hält die Verbindung aufrecht. Sie brauchen weder Docker noch SSH, und Sie öffnen keine Ports an Ihrem Router.
+
+## Was Sie brauchen
+
+- Einen Rechner mit **64-Bit-Linux und systemd**. Ubuntu, Debian, Fedora, Arch, openSUSE und ihre Verwandten funktionieren alle. Normale PCs (x86_64) und ARM (arm64) sind beide möglich.
+- Eine GPU. **NVIDIA ist der getestete Weg.** AMD-Karten funktionieren über die ROCm-Unterstützung von Ollama, aber das Dashboard zeigt noch keine Details zu AMD-GPUs an.
+- Die Berechtigung, auf diesem Rechner `sudo` zu verwenden.
+- Ein GPUFlow-Konto. [Hier legen Sie eines an](https://gpuflow.app/de/join). Bestätigen Sie auch Ihre E-Mail-Adresse. Ohne Bestätigung können Sie sich nicht auszahlen lassen.
+
+<Aside>
+Für Windows und macOS gibt es noch kein Installationsprogramm.
+</Aside>
+
+## 1. Installationsbefehl kopieren
+
+<Steps>
+
+1. Öffnen Sie Ihr **Dashboard** und klicken Sie im Menü links auf **Meine Rechner**.
+2. Lassen Sie unter **Eine GPU mit einem Befehl hinzufügen** das Feld **Wofür ist dieser Rechner?** auf **Ein neues Angebot (einrichten, sobald er online ist)**.
+3. Klicken Sie neben dem Befehl auf **Kopieren**.
+
+</Steps>
+
+<Image src={addMachine} alt="Meine Rechner: das Feld mit dem Befehl und die Schaltfläche Kopieren hervorgehoben" />
+
+Der Befehl sieht so aus (bei Ihnen steht am Ende Ihr eigener Token):
+
+```bash
+curl -fsSL https://gpuflow.app/downloads/install.sh | sudo bash -s -- --token eyJhbGciOi...
+```
+
+<Aside type="caution" title="Innerhalb von 15 Minuten verwenden">
+Der Token im Befehl ist nur 15 Minuten gültig. Sehen Sie `enrollment failed` und steht im Log, dass der Token abgelaufen ist, laden Sie das Dashboard neu und kopieren Sie einen neuen Befehl.
+</Aside>
+
+## 2. Auf dem GPU-Rechner ausführen
+
+<Steps>
+
+1. Öffnen Sie auf dem Rechner mit der GPU ein Terminal.
+2. Fügen Sie den Befehl ein und drücken Sie die Eingabetaste. Geben Sie Ihr Passwort ein, wenn `sudo` danach fragt.
+3. Warten Sie auf diese Zeile:
+
+   ```
+   Enrolled. gpuflow-agent is running.
+   ```
+
+   Ab diesem Moment ist Ihr Rechner online. Danach lädt das Installationsprogramm ein KI-Modell herunter. Das kann beim ersten Mal ein paar Minuten dauern.
+
+</Steps>
+
+## 3. Angebot erstellen
+
+Zurück unter **Meine Rechner** zeigt Ihr Rechner jetzt **Online** und die Meldung **Dieser Rechner ist online, aber nicht gelistet.**
+
+<Image src={notListed} alt="Eine Rechner-Karte, die online, aber nicht gelistet ist, mit hervorgehobener Schaltfläche Zur Miete anbieten" />
+
+Klicken Sie auf **Zur Miete anbieten**. Das Angebotsformular öffnet sich, und dieser Rechner ist schon ausgewählt. Tragen Sie Namen, GPU-Modell und Stundenpreis ein und klicken Sie dann auf **GPU anbieten**.
+
+Sie wissen nicht, was Sie schreiben oder verlangen sollen? Lesen Sie [Ein gutes Angebot schreiben](/de/providers/creating-listings/) und [Den Preis für Ihre GPU festlegen](/de/providers/pricing/).
+
+## 4. Prüfen, ob es live ist
+
+Öffnen Sie **Meine GPUs**. Ihr Angebot zeigt den Rechner mit einem grünen Punkt. Es erscheint jetzt auf dem Marktplatz, und Mieter können es mieten.
+
+<Image src={myGpus} alt="Meine GPUs: ein Angebot mit seinem Rechner online und der Schaltfläche Bearbeiten hervorgehoben" />
+
+## Andere Wege
+
+**Zuerst das Angebot:** Klicken Sie auf **GPU anbieten**, füllen Sie das Formular aus und lassen Sie **Rechner** auf **Keiner, später verknüpfen**. Klicken Sie dann unter **Meine GPUs** unter dem Angebot auf **Online schalten**. Sie bekommen einen Befehl, der den Rechner mit *genau diesem* Angebot verknüpft. Hinterher müssen Sie nichts mehr verknüpfen.
+
+**Ein Rechner zeigt Offline:** Jeder Offline-Rechner unter **Meine Rechner** hat seinen eigenen Befehl direkt auf seiner Karte. Führen Sie ihn auf diesem Rechner aus. Er installiert den Agenten neu und bringt **denselben Rechner** zurück. Sein Angebot ist dann wieder aktiv, und es entsteht kein Duplikat. Einen Befehl aus dem Dashboard zweimal auf demselben Rechner auszuführen, ist immer unbedenklich.
+
+## KI-Modell auswählen
+
+Mieter nutzen Ihre GPU über KI-Modelle, die darauf laufen. Das Installationsprogramm lädt standardmäßig `qwen2.5:7b` herunter. Für ein anderes Modell hängen Sie `--model` an das Ende des Befehls:
+
+```bash
+curl -fsSL https://gpuflow.app/downloads/install.sh | sudo bash -s -- --token <your token> --model llama3.1:8b
+```
+
+Übliche Modelle, von klein nach groß: `qwen2.5:0.5b`, `deepseek-r1:1.5b`, `qwen2.5:7b`, `deepseek-r1:7b`, `llama3.1:8b`, `qwen2.5:14b`. Ein Modell muss in den Speicher Ihrer GPU (VRAM) passen. Wählen Sie für kleine Karten also ein kleines Modell.
+
+Um später auf einem Rechner, der schon online ist, ein Modell hinzuzufügen, brauchen Sie keinen neuen Token:
+
+```bash
+curl -fsSL https://gpuflow.app/downloads/install.sh | sudo bash -s -- --model qwen2.5:14b
+```
+
+Sie betreiben schon einen eigenen OpenAI-kompatiblen Server? Hängen Sie `--engine none --ollama-url http://127.0.0.1:<port>` an.
+
+<Aside type="tip">
+Schreiben Sie die Modelle, die Sie bereitstellen, in die Beschreibung Ihres Angebots. Dort suchen Mieter danach.
+</Aside>
+
+## Den Agenten prüfen
+
+```bash
+systemctl status gpuflow-agent      # läuft er?
+journalctl -u gpuflow-agent -f      # Live-Log (Strg+C zum Beenden)
+```
+
+Der Agent startet nach einem Absturz oder Neustart von selbst neu. Er baut nur **ausgehende** Verbindungen auf, zu `gpuflow.app` und `ws.gpuflow.app`. Deshalb funktioniert er hinter jedem Heimrouter ohne Portweiterleitung.
+
+## Live-Werte
+
+Jede Rechner-Karte unter **Meine Rechner** zeigt, alle 15 Sekunden aktualisiert:
+
+- **Geschwindigkeit (Benchmark):** Tokens pro Sekunde für jedes Ihrer Modelle, gemessen auf Ihrem Rechner. Der Agent testet ein Modell einmal, wenn es neu hinzukommt, und danach jeden Tag. Er testet aber nur, wenn 5 Minuten lang niemand den Rechner genutzt hat. Ein Mieter unterbricht den Test immer.
+- **An Mieter geliefert:** echte Geschwindigkeit und Zeit bis zum ersten Token aus tatsächlichen Mieten.
+- **GPU:** Temperatur, Last, VRAM, Leistungsaufnahme, Lüfter, Taktraten, PCIe-Verbindung.
+- **System und Modelle:** CPU-Temperatur und -Last, RAM, Betriebssystem, Laufzeit, installierte Modelle und das gerade geladene Modell.
+
+Nur Sie sehen diese Werte.
+
+## Worüber Sie informiert werden
+
+Sie bekommen **eine E-Mail und eine Benachrichtigung** (die Glocke oben auf der Website), wenn:
+
+- **Ihre GPU gemietet wird,**
+- **ein Mieter** auf Ihre GPU **wartet**, während sie offline ist (höchstens einmal am Tag pro GPU). Starten Sie den Rechner, um die Miete zu bekommen.
+- **eine Auszahlung gesendet wurde** oder nicht durchging.
+
+Sie bekommen **eine Benachrichtigung**, wenn eine Miete endet, mit Ihrem Verdienst, und wenn Einnahmen auszahlbar werden.
+
+Weiter: [Ein gutes Angebot schreiben](/de/providers/creating-listings/).

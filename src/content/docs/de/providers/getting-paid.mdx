@@ -1,0 +1,71 @@
+---
+title: So werden Sie bezahlt
+description: So werden GPUFlow-Anbieter bezahlt - die Gebühr von 12 %, die 7-tägige Haltefrist für Einnahmen, Auszahlungen mit Stripe einrichten und auf Ihr Bankkonto auszahlen (mindestens $25, Gebühr $2.50).
+sidebar:
+  label: So werden Sie bezahlt
+  order: 4
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+import { Image } from 'astro:assets';
+import setup from '../../../../assets/screens/de/provider-payout-setup.png';
+import cashout from '../../../../assets/screens/de/provider-cash-out.png';
+
+## Wie das Geld zu Ihnen kommt
+
+<Steps>
+
+1. **Eine Miete endet.** Der Mieter zahlt für die genutzte Zeit. GPUFlow behält 12 %, die übrigen 88 % gehören Ihnen.
+2. **Ihre Einnahmen werden 7 Tage zurückgehalten.** Sie stehen unter **Einnahmen im Rückhalt** auf **Dashboard → Zahlungen**. Ist Ihr Konto jünger als 30 Tage, beträgt die Haltefrist 14 Tage. Sie schützt vor Kartenbetrug und Zahlungsanfechtungen.
+3. **Sie werden auszahlbar.** Nach der Haltefrist wandern sie zu **Auszahlbar**, und Sie bekommen eine Benachrichtigung.
+4. **Sie zahlen aus**, über Stripe, unseren Zahlungspartner, auf Ihr Bankkonto.
+
+</Steps>
+
+Sie können Ihre Einnahmen auch ausgeben, um andere GPUs zu mieten. Credits, die Sie per Karte gekauft haben, können Sie ausgeben, aber nicht auszahlen.
+
+## Auszahlungen einrichten (einmalig)
+
+Sie brauchen eine bestätigte E-Mail-Adresse und ein Auszahlungskonto bei Stripe. Stripe prüft Ihre Identität und fragt nach Ihren Bankdaten. Das dauert wenige Minuten.
+
+<Steps>
+
+1. Öffnen Sie **Dashboard → Zahlungen**.
+2. Wählen Sie unter **Auszahlen** das Land, in dem Sie wohnen oder in dem Ihr Unternehmen registriert ist.
+3. Klicken Sie auf **Auszahlungen mit Stripe einrichten** und folgen Sie den Schritten bei Stripe. Halten Sie einen Ausweis und Ihre Bankdaten bereit.
+4. Wenn Sie fertig sind, schickt Stripe Sie zurück zu GPUFlow.
+
+</Steps>
+
+<Image src={setup} alt="Der Bereich Auszahlen: die Länderliste und die Schaltfläche Auszahlungen mit Stripe einrichten hervorgehoben" />
+
+Manchmal prüft Stripe Ihre Angaben zuerst. Das dauert meist wenige Minuten, manchmal ein bis zwei Tage. Fehlt noch ein Schritt, sehen Sie **Einrichtung bei Stripe fortsetzen**.
+
+**Länder, in denen Auszahlungen möglich sind:** USA, Kanada, Großbritannien, Schweiz und der Europäische Wirtschaftsraum: Belgien, Bulgarien, Dänemark, Deutschland, Estland, Finnland, Frankreich, Griechenland, Irland, Island, Italien, Kroatien, Lettland, Liechtenstein, Litauen, Luxemburg, Malta, Niederlande, Norwegen, Österreich, Polen, Portugal, Rumänien, Schweden, Slowakei, Slowenien, Spanien, Tschechien, Ungarn und Zypern.
+
+## Auszahlen
+
+<Steps>
+
+1. Öffnen Sie **Dashboard → Zahlungen**.
+2. Geben Sie unter **Auszahlen** den Betrag ein oder lassen Sie den vorausgefüllten Gesamtbetrag stehen.
+3. Prüfen Sie die Zeile darunter: Sie zeigt die Gebühr von $2.50 und was Sie erhalten.
+4. Klicken Sie auf **Auszahlen**.
+
+</Steps>
+
+<Image src={cashout} alt="Der Bereich Auszahlen mit dem Betragsfeld und der Schaltfläche Auszahlen hervorgehoben" />
+
+- **Mindestbetrag:** $25 pro Auszahlung.
+- **Gebühr:** $2.50 pro Auszahlung, unabhängig vom Betrag. Wer seltener auszahlt, spart Gebühren.
+- Das Geld wird in US-Dollar an Ihr Stripe-Auszahlungskonto gesendet, und Stripe überweist es auf Ihr Bankkonto.
+- Sie bekommen eine E-Mail und eine Benachrichtigung, sobald es gesendet ist. Geht die Auszahlung nicht durch, kommt der volle Betrag zurück auf Ihr Guthaben.
+- Ihre Bankdaten ändern Sie jederzeit über **Auszahlungsdaten bei Stripe verwalten**.
+
+## Wenn ein Mieter eine Kartenzahlung anficht
+
+Manchmal bittet ein Mieter seine Bank, eine Kartenzahlung rückgängig zu machen. In diesem Fall nimmt GPUFlow Einnahmen aus den Mieten dieses Mieters zurück, die **noch im Rückhalt** sind, und Sie bekommen dazu eine E-Mail. Wird die Anfechtung zu unseren Gunsten entschieden, bekommen Sie die Einnahmen zurück. Einnahmen, deren Haltefrist schon abgelaufen ist, sind nicht betroffen.
+
+<Aside type="note">
+Ihre Einnahmen sind Einkommen. Wie sie besteuert werden, hängt davon ab, wo Sie leben. Wenn Sie unsicher sind, fragen Sie eine Steuerberaterin oder einen Steuerberater.
+</Aside>

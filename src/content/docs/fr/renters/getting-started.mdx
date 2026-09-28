@@ -1,0 +1,111 @@
+---
+title: Louer un GPU, étape par étape
+description: Créez un compte GPUFlow, ajoutez des crédits par carte, louez un GPU à l'heure et obtenez votre clé API. Chaque étape avec une capture d'écran.
+sidebar:
+  label: Louer un GPU, étape par étape
+  order: 1
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+import signup from '../../../../assets/screens/fr/renter-signup.png';
+import credits from '../../../../assets/screens/fr/renter-add-credits.png';
+import market from '../../../../assets/screens/fr/renter-marketplace.png';
+import rent from '../../../../assets/screens/fr/renter-rent.png';
+import key from '../../../../assets/screens/fr/renter-key.png';
+import notify from '../../../../assets/screens/fr/renter-notify.png';
+import { Image } from 'astro:assets';
+
+Louer un GPU sur GPUFlow prend environ cinq minutes. Il vous faut une adresse e-mail et une carte de paiement.
+
+**Ce que vous obtenez :** une clé API pour un GPU, pour le nombre d'heures que vous choisissez. La clé fonctionne comme une clé OpenAI : toute application ou tout script qui utilise l'API OpenAI peut s'en servir. Il n'y a pas de serveur auquel se connecter et rien à installer.
+
+## 1. Créer un compte
+
+<Steps>
+
+1. Allez sur [gpuflow.app](https://gpuflow.app/fr/join) et cliquez sur **S'inscrire** en haut à droite.
+2. Saisissez un nom d'utilisateur, votre adresse e-mail et un mot de passe (deux fois).
+3. Cliquez sur **Créer le compte**.
+
+</Steps>
+
+<Image src={signup} alt="Le formulaire de création de compte avec les champs nom d'utilisateur, e-mail et mot de passe, et le bouton Créer le compte mis en évidence" />
+
+Au lieu de créer un mot de passe, vous pouvez aussi cliquer sur **Continuer avec Google** ou **Continuer avec GitHub**.
+
+## 2. Confirmer votre adresse e-mail
+
+GPUFlow vous envoie un e-mail tout de suite. Ouvrez-le et cliquez sur le lien qu'il contient.
+
+<Aside type="caution">
+Vous ne pouvez pas ajouter de crédits tant que votre adresse e-mail n'est pas confirmée. Si l'e-mail n'arrive pas au bout de quelques minutes, regardez dans vos spams, ou cliquez sur **Renvoyer l'email** dans le bandeau jaune en haut de votre tableau de bord.
+</Aside>
+
+## 3. Ajouter des crédits
+
+Les crédits servent à payer vos locations. **1 crédit = $0.01**, donc $25 vous donnent 2 500 crédits.
+
+<Steps>
+
+1. Ouvrez votre **Tableau de bord** et cliquez sur **Paiements** dans le menu de gauche.
+2. Sous **Ajouter des crédits**, cliquez sur un montant, ou saisissez le vôtre. Vous pouvez ajouter de $10 à $500 à la fois. Il n'y a pas de frais.
+3. Cliquez sur **Continuer vers le paiement**. Vous passez sur Stripe, notre partenaire de paiement, pour payer par carte.
+4. Après le paiement, vous revenez sur GPUFlow. Vos crédits apparaissent en moins d'une minute, en haut de la page Paiements et sur le bouton orange de l'en-tête.
+
+</Steps>
+
+<Image src={credits} alt="La page Paiements : les boutons de montant et le bouton Continuer vers le paiement mis en évidence" />
+
+## 4. Choisir un GPU
+
+Cliquez sur **Parcourir les GPU** en haut de n'importe quelle page. Les GPU disponibles tout de suite se trouvent dans la section verte **Accès Instantané Disponible**.
+
+<Image src={market} alt="La place de marché avec une carte de GPU et son bouton Louer Maintenant mis en évidence" />
+
+Sur chaque carte, vérifiez :
+
+- **Le prix à l'heure.** C'est ce que vous coûte une heure.
+- **La VRAM.** Les gros modèles d'IA en demandent plus. En gros, un modèle 7B tourne bien avec 8 Go ou plus, un modèle 14B avec 16 Go ou plus.
+- **Le modèle.** Cliquez sur le nom du GPU pour ouvrir sa page. Les fournisseurs indiquent dans la description les modèles d'IA qu'ils proposent (par exemple `qwen2.5:7b`).
+
+Une fois votre choix fait, cliquez sur **Louer Maintenant - Accès Instantané**.
+
+## 5. Choisir le nombre d'heures
+
+<Steps>
+
+1. Saisissez le nombre d'heures voulu. La plupart des GPU acceptent de 1 à 168 heures (une semaine). Vous pourrez ajouter des heures plus tard.
+2. Vérifiez les deux lignes en dessous : le montant qui sera réservé sur vos crédits, et ce dont vous disposez.
+3. Cliquez sur le bouton orange qui démarre la location. Il affiche votre nombre d'heures, par exemple **Démarrer une location de 2 h**.
+
+</Steps>
+
+<Image src={rent} alt="La page de location avec le champ Heures et le bouton de démarrage mis en évidence" />
+
+<Aside type="tip" title="Vous ne payez que ce que vous utilisez">
+Le montant total de vos heures est réservé au démarrage. À la fin de la location, vous ne payez que le temps réellement utilisé, à la seconde près, et le reste revient sur vos crédits. [Comment fonctionne la facturation](/fr/renters/billing/).
+</Aside>
+
+## 6. Copier votre clé API
+
+Vous arrivez sur **Locations Actuelles**. Votre nouvelle location est tout en haut.
+
+<Image src={key} alt="Locations Actuelles : le cadre de la clé API, le cadre de l'endpoint et les boutons Ajouter des heures, Nouvelle clé et Terminer maintenant mis en évidence" />
+
+1. **Votre clé API.** Elle commence par `gfk_`. Copiez-la maintenant et gardez-la en lieu sûr. **Elle n'est affichée qu'une seule fois.**
+2. **L'endpoint :** `https://gpuflow.app/v1`. Utilisez-le comme « URL de base » (base URL) dans votre application.
+3. **Les boutons :** **Ajouter des heures** prolonge la location, **Nouvelle clé** crée une nouvelle clé et désactive l'ancienne, **Terminer maintenant** arrête la location et rend le temps non utilisé à vos crédits.
+
+Vous avez perdu la clé ? Cliquez sur **Nouvelle clé**. L'ancienne clé cesse de fonctionner et une nouvelle apparaît.
+
+**Ensuite :** [utilisez votre clé API](/fr/renters/api-quickstart/) avec `curl`, Python, JavaScript ou une application.
+
+## Si le GPU que vous voulez est hors ligne
+
+Les GPU dont le propriétaire est hors ligne se trouvent dans la section jaune **Disponible - Fournisseur Hors Ligne**. Cliquez sur **Me notifier quand en ligne** sur la carte.
+
+<Image src={notify} alt="Une carte de GPU dans la section hors ligne avec le bouton Me notifier quand en ligne mis en évidence" />
+
+- Vous recevez un e-mail et une notification (la cloche dans l'en-tête) dès que ce GPU est en ligne.
+- Le propriétaire est prévenu que quelqu'un attend son GPU.
+- Vous avez changé d'avis ? Cliquez de nouveau sur le bouton (il affiche maintenant **Vous serez prévenu**) pour arrêter.

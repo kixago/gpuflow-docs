@@ -1,0 +1,140 @@
+---
+title: Coloque sua GPU online
+description: Execute um comando em um computador Linux com GPU e ele fica online e disponível para aluguel no GPUFlow. Sem Docker, sem SSH, sem abrir portas. Passo a passo com capturas de tela.
+sidebar:
+  label: Coloque sua GPU online
+  order: 1
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+import { Image } from 'astro:assets';
+import addMachine from '../../../../assets/screens/pt-br/provider-add-machine.png';
+import notListed from '../../../../assets/screens/pt-br/provider-not-listed.png';
+import myGpus from '../../../../assets/screens/pt-br/provider-my-gpus.png';
+
+Você executa **um comando** no computador que tem a GPU. Ele instala tudo, conecta o computador ao GPUFlow e mantém a conexão. Você não precisa de Docker nem de SSH, e não abre nenhuma porta no roteador.
+
+## O que você precisa
+
+- Um computador com **Linux 64 bits com systemd**. Ubuntu, Debian, Fedora, Arch, openSUSE e seus derivados funcionam. Tanto PCs comuns (x86_64) quanto ARM (arm64) servem.
+- Uma GPU. **NVIDIA é o caminho testado.** Placas AMD funcionam pelo suporte ROCm do Ollama, mas o painel ainda não mostra os detalhes de GPUs AMD.
+- Permissão para usar `sudo` nesse computador.
+- Uma conta no GPUFlow. [Crie uma aqui](https://gpuflow.app/pt-BR/join). Confirme também seu endereço de e-mail. Você precisa dele para receber.
+
+<Aside>
+Ainda não há instalador para Windows nem para macOS.
+</Aside>
+
+## 1. Copie seu comando de instalação
+
+<Steps>
+
+1. Abra seu **Painel** e clique em **Minhas máquinas** no menu à esquerda.
+2. Em **Adicione uma GPU com um comando**, deixe **Para que serve esta máquina?** em **Um anúncio novo (configure quando estiver online)**.
+3. Clique em **Copiar** ao lado do comando.
+
+</Steps>
+
+<Image src={addMachine} alt="Minhas máquinas: a caixa do comando e o botão Copiar em destaque" />
+
+O comando é parecido com este (o seu tem o seu próprio token no final):
+
+```bash
+curl -fsSL https://gpuflow.app/downloads/install.sh | sudo bash -s -- --token eyJhbGciOi...
+```
+
+<Aside type="caution" title="Use em até 15 minutos">
+O token no comando vale só por 15 minutos. Se aparecer `enrollment failed` e o log disser que o token expirou, recarregue o painel e copie um comando novo.
+</Aside>
+
+## 2. Execute no computador da GPU
+
+<Steps>
+
+1. No computador que tem a GPU, abra um terminal.
+2. Cole o comando e pressione Enter. Digite sua senha se o `sudo` pedir.
+3. Espere por esta linha:
+
+   ```
+   Enrolled. gpuflow-agent is running.
+   ```
+
+   A partir deste momento, seu computador está online. Em seguida, o instalador baixa um modelo de IA, o que pode levar alguns minutos na primeira vez.
+
+</Steps>
+
+## 3. Crie seu anúncio
+
+De volta a **Minhas máquinas**, seu computador agora aparece como **Online**, com a mensagem **Esta máquina está online, mas não está anunciada.**
+
+<Image src={notListed} alt="O card de uma máquina online, mas não anunciada, com o botão Colocar para alugar em destaque" />
+
+Clique em **Colocar para alugar**. O formulário do anúncio abre com esta máquina já escolhida. Preencha o nome, o modelo da GPU e o preço por hora e clique em **Listar GPU**.
+
+Não sabe o que escrever ou quanto cobrar? Veja [escreva um bom anúncio](/pt-br/providers/creating-listings/) e [como definir o preço da sua GPU](/pt-br/providers/pricing/).
+
+## 4. Confira se está no ar
+
+Abra **Minhas GPUs**. Seu anúncio mostra a máquina com um ponto verde. Agora ele aparece no marketplace, e os locatários podem alugá-lo.
+
+<Image src={myGpus} alt="Minhas GPUs: um anúncio com a máquina online e o botão Editar em destaque" />
+
+## Outras formas de fazer
+
+**Anúncio primeiro:** clique em **Listar uma GPU**, preencha o formulário e deixe **Máquina** em **Nenhuma, vincular depois**. Em **Minhas GPUs**, clique em **Ficar Online** embaixo do anúncio. Isso dá a você um comando que vincula o computador a *esse* anúncio. Assim, não há nada para vincular depois.
+
+**Um computador aparece como Offline:** cada computador offline em **Minhas máquinas** tem o seu próprio comando no card. Execute esse comando nesse computador. Ele reinstala o agente e traz de volta **a mesma máquina**. Assim, o anúncio dela volta a ficar ativo e nenhuma cópia é criada. Executar um comando do painel duas vezes no mesmo computador é sempre seguro.
+
+## Escolher um modelo de IA
+
+Os locatários usam sua GPU pelos modelos de IA que rodam nela. Por padrão, o instalador baixa o `qwen2.5:7b`. Para escolher outro, adicione `--model` no final do comando:
+
+```bash
+curl -fsSL https://gpuflow.app/downloads/install.sh | sudo bash -s -- --token <your token> --model llama3.1:8b
+```
+
+Escolhas comuns, do menor para o maior: `qwen2.5:0.5b`, `deepseek-r1:1.5b`, `qwen2.5:7b`, `deepseek-r1:7b`, `llama3.1:8b`, `qwen2.5:14b`. O modelo precisa caber na memória da GPU (VRAM). Então escolha um modelo pequeno para placas pequenas.
+
+Para adicionar um modelo depois, em um computador que já está online, você não precisa de um token novo:
+
+```bash
+curl -fsSL https://gpuflow.app/downloads/install.sh | sudo bash -s -- --model qwen2.5:14b
+```
+
+Já tem o seu próprio servidor compatível com a OpenAI? Adicione `--engine none --ollama-url http://127.0.0.1:<port>`.
+
+<Aside type="tip">
+Escreva na descrição do anúncio os modelos que você oferece. É ali que os locatários procuram.
+</Aside>
+
+## Como acompanhar
+
+```bash
+systemctl status gpuflow-agent      # is it running?
+journalctl -u gpuflow-agent -f      # live log (Ctrl+C to stop)
+```
+
+O agente se reinicia sozinho depois de uma falha ou de uma reinicialização. Ele só faz conexões **de saída**, para `gpuflow.app` e `ws.gpuflow.app`. Por isso funciona atrás de qualquer roteador doméstico, sem redirecionamento de portas.
+
+## Estatísticas ao vivo
+
+Cada card de máquina em **Minhas máquinas** mostra, com atualização a cada 15 segundos:
+
+- **Velocidade (benchmark):** tokens por segundo de cada um dos seus modelos, medidos na sua máquina. O agente testa um modelo uma vez quando ele aparece e de novo todo dia, mas só quando ninguém usou a máquina por 5 minutos. Um locatário sempre interrompe o teste.
+- **Servido a locatários:** a velocidade real e o tempo até o primeiro token em aluguéis de verdade.
+- **GPU:** temperatura, carga, VRAM, consumo de energia, ventoinha, frequências, link PCIe.
+- **Sistema e modelos:** temperatura e carga da CPU, RAM, sistema operacional, tempo ligado, modelos instalados e o modelo carregado no momento.
+
+Só você vê essas estatísticas.
+
+## Quando você é avisado
+
+Você recebe **um e-mail e uma notificação** (o sino no topo do site) quando:
+
+- **sua GPU é alugada,**
+- **um locatário está esperando** pela sua GPU enquanto ela está offline (no máximo uma vez por dia por GPU). Ligue a máquina para aceitar o aluguel.
+- **um saque é enviado** ou não é concluído.
+
+Você recebe **uma notificação** quando um aluguel termina, com o quanto você ganhou, e quando os ganhos ficam disponíveis para saque.
+
+Próximo passo: [escreva um bom anúncio](/pt-br/providers/creating-listings/).

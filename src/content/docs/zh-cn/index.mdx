@@ -1,0 +1,45 @@
+---
+title: GPUFlow 文档
+description: 如何在 GPUFlow 上按小时租用 GPU，或出租自己的 GPU 赚钱。附截图的分步指南。
+template: splash
+hero:
+  tagline: 按小时租用 GPU，或用您的 GPU 赚钱。简短的分步指南，附截图。
+  actions:
+    - text: 租用 GPU
+      link: /zh-cn/renters/getting-started/
+      variant: primary
+      icon: right-arrow
+    - text: 出租我的 GPU
+      link: /zh-cn/providers/getting-started/
+      variant: secondary
+---
+
+import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+## GPUFlow 是什么
+
+GPUFlow 是一个交易平台，用户可以按小时向其他人租用 GPU。
+
+- **租用者**用银行卡充值额度，选一块 GPU，然后获得它的 API 密钥。任何支持 OpenAI API 的应用或代码都能使用这个密钥。
+- **提供者**在一台装有 GPU 的 Linux 电脑上运行一条命令，设定每小时价格，收益会打到自己的银行账户。
+
+<CardGrid>
+  <Card title="我想租用 GPU" icon="rocket">
+    - [分步租用 GPU](/zh-cn/renters/getting-started/)
+    - [使用您的 API 密钥](/zh-cn/renters/api-quickstart/)
+    - [额度、计费和退款](/zh-cn/renters/billing/)
+    - [解决问题](/zh-cn/renters/troubleshooting/)
+  </Card>
+  <Card title="我想出租我的 GPU" icon="laptop">
+    - [让您的 GPU 上线](/zh-cn/providers/getting-started/)
+    - [写好上架信息](/zh-cn/providers/creating-listings/)
+    - [如何为您的 GPU 定价](/zh-cn/providers/pricing/)
+    - [收款](/zh-cn/providers/getting-paid/)
+  </Card>
+</CardGrid>
+
+<LinkCard
+  title="需要帮助？"
+  description="在 gpuflow.app 上提交客服工单。我们会通过电子邮件回复您。"
+  href="https://gpuflow.app/zh-CN/support"
+/>

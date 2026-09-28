@@ -1,0 +1,7 @@
+{
+  "copy.markdown": "Markdown をコピー",
+  "open": "開く",
+  "open.chatgpt": "ChatGPT で開く",
+  "open.claude": "Claude で開く",
+  "heading.anchorLabel": "見出し「{{title}}」へのリンク"
+}

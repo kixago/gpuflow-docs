@@ -1,0 +1,55 @@
+---
+title: Créditos, facturación y reembolsos
+description: Cómo funcionan los créditos de GPUFlow, cómo se factura un alquiler al segundo, cuándo se reembolsa el tiempo no usado y qué pasa si una GPU se desconecta.
+sidebar:
+  label: Créditos, facturación y reembolsos
+  order: 3
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+## Créditos
+
+- Los alquileres se pagan con créditos. **1 crédito = $0.01.**
+- Compras créditos con tarjeta en **Panel → Pagos → Añadir créditos**. El pago se hace a través de Stripe.
+- Cada recarga es de **$10 a $500**. **No hay comisión**.
+- Los créditos no caducan.
+
+## Qué pasa cuando alquilas
+
+Supongamos que alquilas una GPU que cuesta **$0.40 por hora** durante **3 horas**.
+
+| Cuándo | Qué pasa | Tus créditos |
+| --- | --- | --- |
+| Haces clic en **Iniciar alquiler de 3 h** | Se **reservan** $1.20 (3 × $0.40). Aparecen como "En uso" en la página de Pagos. | $1.20 reservados |
+| La usas durante 1 hora y 30 minutos y luego haces clic en **Terminar ahora** | Pagas exactamente 1 h 30 min: **$0.60**. | Te vuelven $0.60 |
+| O bien: dejas que se acaben las 3 horas | El alquiler termina solo. Pagas $1.20. | No te vuelve nada |
+
+Las reglas:
+
+- **Facturación al segundo.** El cargo mínimo es de 1 minuto.
+- **Nunca pagas más de lo que se reservó.**
+- **Terminar antes no cuesta nada.** El tiempo no usado vuelve directamente a tus créditos.
+- **¿Necesitas más tiempo?** Haz clic en **Añadir horas** en **Alquileres Actuales** antes de que se acabe tu tiempo. Se reservan más créditos y la misma clave API sigue funcionando.
+
+## Si la GPU se desconecta
+
+Si la máquina del proveedor deja de responder durante **10 minutos**, el alquiler termina solo. Pagas solo hasta el momento en que se desconectó, y el resto vuelve a tus créditos. Recibes una notificación cuando esto pasa.
+
+## Dónde ver tu dinero
+
+- **Panel → Pagos** muestra lo que tienes disponible, lo que está reservado para alquileres en curso y un historial de cada recarga, alquiler y reembolso.
+- **Panel → Historial de Alquiler** muestra tus alquileres terminados.
+- **El botón naranja de la cabecera** siempre muestra tus créditos disponibles. Haz clic en él para añadir más.
+
+## Algo salió mal con un alquiler
+
+En **Alquileres Actuales** o en **Historial de Alquiler**, haz clic en **Reportar un problema** junto al alquiler. Se abre un ticket de soporte con el alquiler ya indicado. Describe lo que pasó, por ejemplo:
+
+> Alquiler n.º 1042 de "RTX 4090 · qwen2.5 7B". De 14:10 a 14:35 todas las solicitudes devolvieron `provider_offline`, pero el alquiler siguió en curso. Por favor, revisen si me corresponde un reembolso por ese tiempo.
+
+Te respondemos por email. Si vemos que ese tiempo no se pudo usar, te lo reembolsamos en créditos.
+
+<Aside type="caution" title="Habla con nosotros antes de reclamar un pago con tarjeta">
+Si reclamas un pago de GPUFlow ante tu banco, el importe reclamado se descuenta de tus créditos y tu cuenta queda suspendida hasta que se resuelva la reclamación. Abrir antes un ticket de soporte casi siempre es más rápido.
+</Aside>

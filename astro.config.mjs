@@ -256,30 +256,105 @@ const analyticsPlugin = {
 };
 
 // https://astro.build/config
+//
+// English lives at the root (/providers/...), every other language under its
+// own prefix (/de/providers/...). The app links to the same prefix as the
+// language the visitor is using. Keep LOCALES in step with the app's
+// app/i18n.ts supportedLngs.
+const LOCALES = {
+  root: { label: "English", lang: "en" },
+  de: { label: "Deutsch", lang: "de" },
+  es: { label: "Español", lang: "es" },
+  fr: { label: "Français", lang: "fr" },
+  ja: { label: "日本語", lang: "ja" },
+  ko: { label: "한국어", lang: "ko" },
+  "zh-cn": { label: "简体中文", lang: "zh-CN" },
+  "zh-tw": { label: "繁體中文", lang: "zh-TW" },
+  "pt-br": { label: "Português (Brasil)", lang: "pt-BR" },
+  ru: { label: "Русский", lang: "ru" },
+  he: { label: "עברית", lang: "he", dir: "rtl" },
+  ar: { label: "العربية", lang: "ar", dir: "rtl" },
+  hi: { label: "हिन्दी", lang: "hi" },
+};
+
+const SIDEBAR_LABELS = {
+  renters: {
+    de: "GPU mieten", es: "Alquilar una GPU", fr: "Louer un GPU", ja: "GPU をレンタルする",
+    ko: "GPU 대여하기", "zh-CN": "租用 GPU", "zh-TW": "租用 GPU", "pt-BR": "Alugar uma GPU",
+    ru: "Аренда GPU", he: "שכירת GPU", ar: "استئجار وحدة GPU", hi: "GPU किराये पर लेना",
+  },
+  providers: {
+    de: "GPU vermieten", es: "Ofrecer tu GPU", fr: "Proposer votre GPU", ja: "GPU を提供する",
+    ko: "GPU 제공하기", "zh-CN": "提供 GPU", "zh-TW": "提供 GPU", "pt-BR": "Oferecer sua GPU",
+    ru: "Сдача GPU в аренду", he: "השכרת ה-GPU שלכם", ar: "تأجير وحدة GPU الخاصة بك", hi: "अपना GPU किराये पर देना",
+  },
+};
+
+// Old addresses that search engines and other sites still link to.
+const REDIRECTS = {
+  "/renters/how-to-rent-gpu": "/renters/getting-started/",
+  "/renters/wallet-setup": "/renters/billing/",
+  "/renters/access-methods": "/renters/api-quickstart/",
+  "/renters/wireguard-client": "/renters/api-quickstart/",
+  "/renters/use-cases": "/renters/api-quickstart/",
+  "/providers/configuration/account-setup": "/providers/getting-started/",
+  "/providers/configuration/creating-listings": "/providers/creating-listings/",
+  "/providers/configuration/security-best-practices": "/providers/security/",
+  "/providers/configuration/wallet-management": "/providers/getting-paid/",
+  "/providers/configuration/windows-automation": "/providers/getting-started/",
+  "/providers/installation/linux/nvidia": "/providers/getting-started/",
+  "/providers/installation/linux/amd": "/providers/getting-started/",
+  "/providers/installation/linux/container-runtime/podman-nvidia": "/providers/getting-started/",
+  "/providers/installation/windows/nvidia": "/providers/getting-started/",
+  "/providers/installation/windows/amd": "/providers/getting-started/",
+  "/providers/networking/wireguard-p2p": "/providers/security/",
+  "/providers/operations/performance-monitoring": "/providers/getting-started/",
+  "/providers/monitoring-performance": "/providers/getting-started/",
+  "/providers/optimization-tips": "/providers/pricing/",
+  "/providers/renter-communications": "/providers/creating-listings/",
+  "/providers/troubleshooting-linux": "/providers/troubleshooting/",
+  "/providers/troubleshooting-windows": "/providers/troubleshooting/",
+};
+
 export default defineConfig({
   site: "https://docs.gpuflow.app",
+  trailingSlash: "always",
+  redirects: REDIRECTS,
   integrations: [
-    sitemap(),
+    sitemap({
+      i18n: {
+        defaultLocale: "en",
+        locales: Object.fromEntries(
+          Object.entries(LOCALES).map(([key, { lang }]) => [
+            key === "root" ? "en" : key,
+            lang,
+          ]),
+        ),
+      },
+    }),
     starlight({
-      title: "GPUFlow Documentation",
+      title: {
+        en: "GPUFlow Docs",
+        de: "GPUFlow Doku",
+        es: "Documentación de GPUFlow",
+        fr: "Documentation GPUFlow",
+        ja: "GPUFlow ドキュメント",
+        ko: "GPUFlow 문서",
+        "zh-CN": "GPUFlow 文档",
+        "zh-TW": "GPUFlow 文件",
+        "pt-BR": "Documentação do GPUFlow",
+        ru: "Документация GPUFlow",
+        he: "תיעוד GPUFlow",
+        ar: "توثيق GPUFlow",
+        hi: "GPUFlow दस्तावेज़",
+      },
+      defaultLocale: "root",
+      locales: LOCALES,
       components: {
         Head: "./src/components/Head.astro",
       },
       head: [
-        {
-          tag: "meta",
-          attrs: { property: "og:site_name", content: "GPUFlow Documentation" },
-        },
-        { tag: "meta", attrs: { name: "twitter:card", content: "summary" } },
-        { tag: "meta", attrs: { name: "theme-color", content: "#6366f1" } },
-        {
-          tag: "script",
-          attrs: {
-            src: "https://anal.gpuflow.app/api/script.js",
-            "data-site-id": "YOUR_DOCS_SITE_ID",
-            defer: true,
-          },
-        },
+        { tag: "meta", attrs: { name: "theme-color", content: "#f97316" } },
       ],
       social: [
         {
@@ -292,8 +367,7 @@ export default defineConfig({
       plugins: [
         starlightPageActions({
           prompt:
-            "You are a technical assistant helping the user understand the GPU Marketplace GpuFlow.app. Read {url} and summarize the most important concepts.",
-          baseUrl: "https://docs.gpuflow.app/",
+            "You are helping someone use GPUFlow (gpuflow.app), a marketplace where people rent GPUs by the hour through an OpenAI-compatible API, or rent out their own GPU. Read {url} and explain the steps it describes.",
           actions: {
             markdown: false,
             share: true,
@@ -301,142 +375,51 @@ export default defineConfig({
           },
         }),
         starlightLlmsTxt({
-          // Core Identity
           projectName: "GPUFlow",
-
-          // Description shown in llms.txt after title
-          description: `GPUFlow is a decentralized GPU rental marketplace that connects GPU owners with users who need computational resources. It creates a peer-to-peer marketplace for GPU computing power, enabling affordable access to high-performance GPUs worldwide for AI training, cryptocurrency mining, 3D rendering, and more. Built on Web3 technology.`,
-
-          // Additional context for LLMs
+          description:
+            "GPUFlow (gpuflow.app) is a marketplace where people rent GPUs by the hour from other people. A renter adds credits by card, rents a GPU for a number of hours and gets an OpenAI-compatible API key for it. A provider runs one command on a Linux machine with a GPU, lists it with an hourly price, and cashes out earnings to a bank account through Stripe.",
           details: `
-## Key Concepts
+## Key facts
 
-- **GPU Providers**: Users who list their GPUs to earn passive income by renting out computational resources
-- **GPU Renters**: Users who pay to access GPU power for AI/ML training, mining, rendering, or gaming
-- **Web3 Integration**: Multi-wallet support and cryptocurrency payments
-- **WireGuard P2P**: Secure peer-to-peer networking between renters and provider hardware
-
-## Platform Components
-
-- Provider Software: Application that GPU owners install to list and manage their hardware (supports Linux and Windows, NVIDIA and AMD GPUs)
-- Container Runtime: Podman/Docker-based isolation for secure GPU access
-- Web Terminal: Browser-based development environment for renters
-- WireGuard VPN: Encrypted P2P connections between renters and GPU hardware
-
-## Supported Hardware
-
-- **NVIDIA GPUs**: Full support on Linux and Windows
-- **AMD GPUs**: Full support on Linux and Windows
-- **Container Runtimes**: Podman (recommended) and Docker
-
-## User Types
-
-1. **Providers**: GPU owners who install software, configure networking, create listings, and earn cryptocurrency
-2. **Renters**: Users who browse GPUs, connect wallets, rent hardware, and access via terminal or WireGuard
+- Renters pay with credits bought by card through Stripe ($10 to $500 per top-up, no fee). 1 credit = $0.01.
+- A rental holds credits for the hours booked (1 to 168 hours unless the listing says otherwise). Use is billed to the second with a 1-minute minimum; unused time goes back to the renter's credits when the rental ends.
+- A rental is an OpenAI-compatible API: base URL https://gpuflow.app/v1, key starting with gfk_, endpoints /v1/models and /v1/chat/completions (streaming supported). No SSH, shell or VPN.
+- If the provider's machine is offline for 10 minutes, the rental ends and the renter pays only until it went offline.
+- Providers install the agent with one command on 64-bit Linux with systemd (NVIDIA tested; AMD through Ollama's ROCm support). No Docker, no open ports.
+- GPUFlow keeps a 12% fee from each rental. Earnings are held 7 days (14 days for accounts younger than 30 days), then can be cashed out: minimum $25, $2.50 fee per cash-out, to a bank account through Stripe in the US, Canada, the UK, Switzerland and the European Economic Area.
+- The documentation is available in 13 languages; English is at the root, other languages under /de/, /es/, /fr/, /ja/, /ko/, /zh-cn/, /zh-tw/, /pt-br/, /ru/, /he/, /ar/, /hi/.
           `.trim(),
-
-          // Optional external resources
           optionalLinks: [
             {
-              label: "GPUFlow Platform",
-              url: "https://gpuflow.app",
-              description: "Main GPUFlow application and marketplace",
-            },
-            {
-              label: "GitHub Repository",
-              url: "https://github.com/kixago/gpuflow-docs",
-              description:
-                "Documentation source code and contribution guidelines",
+              label: "GPUFlow marketplace",
+              url: "https://gpuflow.app/en/marketplace",
+              description: "Browse GPUs for rent",
             },
           ],
-
-          // Documentation subsets based on your actual structure
           customSets: [
             {
-              label: "Provider Documentation",
+              label: "Renting a GPU",
               description:
-                "Complete guide for GPU providers - installation, configuration, networking, operations, and troubleshooting for both Linux and Windows with NVIDIA and AMD GPU support",
-              paths: ["providers/**"],
-            },
-            {
-              label: "Renter Documentation",
-              description:
-                "Complete guide for GPU renters - getting started, how to rent, wallet setup, access methods, WireGuard client setup, use cases, and troubleshooting",
+                "Create an account, add credits, rent a GPU, use the API key, billing and refunds, fixing errors",
               paths: ["renters/**"],
             },
             {
-              label: "Installation Guides",
+              label: "Providing a GPU",
               description:
-                "Step-by-step installation instructions for provider software on Linux and Windows for both NVIDIA and AMD GPUs, including container runtime setup",
-              paths: ["providers/installation/**"],
-            },
-            {
-              label: "Provider Configuration",
-              description:
-                "Account setup, wallet management, creating GPU listings, and security best practices for providers",
-              paths: ["providers/configuration/**"],
-            },
-            {
-              label: "Networking & Connectivity",
-              description:
-                "WireGuard P2P setup for providers and WireGuard client configuration for renters",
-              paths: ["providers/networking/**", "renters/wireguard-client"],
-            },
-            {
-              label: "Troubleshooting",
-              description:
-                "Troubleshooting guides for providers (Linux and Windows) and renters",
-              paths: ["providers/troubleshooting-*", "renters/troubleshooting"],
-            },
-            {
-              label: "Security",
-              description:
-                "Security best practices and wallet management documentation",
-              paths: [
-                "providers/configuration/security-best-practices",
-                "providers/configuration/wallet-management",
-              ],
+                "Put a Linux GPU machine online, create a listing, price it, get paid, security, fixing problems",
+              paths: ["providers/**"],
             },
           ],
-
-          // Pages to show first in output files
           promote: [
-            "index", // Homepage
-            "providers/getting-started", // Provider getting started
-            "renters/getting-started", // Renter getting started
-            "renters/how-to-rent-gpu", // Core renter workflow
-            "providers/configuration/account-setup", // First config step
+            "index",
+            "renters/getting-started",
+            "renters/api-quickstart",
+            "providers/getting-started",
+            "providers/pricing",
           ],
-
-          // Pages to show last in output files
-          demote: [
-            "providers/troubleshooting-*", // Troubleshooting at the end
-            "renters/troubleshooting", // Troubleshooting at the end
-          ],
-
-          // Pages to exclude from small context version
-          exclude: [
-            "providers/troubleshooting-*", // Detailed troubleshooting
-            "renters/troubleshooting", // Detailed troubleshooting
-          ],
-
-          // Minification settings for llms-small.txt
-          minify: {
-            note: true, // Exclude notes (supplementary info)
-            tip: true, // Exclude tips (nice-to-have)
-            caution: false, // KEEP caution (important for hardware/wallet safety)
-            danger: false, // KEEP danger (critical warnings)
-            details: true, // Exclude collapsible details
-            whitespace: true, // Collapse whitespace
-
-            // Custom elements to exclude (adjust based on your actual components)
-            customSelectors: [".edit-on-github", ".page-navigation"],
-          },
-
-          // Page separator in concatenated files
+          demote: ["renters/troubleshooting", "providers/troubleshooting"],
+          minify: { whitespace: true },
           pageSeparator: "\n\n---\n\n",
-
-          // Set to false since you're using MDX without framework components
           rawContent: false,
         }),
         externalLinksPlugin,
@@ -444,24 +427,14 @@ export default defineConfig({
       ],
       sidebar: [
         {
-          label: "GPU Providers",
-          autogenerate: { directory: "providers" },
-        },
-        {
-          label: "GPU Renters",
+          label: "Renting a GPU",
+          translations: SIDEBAR_LABELS.renters,
           autogenerate: { directory: "renters" },
         },
         {
-          label: "Developers",
-          autogenerate: { directory: "developers" },
-        },
-        {
-          label: "Guides",
-          autogenerate: { directory: "guides" },
-        },
-        {
-          label: "Reference",
-          autogenerate: { directory: "reference" },
+          label: "Providing a GPU",
+          translations: SIDEBAR_LABELS.providers,
+          autogenerate: { directory: "providers" },
         },
       ],
     }),
