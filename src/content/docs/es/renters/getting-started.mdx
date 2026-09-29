@@ -13,6 +13,7 @@ import market from '../../../../assets/screens/es/renter-marketplace.png';
 import rent from '../../../../assets/screens/es/renter-rent.png';
 import key from '../../../../assets/screens/es/renter-key.png';
 import notify from '../../../../assets/screens/es/renter-notify.png';
+import rate from '../../../../assets/screens/es/renter-rate.png';
 import { Image } from 'astro:assets';
 
 Alquilar una GPU en GPUFlow lleva unos cinco minutos. Necesitas una dirección de email y una tarjeta de pago.
@@ -109,3 +110,29 @@ Las GPUs cuyo dueño está desconectado aparecen en la sección amarilla **Dispo
 - Recibes un email y una notificación (la campana de la cabecera) en cuanto esa GPU se conecta.
 - Al dueño se le avisa de que alguien está esperando su GPU.
 - ¿Cambiaste de idea? Haz clic otra vez en el botón (ahora dice **Recibirás un aviso**) para dejar de esperar.
+
+## Valora tu alquiler
+
+Cuando termina un alquiler, puedes valorarlo. Tu valoración ayuda a otros inquilinos a elegir y ayuda a que los buenos proveedores consigan alquileres.
+
+<Steps>
+
+1. Abre **Panel → Historial de Alquiler**.
+2. Busca el alquiler y haz clic en **Valorar este alquiler**.
+3. Elige de 1 a 5 estrellas. El comentario es opcional.
+4. Haz clic en **Publicar reseña**.
+
+</Steps>
+
+<Image src={rate} alt="La ventana de valoración con las estrellas, el cuadro de comentario y el botón Publicar reseña resaltados" />
+
+Un comentario útil cuenta para qué usaste la GPU y qué tal fue. Por ejemplo:
+
+> La usé unas dos horas con qwen2.5:7b. Respondía rápido y no se cortó ni una vez. Estaban todos los modelos que decía la descripción.
+
+Conviene saber:
+
+- Puedes valorar un alquiler durante 30 días después de que termine, si te costó algo.
+- Puedes cambiar tu reseña durante 14 días después de publicarla. Haz clic en **Editar reseña** en **Historial de Alquiler**.
+- Tu reseña muestra tu nombre de usuario de GPUFlow. Tu dirección de email no aparece.
+- El proveedor puede responder públicamente debajo de tu reseña. Recibes una notificación cuando lo hace.

@@ -13,6 +13,7 @@ import market from '../../../../assets/screens/zh-tw/renter-marketplace.png';
 import rent from '../../../../assets/screens/zh-tw/renter-rent.png';
 import key from '../../../../assets/screens/zh-tw/renter-key.png';
 import notify from '../../../../assets/screens/zh-tw/renter-notify.png';
+import rate from '../../../../assets/screens/zh-tw/renter-rate.png';
 import { Image } from 'astro:assets';
 
 在 GPUFlow 租用 GPU 大約需要五分鐘。您需要一個電子郵件地址和一張信用卡或簽帳金融卡。
@@ -109,3 +110,29 @@ GPUFlow 會立刻寄一封電子郵件給您。打開郵件，點擊裡面的連
 - 那張 GPU 一上線，您就會收到電子郵件和通知（頁首的鈴鐺圖示）。
 - 擁有者會收到通知，得知有人在等他的 GPU。
 - 改變主意了？再點擊一次該按鈕（此時會顯示 **上線時會通知你**）即可取消。
+
+## 為租用評分
+
+租用結束後，您可以為它評分。您的評分能幫助其他租用者做選擇，也能讓優質的提供者更容易被租用。
+
+<Steps>
+
+1. 打開 **儀表板 → 租用歷史**。
+2. 找到那筆租用，點擊 **為這次租用評分**。
+3. 點選 1 到 5 顆星。評論內容可以不填。
+4. 點擊 **發布評論**。
+
+</Steps>
+
+<Image src={rate} alt="評分視窗，星星、評論欄和「發布評論」按鈕已標示出來" />
+
+有幫助的評論會說明您用這張 GPU 做什麼，以及使用狀況如何。例如：
+
+> 用 qwen2.5:7b 跑了大概兩個小時，回應很快，中間都沒有斷線。描述裡寫的模型也都有。
+
+小提醒：
+
+- 租用結束後 30 天內，只要這筆租用有產生費用，您就可以評分。
+- 評論發布後 14 天內可以修改。請在 **租用歷史** 中點擊 **編輯評論**。
+- 您的評論會顯示您的 GPUFlow 使用者名稱，但不會顯示您的電子郵件地址。
+- 提供者可以在您的評論下方公開回覆。對方回覆時，您會收到通知。

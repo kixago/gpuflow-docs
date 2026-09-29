@@ -9,6 +9,7 @@ sidebar:
 import { Aside } from '@astrojs/starlight/components';
 import { Image } from 'astro:assets';
 import form from '../../../../assets/screens/fr/provider-list-gpu.png';
+import reply from '../../../../assets/screens/fr/provider-reply.png';
 
 Les locataires choisissent un GPU en quelques secondes. Un nom clair, le bon modèle et une courte description qui indique les modèles d'IA que vous proposez font la différence.
 
@@ -63,3 +64,18 @@ Votre annonce apparaît sur la place de marché :
 
 - dans la section verte **Accès Instantané Disponible** tant que votre machine est en ligne,
 - dans la section jaune **Disponible - Fournisseur Hors Ligne** quand elle est éteinte. Les locataires peuvent y cliquer sur **Me notifier quand en ligne**. Vous recevez un e-mail indiquant que quelqu'un attend, et ils en reçoivent un à votre retour.
+
+## Avis et réponses
+
+Après une location, le locataire peut noter votre GPU de 1 à 5 étoiles et laisser un commentaire. La note moyenne et le nombre d'avis s'affichent sur la page de votre annonce et sur sa carte dans la place de marché.
+
+- Vous recevez une notification (la cloche dans l'en-tête) pour chaque nouvel avis.
+- Ouvrez la page de votre annonce. Sous chaque avis se trouve un bouton **Répondre publiquement**. Tout le monde peut lire votre réponse. Vous pouvez la changer plus tard avec **Modifier la réponse**.
+
+<Image src={reply} alt="Un avis sur la page d'une annonce, avec l'avis et le bouton Répondre publiquement mis en évidence" />
+
+Une réponse courte et posée fonctionne le mieux, surtout sous un mauvais avis. Par exemple :
+
+> Merci pour votre retour. La machine a redémarré vers 14 h pour une mise à jour, c'est pour cela que la location s'est arrêtée plus tôt. Les mises à jour se font maintenant la nuit.
+
+Vous ne pouvez pas supprimer un avis vous-même. Si un avis est injurieux ou faux, ouvrez un ticket d'assistance avec un lien vers cet avis.

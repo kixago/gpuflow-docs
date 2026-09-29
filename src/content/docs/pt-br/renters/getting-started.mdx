@@ -13,6 +13,7 @@ import market from '../../../../assets/screens/pt-br/renter-marketplace.png';
 import rent from '../../../../assets/screens/pt-br/renter-rent.png';
 import key from '../../../../assets/screens/pt-br/renter-key.png';
 import notify from '../../../../assets/screens/pt-br/renter-notify.png';
+import rate from '../../../../assets/screens/pt-br/renter-rate.png';
 import { Image } from 'astro:assets';
 
 Alugar uma GPU no GPUFlow leva uns cinco minutos. Você precisa de um endereço de e-mail e de um cartão de pagamento.
@@ -109,3 +110,29 @@ As GPUs cujo dono está offline ficam na seção amarela **Disponível - Fornece
 - Você recebe um e-mail e uma notificação (o sino no cabeçalho) assim que essa GPU ficar online.
 - O dono fica sabendo que alguém está esperando pela GPU dele.
 - Mudou de ideia? Clique no botão de novo (agora ele diz **Você será avisado**) para cancelar.
+
+## Avalie seu aluguel
+
+Quando um aluguel termina, você pode avaliá-lo. Sua avaliação ajuda outros locatários a escolher e ajuda os bons provedores a serem alugados.
+
+<Steps>
+
+1. Abra **Painel → Histórico de Aluguéis**.
+2. Encontre o aluguel e clique em **Avaliar este aluguel**.
+3. Clique de 1 a 5 estrelas. O comentário é opcional.
+4. Clique em **Publicar avaliação**.
+
+</Steps>
+
+<Image src={rate} alt="A janela de avaliação com as estrelas, a caixa de comentário e o botão Publicar avaliação em destaque" />
+
+Um comentário útil diz para que você usou a GPU e como foi. Por exemplo:
+
+> Usei por umas duas horas com o qwen2.5:7b. Respostas rápidas e nenhuma queda. Todos os modelos da descrição estavam lá.
+
+É bom saber:
+
+- Você pode avaliar um aluguel por até 30 dias depois que ele termina, se ele custou alguma coisa para você.
+- Você pode alterar sua avaliação por até 14 dias depois de publicá-la. Clique em **Editar avaliação** em **Histórico de Aluguéis**.
+- Seu nome de usuário do GPUFlow aparece junto com a avaliação. Seu endereço de e-mail, não.
+- O provedor pode responder publicamente abaixo da sua avaliação. Você recebe uma notificação quando isso acontece.

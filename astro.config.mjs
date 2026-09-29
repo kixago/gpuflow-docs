@@ -385,6 +385,7 @@ export default defineConfig({
 - A rental holds credits for the hours booked (1 to 168 hours unless the listing says otherwise). Use is billed to the second with a 1-minute minimum; unused time goes back to the renter's credits when the rental ends.
 - A rental is an OpenAI-compatible API: base URL https://gpuflow.app/v1, key starting with gfk_, endpoints /v1/models and /v1/chat/completions (streaming supported). No SSH, shell or VPN.
 - If the provider's machine is offline for 10 minutes, the rental ends and the renter pays only until it went offline.
+- After a paid rental ends, the renter can rate it 1 to 5 stars with an optional comment (within 30 days, editable for 14 days). The average shows on the listing; the provider can reply publicly once per review.
 - Providers install the agent with one command on 64-bit Linux with systemd (NVIDIA tested; AMD through Ollama's ROCm support). No Docker, no open ports.
 - GPUFlow keeps a 12% fee from each rental. Earnings are held 7 days (14 days for accounts younger than 30 days), then can be cashed out: minimum $25, $2.50 fee per cash-out, to a bank account through Stripe in the US, Canada, the UK, Switzerland and the European Economic Area.
 - The documentation is available in 13 languages; English is at the root, other languages under /de/, /es/, /fr/, /ja/, /ko/, /zh-cn/, /zh-tw/, /pt-br/, /ru/, /he/, /ar/, /hi/.

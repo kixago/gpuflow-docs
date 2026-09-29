@@ -13,6 +13,7 @@ import market from '../../../assets/screens/en/renter-marketplace.png';
 import rent from '../../../assets/screens/en/renter-rent.png';
 import key from '../../../assets/screens/en/renter-key.png';
 import notify from '../../../assets/screens/en/renter-notify.png';
+import rate from '../../../assets/screens/en/renter-rate.png';
 import { Image } from 'astro:assets';
 
 Renting a GPU on GPUFlow takes about five minutes. You need an email address and a payment card.
@@ -109,3 +110,29 @@ GPUs whose owner is offline are in the yellow **Available - Provider Offline** s
 - You get an email and a notification (the bell in the header) as soon as that GPU comes online.
 - The owner is told that someone is waiting for their GPU.
 - Changed your mind? Click the button again (it now says **You'll be notified**) to stop.
+
+## Rate your rental
+
+When a rental ends, you can rate it. Your rating helps other renters choose, and it helps good providers get rented.
+
+<Steps>
+
+1. Open **Dashboard → Rental History**.
+2. Find the rental and click **Rate this rental**.
+3. Click 1 to 5 stars. A comment is optional.
+4. Click **Post review**.
+
+</Steps>
+
+<Image src={rate} alt="The rating window with the stars, the comment box and the Post review button highlighted" />
+
+A useful comment says what you used the GPU for and how it went. For example:
+
+> Used it for about two hours with qwen2.5:7b. Fast answers and no drops. The models in the description were all there.
+
+Good to know:
+
+- You can rate a rental for 30 days after it ends, if it cost you something.
+- You can change your review for 14 days after you post it. Click **Edit review** in **Rental History**.
+- Your GPUFlow username is shown with your review. Your email address is not.
+- The provider can reply publicly under your review. You get a notification when they do.

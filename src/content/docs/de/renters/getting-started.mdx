@@ -13,6 +13,7 @@ import market from '../../../../assets/screens/de/renter-marketplace.png';
 import rent from '../../../../assets/screens/de/renter-rent.png';
 import key from '../../../../assets/screens/de/renter-key.png';
 import notify from '../../../../assets/screens/de/renter-notify.png';
+import rate from '../../../../assets/screens/de/renter-rate.png';
 import { Image } from 'astro:assets';
 
 Eine GPU bei GPUFlow zu mieten dauert etwa fünf Minuten. Sie brauchen eine E-Mail-Adresse und eine Zahlungskarte.
@@ -109,3 +110,29 @@ GPUs, deren Besitzer offline ist, stehen im gelben Bereich **Verfügbar - Anbiet
 - Sobald diese GPU online ist, bekommen Sie eine E-Mail und eine Benachrichtigung (die Glocke in der Kopfzeile).
 - Der Besitzer erfährt, dass jemand auf seine GPU wartet.
 - Doch kein Interesse mehr? Klicken Sie erneut auf die Schaltfläche (sie heißt jetzt **Sie werden benachrichtigt**), um die Benachrichtigung abzubestellen.
+
+## Ihre Miete bewerten
+
+Wenn eine Miete beendet ist, können Sie sie bewerten. Ihre Bewertung hilft anderen Mietern bei der Wahl, und sie hilft guten Anbietern, Mieter zu finden.
+
+<Steps>
+
+1. Öffnen Sie **Dashboard → Mietverlauf**.
+2. Suchen Sie die Miete und klicken Sie auf **Diese Miete bewerten**.
+3. Klicken Sie auf 1 bis 5 Sterne. Ein Kommentar ist optional.
+4. Klicken Sie auf **Bewertung veröffentlichen**.
+
+</Steps>
+
+<Image src={rate} alt="Das Bewertungsfenster mit den Sternen, dem Kommentarfeld und der Schaltfläche Bewertung veröffentlichen hervorgehoben" />
+
+Ein hilfreicher Kommentar sagt, wofür Sie die GPU genutzt haben und wie es lief. Zum Beispiel:
+
+> Etwa zwei Stunden mit qwen2.5:7b genutzt. Schnelle Antworten, keine Abbrüche. Alle Modelle aus der Beschreibung waren vorhanden.
+
+Gut zu wissen:
+
+- Sie können eine Miete bis 30 Tage nach ihrem Ende bewerten, sofern sie Sie etwas gekostet hat.
+- Ihre Bewertung können Sie bis 14 Tage nach der Veröffentlichung ändern. Klicken Sie dazu im **Mietverlauf** auf **Bewertung bearbeiten**.
+- Zu Ihrer Bewertung wird Ihr GPUFlow-Benutzername angezeigt, Ihre E-Mail-Adresse nicht.
+- Der Anbieter kann unter Ihrer Bewertung öffentlich antworten. Sie bekommen dann eine Benachrichtigung.

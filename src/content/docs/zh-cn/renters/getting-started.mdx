@@ -13,6 +13,7 @@ import market from '../../../../assets/screens/zh-cn/renter-marketplace.png';
 import rent from '../../../../assets/screens/zh-cn/renter-rent.png';
 import key from '../../../../assets/screens/zh-cn/renter-key.png';
 import notify from '../../../../assets/screens/zh-cn/renter-notify.png';
+import rate from '../../../../assets/screens/zh-cn/renter-rate.png';
 import { Image } from 'astro:assets';
 
 在 GPUFlow 上租用 GPU 大约需要五分钟。您需要一个电子邮件地址和一张银行卡。
@@ -109,3 +110,29 @@ GPUFlow 会立即给您发送一封邮件。打开邮件，点击其中的链接
 - 这块 GPU 一上线，您就会收到一封邮件和一条通知（页眉中的铃铛）。
 - 所有者会收到通知，得知有人在等他们的 GPU。
 - 改主意了？再点一次这个按钮（此时显示为 **上线时会通知你**）即可取消。
+
+## 为租用评分
+
+租用结束后，您可以为它评分。您的评分能帮助其他租用者做选择，也能让好的提供者更容易被租用。
+
+<Steps>
+
+1. 打开 **仪表板 → 租用历史**。
+2. 找到这次租用，点击 **为此次租用评分**。
+3. 点击 1 到 5 颗星。评论可以不写。
+4. 点击 **发布评论**。
+
+</Steps>
+
+<Image src={rate} alt="评分窗口，星级、评论框和“发布评论”按钮已高亮" />
+
+有用的评论会写明您用这块 GPU 做了什么，以及用得怎么样。例如：
+
+> 用 qwen2.5:7b 跑了大概两个小时，响应很快，中间没有断过。描述里写的模型都能用。
+
+需要了解的几点：
+
+- 租用结束后 30 天内可以评分，前提是这次租用产生了费用。
+- 评论发布后 14 天内可以修改。在 **租用历史** 中点击 **编辑评论**。
+- 您的评论会显示您的 GPUFlow 用户名，不会显示您的电子邮件地址。
+- 提供者可以在您的评论下公开回复。回复时您会收到一条通知。

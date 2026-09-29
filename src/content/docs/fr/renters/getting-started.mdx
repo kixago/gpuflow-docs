@@ -13,6 +13,7 @@ import market from '../../../../assets/screens/fr/renter-marketplace.png';
 import rent from '../../../../assets/screens/fr/renter-rent.png';
 import key from '../../../../assets/screens/fr/renter-key.png';
 import notify from '../../../../assets/screens/fr/renter-notify.png';
+import rate from '../../../../assets/screens/fr/renter-rate.png';
 import { Image } from 'astro:assets';
 
 Louer un GPU sur GPUFlow prend environ cinq minutes. Il vous faut une adresse e-mail et une carte de paiement.
@@ -109,3 +110,29 @@ Les GPU dont le propriétaire est hors ligne se trouvent dans la section jaune *
 - Vous recevez un e-mail et une notification (la cloche dans l'en-tête) dès que ce GPU est en ligne.
 - Le propriétaire est prévenu que quelqu'un attend son GPU.
 - Vous avez changé d'avis ? Cliquez de nouveau sur le bouton (il affiche maintenant **Vous serez prévenu**) pour arrêter.
+
+## Noter votre location
+
+À la fin d'une location, vous pouvez la noter. Votre note aide les autres locataires à choisir, et elle aide les bons fournisseurs à être loués.
+
+<Steps>
+
+1. Ouvrez **Tableau de bord → Historique des locations**.
+2. Trouvez la location et cliquez sur **Noter cette location**.
+3. Cliquez sur 1 à 5 étoiles. Le commentaire est facultatif.
+4. Cliquez sur **Publier l'avis**.
+
+</Steps>
+
+<Image src={rate} alt="La fenêtre de notation avec les étoiles, le champ de commentaire et le bouton Publier l'avis mis en évidence" />
+
+Un commentaire utile dit à quoi vous avez utilisé le GPU et comment cela s'est passé. Par exemple :
+
+> Utilisé environ deux heures avec qwen2.5:7b. Réponses rapides, aucune coupure. Tous les modèles de la description étaient bien là.
+
+Bon à savoir :
+
+- Vous pouvez noter une location pendant 30 jours après sa fin, si elle vous a coûté quelque chose.
+- Vous pouvez modifier votre avis pendant 14 jours après l'avoir publié. Cliquez sur **Modifier l'avis** dans **Historique des locations**.
+- Votre nom d'utilisateur GPUFlow s'affiche avec votre avis. Votre adresse e-mail, non.
+- Le fournisseur peut répondre publiquement sous votre avis. Vous recevez alors une notification.
