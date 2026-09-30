@@ -4,6 +4,16 @@ https://:project.pages.dev/*
 https://:version.:project.pages.dev/*
   X-Robots-Tag: noindex
 
+# Browser security headers: HTTPS only (not for subdomains), never framed by
+# another site, no shared window with pop-ups from other origins, and no
+# guessing of file types.
+/*
+  Strict-Transport-Security: max-age=31536000
+  X-Frame-Options: DENY
+  Cross-Origin-Opener-Policy: same-origin
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+
 # Astro fingerprints everything in /_astro/ (the name changes when the file
 # does), so browsers may keep it for a year without asking again.
 /_astro/*

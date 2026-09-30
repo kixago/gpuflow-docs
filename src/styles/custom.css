@@ -23,10 +23,8 @@
  * These HSL values have been adjusted for a "burnt orange" theme.
  * (Less saturation and lightness than the previous vibrant orange).
 */
-[data-theme="dark"] {
-  --sl-color-accent-low: hsl(
-    25 75% 45% / 0.2
-  ); /* A semi-transparent BURNT ORANGE for highlights */
+[data-theme='dark'] {
+  --sl-color-accent-low: hsl(25 75% 45% / 0.2); /* A semi-transparent BURNT ORANGE for highlights */
   --sl-color-accent: hsl(25 80% 50%);
   --sl-color-accent-high: hsl(25 80% 60%);
   /* Links, site title and dark-text buttons: 6.4:1 on the page, 5.5:1 on
@@ -40,10 +38,10 @@
  * This is the targeted fix for the active sidebar link in DARK MODE.
  * It forces the text to be white so it's readable against the orange highlight.
 */
-[data-theme="dark"] .sidebar a[aria-current="page"] {
+[data-theme='dark'] .sidebar a[aria-current="page"] {
   background-color: var(--sl-color-accent-low);
   /* Force the text color to be nearly pure white. The !important ensures this rule wins. */
-  color: hsl(0 0% 98%) !important;
+  color: hsl(0 0% 98%) !important; 
   font-weight: 600;
 }
 /*
