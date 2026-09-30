@@ -3,3 +3,8 @@ https://:project.pages.dev/*
 
 https://:version.:project.pages.dev/*
   X-Robots-Tag: noindex
+
+# Astro fingerprints everything in /_astro/ (the name changes when the file
+# does), so browsers may keep it for a year without asking again.
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
