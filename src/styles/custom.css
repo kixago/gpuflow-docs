@@ -9,9 +9,12 @@
 */
 :root {
   --sl-color-accent-low: hsl(24.6 95% 53.1% / 0.15);
-  --sl-color-accent: hsl(24.6 95% 45%);
+  /* Starlight uses this for links, the site title and the text of the
+     sidebar's current page, and as the background of white-text buttons.
+     36% lightness is the brightest orange that clears the WCAG AA 4.5:1
+     contrast ratio on both white (5.3:1) and the grey header (4.9:1). */
+  --sl-color-accent: hsl(24.6 95% 36%);
   --sl-color-accent-high: hsl(24.6 95% 53.1%);
-  --sl-color-text-accent: hsl(24.6 95% 53.1%);
 }
 /*
  * =================================================================
@@ -20,11 +23,15 @@
  * These HSL values have been adjusted for a "burnt orange" theme.
  * (Less saturation and lightness than the previous vibrant orange).
 */
-[data-theme='dark'] {
-  --sl-color-accent-low: hsl(25 75% 45% / 0.2); /* A semi-transparent BURNT ORANGE for highlights */
+[data-theme="dark"] {
+  --sl-color-accent-low: hsl(
+    25 75% 45% / 0.2
+  ); /* A semi-transparent BURNT ORANGE for highlights */
   --sl-color-accent: hsl(25 80% 50%);
   --sl-color-accent-high: hsl(25 80% 60%);
-  --sl-color-text-accent: hsl(25 75% 45%);
+  /* Links, site title and dark-text buttons: 6.4:1 on the page, 5.5:1 on
+     the header. The old 45% lightness failed on the header (3.8:1). */
+  --sl-color-text-accent: hsl(25 80% 56%);
 }
 /*
  * =================================================================
@@ -33,10 +40,10 @@
  * This is the targeted fix for the active sidebar link in DARK MODE.
  * It forces the text to be white so it's readable against the orange highlight.
 */
-[data-theme='dark'] .sidebar a[aria-current="page"] {
+[data-theme="dark"] .sidebar a[aria-current="page"] {
   background-color: var(--sl-color-accent-low);
   /* Force the text color to be nearly pure white. The !important ensures this rule wins. */
-  color: hsl(0 0% 98%) !important; 
+  color: hsl(0 0% 98%) !important;
   font-weight: 600;
 }
 /*
