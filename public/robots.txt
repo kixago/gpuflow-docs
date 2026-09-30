@@ -1,7 +1,8 @@
 User-agent: *
 Allow: /
 
-Disallow: /_astro/
 Disallow: /pagefind/
+# Raw Markdown copies of the pages (starlight-page-actions); the HTML page is the one to index
+Disallow: /*.md$
 
 Sitemap: https://docs.gpuflow.app/sitemap-index.xml

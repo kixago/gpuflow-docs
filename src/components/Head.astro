@@ -1,6 +1,7 @@
 ---
 // Starlight's head plus: an x-default language link (English), breadcrumb
-// structured data in the page's language, and the site analytics script.
+// structured data in the page's language, the site analytics script, and
+// noindex on the 404 page, which Starlight gives a canonical and hreflang links.
 import Default from '@astrojs/starlight/components/Head.astro';
 
 const route = Astro.locals.starlightRoute;
@@ -24,6 +25,7 @@ const breadcrumbs = {
 ---
 
 <Default><slot /></Default>
+{route.id === '404' && <meta name="robots" content="noindex" />}
 <link rel="alternate" hreflang="x-default" href={englishUrl} />
 <script type="application/ld+json" set:html={JSON.stringify(breadcrumbs)} />
 <script src="https://anal.gpuflow.app/api/script.js" data-site-id="5cede7db7be6" defer></script>

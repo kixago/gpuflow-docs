@@ -4,6 +4,8 @@ import starlightPageActions from "starlight-page-actions";
 import sitemap from "@astrojs/sitemap";
 import starlightLlmsTxt from "starlight-llms-txt";
 import { defineConfig } from "astro/config";
+import { execFileSync } from "node:child_process";
+import { writeFile } from "node:fs/promises";
 
 /**
  * @type {import('@astrojs/starlight/types').StarlightPlugin}
@@ -316,12 +318,60 @@ const REDIRECTS = {
   "/providers/troubleshooting-windows": "/providers/troubleshooting/",
 };
 
+// A static build turns `redirects` into meta-refresh pages served with 200.
+// Cloudflare Pages applies _redirects before static files, so these become
+// real 301s; the pages stay as a fallback for other hosts.
+const cloudflareRedirects = {
+  name: "cloudflare-redirects",
+  hooks: {
+    "astro:build:done": async ({ dir }) => {
+      const lines = Object.entries(REDIRECTS).flatMap(([from, to]) => [
+        `${from} ${to} 301`,
+        `${from}/ ${to} 301`,
+      ]);
+      await writeFile(new URL("_redirects", dir), `${lines.join("\n")}\n`);
+    },
+  },
+};
+
+// Last commit date of each docs page, keyed by URL path, for the sitemap's
+// <lastmod>. A shallow clone (Cloudflare Pages' default) has only the newest
+// commit and would date every page to it, so give no dates rather than wrong ones.
+function docsLastModified() {
+  const git = (...args) =>
+    execFileSync("git", args, { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] });
+  const dates = new Map();
+  try {
+    if (git("rev-parse", "--is-shallow-repository").trim() !== "false") return dates;
+    let date;
+    for (const line of git("log", "--format=%x00%cI", "--name-only", "--", "src/content/docs").split("\n")) {
+      if (line.startsWith("\0")) date = line.slice(1);
+      else if (/\.mdx?$/.test(line)) {
+        const slug = line.replace(/^src\/content\/docs\//, "").replace(/\.mdx?$/, "").replace(/(^|\/)index$/, "");
+        const path = slug ? `/${slug}/` : "/";
+        // git log lists newest first, so the first date seen is the latest.
+        if (!dates.has(path)) dates.set(path, date);
+      }
+    }
+  } catch {
+    // Not a git checkout: leave lastmod out.
+  }
+  return dates;
+}
+const LAST_MODIFIED = docsLastModified();
+
 export default defineConfig({
   site: "https://docs.gpuflow.app",
   trailingSlash: "always",
   redirects: REDIRECTS,
   integrations: [
+    cloudflareRedirects,
     sitemap({
+      serialize(item) {
+        const lastmod = LAST_MODIFIED.get(new URL(item.url).pathname);
+        if (lastmod) item.lastmod = lastmod;
+        return item;
+      },
       i18n: {
         defaultLocale: "en",
         locales: Object.fromEntries(
