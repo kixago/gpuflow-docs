@@ -7,13 +7,19 @@ sidebar:
 ---
 
 import { Aside } from '@astrojs/starlight/components';
+import Tip from '../../../../components/Tip.astro';
 
 ## Crédits
 
 - Vous payez vos locations avec des crédits. **1 crédit = $0.01.**
 - Vous achetez des crédits par carte dans **Tableau de bord → Paiements → Ajouter des crédits**. Le paiement passe par Stripe.
-- Chaque recharge est comprise **entre $10 et $500**. Il n'y a **pas de frais**.
 - Les crédits n'expirent pas.
+
+<Tip id="credits.limits">
+
+Chaque recharge va de %credits.topupMinUsd% à %credits.topupMaxUsd%, sans frais. Avec la validation en deux étapes activée, les locataires peuvent recharger jusqu'à %credits.topupLevel1Usd% en une fois à partir du niveau de locataire %credits.topupLevel1% et jusqu'à %credits.topupLevel2Usd% à partir du niveau %credits.topupLevel2% ([Niveaux et points](/fr/account/levels/)). Les comptes de moins de %credits.newAccountDays% jours peuvent recharger jusqu'à %credits.newAccountWeeklyUsd% au total tous les %credits.weeklyWindowDays% jours.
+
+</Tip>
 
 ## Ce qui se passe quand vous louez
 

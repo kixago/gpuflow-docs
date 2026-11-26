@@ -1,12 +1,13 @@
 ---
 title: 收款
-description: GPUFlow 提供者如何收款：12% 的平台費用、7 天的收益暫扣期、透過 Stripe 設定提領，以及提領到銀行帳戶（最低 $25，手續費 $2.50）。
+description: GPUFlow 提供者如何收款：%fees.platformPercent%% 的平台費用、%earnings.holdDays% 天的收益暫扣期、透過 Stripe 設定提領，以及提領到銀行帳戶（最低 %earnings.cashoutMinUsd%，手續費 %earnings.cashoutFeeUsd%）。
 sidebar:
   label: 收款
   order: 4
 ---
 
 import { Aside, Steps } from '@astrojs/starlight/components';
+import Tip from '../../../../components/Tip.astro';
 import { Image } from 'astro:assets';
 import setup from '../../../../assets/screens/zh-tw/provider-payout-setup.png';
 import cashout from '../../../../assets/screens/zh-tw/provider-cash-out.png';
@@ -15,14 +16,22 @@ import cashout from '../../../../assets/screens/zh-tw/provider-cash-out.png';
 
 <Steps>
 
-1. **租用結束**。租用者支付實際使用的時間。GPUFlow 收取 12%，其餘 88% 歸您。
-2. **您的收益會暫扣 7 天**。這筆收益會顯示在 **儀表板 → 支付** 的 **暫扣收益** 中。如果您的帳戶註冊未滿 30 天，暫扣期為 14 天。暫扣是為了防範信用卡盜刷和付款爭議。
+1. **租用結束**。租用者支付實際使用的時間。GPUFlow 收取 %fees.platformPercent%%，其餘 %fees.providerPercent%% 歸您。
+2. **您的收益會暫扣一段時間**。這筆收益會顯示在 **儀表板 → 支付** 的 **暫扣收益** 中。暫扣是為了防範信用卡盜刷和付款爭議。
 3. **收益變成可提領**。暫扣期結束後，收益會移到 **可提領**，您也會收到通知。
 4. **您提領款項**，透過我們的付款合作夥伴 Stripe 匯到您的銀行帳戶。
 
 </Steps>
 
 您也可以用收益來租用其他 GPU。用信用卡購買的額度可以消費，但不能提領。
+
+### 暫扣多久
+
+<Tip id="earnings.hold">
+
+收益暫扣 %earnings.holdDays% 天；帳戶註冊未滿 %earnings.newAccountAgeDays% 天時為 %earnings.newAccountHoldDays% 天。提供者等級 %earnings.shortHoldLevel% 以上、且帳戶註冊滿 %earnings.shortHoldMinAgeDays% 天時，暫扣期為 %earnings.shortHoldDays% 天。如果您和租用者的帳戶都註冊未滿 %earnings.newPairAgeDays% 天，暫扣期為 %earnings.newPairHoldDays% 天；GPUFlow 因可能涉及詐欺而審查的租用，最多可暫扣 %earnings.reviewHoldDays% 天。
+
+</Tip>
 
 ## 設定提領（只需一次）
 
@@ -49,15 +58,15 @@ Stripe 有時會先審核您的資料。通常只需幾分鐘，有時需要一�
 
 1. 打開 **儀表板 → 支付**。
 2. 在 **提領** 下方輸入金額，或保留已自動填入的全部金額。
-3. 查看下方那一行：它會顯示 $2.50 的手續費，以及您實際會收到的金額。
+3. 查看下方那一行：它會顯示 %earnings.cashoutFeeUsd% 的手續費，以及您實際會收到的金額。
 4. 點擊 **提領**。
 
 </Steps>
 
 <Image src={cashout} alt="「提領」區塊，金額欄位和「提領」按鈕已標示出來" />
 
-- **最低金額**：每次提領 $25。
-- **手續費**：每次提領 $2.50，不論金額多少。減少提領次數可以省下手續費。
+- **最低金額**：每次提領 %earnings.cashoutMinUsd%。
+- **手續費**：每次提領 %earnings.cashoutFeeUsd%，不論金額多少。減少提領次數可以省下手續費。
 - 款項會以美元匯到您的 Stripe 收款帳戶，再由 Stripe 撥入您的銀行帳戶。
 - 款項送出時，您會收到電子郵件和通知。如果提領未成功，全部金額會退回您的餘額。
 - 隨時可以透過 **在 Stripe 管理收款資料** 更改銀行資料。

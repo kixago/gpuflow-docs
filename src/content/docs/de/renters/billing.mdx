@@ -7,13 +7,19 @@ sidebar:
 ---
 
 import { Aside } from '@astrojs/starlight/components';
+import Tip from '../../../../components/Tip.astro';
 
 ## Credits
 
 - Sie bezahlen Mieten mit Credits. **1 Credit = $0.01.**
 - Credits kaufen Sie per Karte unter **Dashboard → Zahlungen → Credits aufladen**. Die Zahlung läuft über Stripe.
-- Jede Aufladung liegt zwischen **$10 und $500**. Es fällt **keine Gebühr** an.
 - Credits verfallen nicht.
+
+<Tip id="credits.limits">
+
+Jede Aufladung liegt zwischen %credits.topupMinUsd% und %credits.topupMaxUsd%, ohne Gebühr. Mit eingeschalteter Zwei-Faktor-Anmeldung können Mieter ab Mieter-Level %credits.topupLevel1% bis zu %credits.topupLevel1Usd% auf einmal aufladen und ab Level %credits.topupLevel2% bis zu %credits.topupLevel2Usd% ([Level und Punkte](/de/account/levels/)). Konten, die jünger als %credits.newAccountDays% Tage sind, können insgesamt bis zu %credits.newAccountWeeklyUsd% pro %credits.weeklyWindowDays% Tage aufladen.
+
+</Tip>
 
 ## Was bei einer Miete passiert
 

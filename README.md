@@ -1,87 +1,30 @@
-# GPUFlow Documentation
+# GPUFlow documentation
 
-Official documentation for [GPUFlow](https://gpuflow.app) - the decentralized GPU rental marketplace.
+Source of [docs.gpuflow.app](https://docs.gpuflow.app), the documentation for [GPUFlow](https://gpuflow.app): rent a GPU by the hour through an OpenAI-compatible API, or rent out your own.
 
-## About GPUFlow
+Built with [Astro Starlight](https://starlight.astro.build) and deployed by Cloudflare Pages on every push to `main`.
 
-GPUFlow connects GPU owners with users who need computational resources, creating a peer-to-peer marketplace for GPU computing power. Whether you're training AI models, mining cryptocurrency, or rendering 3D graphics, GPUFlow provides affordable access to high-performance GPUs worldwide.
+## Languages
 
-## Documentation Site
+All pages exist in 13 languages. English is at the root of `src/content/docs/`; every other language has its own folder (`de/`, `es/`, `fr/`, `ja/`, `ko/`, `zh-cn/`, `zh-tw/`, `pt-br/`, `ru/`, `he/`, `ar/`, `hi/`) with the same files and the same section order. Keep the languages in step with the app's `app/i18n.ts`.
 
-This repository contains the source code for our documentation website at [docs.gpuflow.app](https://docs.gpuflow.app).
+## Numbers come from the app
 
-## What You'll Find Here
+Fees, holds, top-up limits, rating windows, points, levels and name rules are never typed into a page. Pages write a token such as `%earnings.holdDays%` or `%credits.topupMaxUsd%`, and the build fills it from `https://gpuflow.app/api/limits.json` (`src/lib/limits.mjs`). The build fails if that file can't be fetched or a token doesn't exist, and Cloudflare Pages then keeps the last good build.
 
-### For GPU Providers
-- **Getting Started**: How to list your GPU and start earning
-- **Container Setup**: Installing and configuring the GPUFlow provider
-- **Earnings Guide**: Understanding payments and maximizing income
-- **Security Best Practices**: Keeping your hardware and data safe
+- Money keys (ending in `Usd`) print as `$500` or `$2.50`. Point changes print with their sign.
+- Tokens work in page text, titles, descriptions and sidebar labels, not inside code.
+- To build against a local app: `LIMITS_URL=http://localhost:3000/api/limits.json pnpm build`.
 
-### For GPU Renters
-- **How to Rent**: Browse, select, and pay for GPU access
-- **Wallet Setup**: Multi-wallet configuration and payment methods
-- **Terminal Access**: Using the web-based development environment
-- **Use Cases**: AI training, mining, gaming, and rendering guides
+## Help text for the app
 
-### For Developers
-- **API Reference**: Integration endpoints and WebSocket events
-- **Smart Contracts**: Contract addresses and interaction guides
-- **Container Specifications**: Hardware and software requirements
+The app's ⓘ buttons show docs text. A paragraph wrapped in `<Tip id="...">` (`src/components/Tip.astro`) is copied at build time into `/tips/<lang>.json`, with a link to its section. Use the same ids in every language: the build fails if a language is missing a tip that English has.
 
-## Technology Stack
+## Commands
 
-- **Framework**: Astro.js with TypeScript
-- **Styling**: Tailwind CSS
-- **Deployment**: Cloudflare Pages
-- **Content**: Markdown with frontmatter
-
-## Contributing
-
-We welcome contributions to improve our documentation:
-
-1. Fork this repository
-2. Create a feature branch (`git checkout -b feature/improve-docs`)
-3. Make your changes
-4. Submit a pull request
-
-### Writing Guidelines
-
-- Use clear, concise language
-- Include code examples where helpful
-- Test all instructions before submitting
-- Follow our existing tone and style
-
-## Local Development
-
-```bash
-# Clone the repository
-git clone https://github.com/kixago/gpuflow-docs.git
-cd gpuflow-docs
-
-# Install dependencies
-pnpm install
-
-# Start development server
-pnpm dev
-
-# Build for production
-pnpm build
-
-# Preview production build
-pnpm preview
-```
-
-## Support
-
-- **Platform Issues**: Contact support through [gpuflow.app](https://gpuflow.app)
-- **Documentation Issues**: Open an issue in this repository
-- **Community**: Join our discussions and get help from other users
-
-## License
-
-This documentation is open source under the MIT License. See [LICENSE](LICENSE) for details.
-
----
-
-**GPUFlow** - Democratizing access to GPU computing power through Web3 technology.
+| Command | What it does |
+| --- | --- |
+| `pnpm install` | Install dependencies |
+| `pnpm dev` | Local dev server at `localhost:4321` |
+| `pnpm build` | Build the site to `./dist/` |
+| `pnpm preview` | Serve the built site |

@@ -6,6 +6,9 @@ import starlightLlmsTxt from "starlight-llms-txt";
 import { defineConfig } from "astro/config";
 import { execFileSync } from "node:child_process";
 import { writeFile } from "node:fs/promises";
+import { fill } from "./src/lib/limits.mjs";
+import remarkLimits from "./src/lib/remark-limits.mjs";
+import tipsIntegration from "./src/lib/tips-integration.mjs";
 
 /**
  * @type {import('@astrojs/starlight/types').StarlightPlugin}
@@ -285,6 +288,11 @@ const SIDEBAR_LABELS = {
     ko: "GPU 대여하기", "zh-CN": "租用 GPU", "zh-TW": "租用 GPU", "pt-BR": "Alugar uma GPU",
     ru: "Аренда GPU", he: "שכירת GPU", ar: "استئجار وحدة GPU", hi: "GPU किराये पर लेना",
   },
+  account: {
+    de: "Ihr Konto", es: "Tu cuenta", fr: "Votre compte", ja: "アカウント",
+    ko: "내 계정", "zh-CN": "你的账户", "zh-TW": "你的帳戶", "pt-BR": "Sua conta",
+    ru: "Ваш аккаунт", he: "החשבון שלכם", ar: "حسابك", hi: "आपका खाता",
+  },
   providers: {
     de: "GPU vermieten", es: "Ofrecer tu GPU", fr: "Proposer votre GPU", ja: "GPU を提供する",
     ko: "GPU 제공하기", "zh-CN": "提供 GPU", "zh-TW": "提供 GPU", "pt-BR": "Oferecer sua GPU",
@@ -364,8 +372,11 @@ export default defineConfig({
   site: "https://docs.gpuflow.app",
   trailingSlash: "always",
   redirects: REDIRECTS,
+  // Numbers on the pages come from the app (src/lib/limits.mjs).
+  markdown: { remarkPlugins: [remarkLimits] },
   integrations: [
     cloudflareRedirects,
+    tipsIntegration(LOCALES),
     sitemap({
       serialize(item) {
         const lastmod = LAST_MODIFIED.get(new URL(item.url).pathname);
@@ -428,18 +439,19 @@ export default defineConfig({
           projectName: "GPUFlow",
           description:
             "GPUFlow (gpuflow.app) is a marketplace where people rent GPUs by the hour from other people. A renter adds credits by card, rents a GPU for a number of hours and gets an OpenAI-compatible API key for it. A provider runs one command on a Linux machine with a GPU, lists it with an hourly price, and cashes out earnings to a bank account through Stripe.",
-          details: `
+          details: fill(`
 ## Key facts
 
-- Renters pay with credits bought by card through Stripe ($10 to $500 per top-up, no fee). 1 credit = $0.01.
+- Renters pay with credits bought by card through Stripe (%credits.topupMinUsd% to %credits.topupMaxUsd% per top-up, more at higher renter levels; accounts under %credits.newAccountDays% days old up to %credits.newAccountWeeklyUsd% per %credits.weeklyWindowDays% days; no fee). 1 credit = $0.01.
 - A rental holds credits for the hours booked (1 to 168 hours unless the listing says otherwise). Use is billed to the second with a 1-minute minimum; unused time goes back to the renter's credits when the rental ends.
 - A rental is an OpenAI-compatible API: base URL https://gpuflow.app/v1, key starting with gfk_, endpoints /v1/models and /v1/chat/completions (streaming supported). No SSH, shell or VPN.
-- If the provider's machine is offline for 10 minutes, the rental ends and the renter pays only until it went offline.
-- After a paid rental ends, the renter can rate it 1 to 5 stars with an optional comment (within 30 days, editable for 14 days). The average shows on the listing; the provider can reply publicly once per review.
+- If the provider's machine is offline for %rentals.offlineMinutes% minutes, the rental ends and the renter pays only until it went offline.
+- After a paid rental ends, the renter rates it 1 to 5 stars with an optional comment (within %ratings.rateDays% days, editable for %ratings.editDays% days), and the provider answers whether they'd rent to the renter again. Neither rating shows until both are in, or %ratings.revealDays% days after the end. The average shows on the listing; the provider can reply publicly once per review.
+- Renters and providers earn points from paid rentals and ratings, on two separate levels from 1 to %levels.max%. Higher levels unlock larger top-ups for renters and a shorter earnings hold and better search position for providers.
 - Providers install the agent with one command on 64-bit Linux with systemd (NVIDIA tested; AMD through Ollama's ROCm support). No Docker, no open ports.
-- GPUFlow keeps a 12% fee from each rental. Earnings are held 7 days (14 days for accounts younger than 30 days), then can be cashed out: minimum $25, $2.50 fee per cash-out, to a bank account through Stripe in the US, Canada, the UK, Switzerland and the European Economic Area.
+- GPUFlow keeps a %fees.platformPercent%% fee from each rental. Earnings are held %earnings.holdDays% days (%earnings.newAccountHoldDays% days for accounts younger than %earnings.newAccountAgeDays% days, %earnings.shortHoldDays% days from provider level %earnings.shortHoldLevel%), then can be cashed out: minimum %earnings.cashoutMinUsd%, %earnings.cashoutFeeUsd% fee per cash-out, to a bank account through Stripe in the US, Canada, the UK, Switzerland and the European Economic Area.
 - The documentation is available in 13 languages; English is at the root, other languages under /de/, /es/, /fr/, /ja/, /ko/, /zh-cn/, /zh-tw/, /pt-br/, /ru/, /he/, /ar/, /hi/.
-          `.trim(),
+          `.trim()),
           optionalLinks: [
             {
               label: "GPUFlow marketplace",
@@ -459,6 +471,12 @@ export default defineConfig({
               description:
                 "Put a Linux GPU machine online, create a listing, price it, get paid, security, fixing problems",
               paths: ["providers/**"],
+            },
+            {
+              label: "Your account",
+              description:
+                "Usernames, display names and provider names; points and levels; how ratings work",
+              paths: ["account/**"],
             },
           ],
           promote: [
@@ -486,6 +504,11 @@ export default defineConfig({
           label: "Providing a GPU",
           translations: SIDEBAR_LABELS.providers,
           autogenerate: { directory: "providers" },
+        },
+        {
+          label: "Your account",
+          translations: SIDEBAR_LABELS.account,
+          autogenerate: { directory: "account" },
         },
       ],
     }),

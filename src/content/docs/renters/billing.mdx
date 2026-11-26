@@ -7,13 +7,19 @@ sidebar:
 ---
 
 import { Aside } from '@astrojs/starlight/components';
+import Tip from '../../../components/Tip.astro';
 
 ## Credits
 
 - You pay for rentals with credits. **1 credit = $0.01.**
 - You buy credits by card on **Dashboard → Payments → Add credits**. Payment runs through Stripe.
-- Each top-up is between **$10 and $500**. There is **no fee**.
 - Credits don't expire.
+
+<Tip id="credits.limits">
+
+Each top-up is between %credits.topupMinUsd% and %credits.topupMaxUsd%, with no fee. With two-step verification turned on, renters can add up to %credits.topupLevel1Usd% at a time from renter level %credits.topupLevel1% and up to %credits.topupLevel2Usd% from level %credits.topupLevel2% ([Levels and points](/account/levels/)). Accounts less than %credits.newAccountDays% days old can add up to %credits.newAccountWeeklyUsd% in total per %credits.weeklyWindowDays% days.
+
+</Tip>
 
 ## What happens when you rent
 

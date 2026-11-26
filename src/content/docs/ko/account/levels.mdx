@@ -1,0 +1,85 @@
+---
+title: "레벨과 포인트"
+description: "GPUFlow에서 대여자와 제공자의 포인트와 레벨이 작동하는 방식: 포인트를 얻거나 잃는 일, %levels.max%단계 레벨, 각 레벨의 혜택을 설명합니다."
+sidebar:
+  label: "레벨과 포인트"
+  order: 2
+---
+
+import Tip from '../../../../components/Tip.astro';
+
+레벨은 대여와 제공 두 가지이며, 각각 포인트가 따로 쌓입니다. 대여자는 내 등록 GPU와 제공자 페이지에서 제공자 레벨을 봅니다. 대여자 레벨은 내 리뷰 옆에 표시되고, 내가 대여하는 제공자에게도 보입니다. 두 레벨이 함께 표시되는 일은 없습니다. 대시보드의 **내 레벨**에서 두 레벨과 최근 포인트를 확인할 수 있습니다.
+
+## 포인트가 작동하는 방식
+
+<Tip id="levels.points">
+
+포인트는 결제가 끝난 대여와 평가에서 생깁니다. 대여자와 제공자 모두 결제된 시간마다 포인트를 받으며(대여 1건당 최대 %points.maxPerRental%), 평가로 포인트가 늘거나 줄기도 합니다. 모든 변화가 기록되므로 합계를 언제든 한 줄씩 확인할 수 있습니다.
+
+</Tip>
+
+| 일어난 일 | 대여자 | 제공자 |
+| --- | --- | --- |
+| 결제된 대여가 끝남 | 결제된 1시간마다 +%points.perPaidHour%, 최대 %points.maxPerRental% | 결제된 1시간마다 +%points.perPaidHour%, 최대 %points.maxPerRental% |
+| 상대방을 평가함 | %points.ratingGiven% | %points.ratingGiven% |
+| 받은 리뷰: 별 5 / 4 / 3 / 2 / 1개 | — | %points.stars5% / %points.stars4% / %points.stars3% / %points.stars2% / %points.stars1% |
+| 제공자가 다시 대여하겠다 / 하지 않겠다고 답함 | %points.thumbsUp% / %points.thumbsDown% | — |
+| 대여 내내 머신이 온라인이었음 | — | %points.onlineWholeRental% |
+| 대여 중 머신이 오프라인됨 | — | %points.machineOffline% |
+| 내 카드 결제에 이의 제기가 들어옴 | %points.cardDispute% | — |
+| 부적절한 리뷰라 직원이 삭제함 | %points.reviewHidden% | — |
+
+### 포인트가 생기지 않는 경우
+
+- 결제된 시간이 %points.minPaidMinutes%분 미만인 대여.
+- 같은 대여자와 제공자 사이에 한 달에 %points.pairMonthlyCap%건을 넘는 대여. 처음 %points.pairMonthlyCap%건만 인정됩니다.
+- 확인 중인 대여(아래 참고).
+
+## 레벨
+
+<Tip id="levels.levels">
+
+레벨은 %levels.max%단계입니다. 포인트가 다음 레벨에 닿으면 바로 올라갑니다. 한동안 이용하지 않아도 레벨은 내려가지 않습니다. 포인트가 바로 아래 레벨의 기준보다 낮아질 때만 내려가므로, 대여 한 번이 잘못됐다고 레벨이 오르내리지 않습니다.
+
+</Tip>
+
+| 레벨 | 필요한 포인트 |
+| --- | --- |
+| 1 | %levels.thresholds.0% |
+| 2 | %levels.thresholds.1% |
+| 3 | %levels.thresholds.2% |
+| 4 | %levels.thresholds.3% |
+| 5 | %levels.thresholds.4% |
+| 6 | %levels.thresholds.5% |
+| 7 | %levels.thresholds.6% |
+| 8 | %levels.thresholds.7% |
+| 9 | %levels.thresholds.8% |
+| 10 | %levels.thresholds.9% |
+
+## 레벨 혜택
+
+<Tip id="levels.perks">
+
+레벨 %levels.searchLevel% 이상의 제공자는 가격이나 평점이 같은 다른 제공자보다 검색에서 위에 표시되고, 레벨 %earnings.shortHoldLevel% 이상이면 가입 %earnings.shortHoldMinAgeDays%일 이상 된 계정의 수익을 %earnings.holdDays%일이 아닌 %earnings.shortHoldDays%일 후에 받을 수 있습니다. 2단계 인증을 켠 대여자는 레벨 %credits.topupLevel1%부터 한 번에 최대 %credits.topupLevel1Usd%, 레벨 %credits.topupLevel2%부터 최대 %credits.topupLevel2Usd%까지 충전할 수 있습니다.
+
+</Tip>
+
+대시보드의 **내 레벨**에서 다음 레벨의 혜택을 확인할 수 있습니다. 혜택은 앞으로 더 늘어날 수 있습니다.
+
+## 새 계정
+
+<Tip id="levels.newAccounts">
+
+대여로 얻은 포인트는 두 계정이 모두 가입 %points.newAccountDays%일이 될 때까지 대기합니다. 그전까지는 **내 레벨**에 반영 예정일과 함께 보류로 표시됩니다.
+
+</Tip>
+
+## 확인 중이라 보류된 포인트
+
+<Tip id="levels.review">
+
+두 계정이 관련 있어 보이거나 결제가 평소와 다를 때처럼, GPUFlow가 대여를 더 자세히 확인하는 경우가 있습니다. 확인하는 동안에는 그 대여의 포인트가 반영되지 않고 두 계정 모두 레벨이 오르지 않습니다. 대부분의 확인은 자동으로 끝나며, 문제가 없으면 포인트가 추가됩니다.
+
+</Tip>
+
+대여 자체에는 영향이 없습니다. 확인이 잘못되었다고 생각되면 [지원 티켓을 여세요](https://gpuflow.app/ko/support).

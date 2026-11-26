@@ -1,0 +1,85 @@
+---
+title: "Níveis e pontos"
+description: "Como funcionam pontos e níveis no GPUFlow para locatários e provedores: o que dá e o que tira pontos, os %levels.max% níveis e o que cada nível desbloqueia."
+sidebar:
+  label: "Níveis e pontos"
+  order: 2
+---
+
+import Tip from '../../../../components/Tip.astro';
+
+Você tem dois níveis, um para alugar e outro como provedor, cada um com seus próprios pontos. Os locatários veem seu nível de provedor nos seus anúncios e na sua página de provedor. Seu nível de locatário aparece ao lado das suas avaliações e para os provedores de quem você aluga. Os dois nunca aparecem juntos. Seu painel mostra os dois em **Seus níveis**, com seus pontos mais recentes.
+
+## Como os pontos funcionam
+
+<Tip id="levels.points">
+
+Os pontos vêm de aluguéis pagos concluídos e de avaliações. Locatário e provedor ganham pontos por cada hora paga, até %points.maxPerRental% por aluguel, e as avaliações somam ou tiram pontos. Cada mudança fica registrada, então o seu total sempre pode ser explicado linha por linha.
+
+</Tip>
+
+| O que acontece | Locatário | Provedor |
+| --- | --- | --- |
+| Um aluguel pago termina | +%points.perPaidHour% por hora paga, até %points.maxPerRental% | +%points.perPaidHour% por hora paga, até %points.maxPerRental% |
+| Você avalia o outro lado | %points.ratingGiven% | %points.ratingGiven% |
+| Avaliação recebida: 5 / 4 / 3 / 2 / 1 estrelas | — | %points.stars5% / %points.stars4% / %points.stars3% / %points.stars2% / %points.stars1% |
+| O provedor alugaria / não alugaria de novo para você | %points.thumbsUp% / %points.thumbsDown% | — |
+| A máquina ficou on-line durante todo o aluguel | — | %points.onlineWholeRental% |
+| A máquina ficou off-line durante o aluguel | — | %points.machineOffline% |
+| Um pagamento com cartão seu é contestado | %points.cardDispute% | — |
+| A equipe remove sua avaliação por abuso | %points.reviewHidden% | — |
+
+### O que não dá pontos
+
+- Aluguéis com menos de %points.minPaidMinutes% minutos pagos.
+- Mais de %points.pairMonthlyCap% aluguéis por mês entre o mesmo locatário e provedor. Só os %points.pairMonthlyCap% primeiros contam.
+- Aluguéis que estão sendo verificados (veja abaixo).
+
+## Níveis
+
+<Tip id="levels.levels">
+
+Há %levels.max% níveis. Você sobe assim que seus pontos chegam ao próximo nível. Seu nível nunca cai porque você ficou parado. Ele só cai se os seus pontos ficarem abaixo do nível imediatamente inferior, para que um único aluguel ruim não o faça subir e descer.
+
+</Tip>
+
+| Nível | Pontos necessários |
+| --- | --- |
+| 1 | %levels.thresholds.0% |
+| 2 | %levels.thresholds.1% |
+| 3 | %levels.thresholds.2% |
+| 4 | %levels.thresholds.3% |
+| 5 | %levels.thresholds.4% |
+| 6 | %levels.thresholds.5% |
+| 7 | %levels.thresholds.6% |
+| 8 | %levels.thresholds.7% |
+| 9 | %levels.thresholds.8% |
+| 10 | %levels.thresholds.9% |
+
+## O que os níveis desbloqueiam
+
+<Tip id="levels.perks">
+
+Provedores a partir do nível %levels.searchLevel% aparecem antes dos outros na busca com o mesmo preço ou nota, e a partir do nível %earnings.shortHoldLevel% seus ganhos ficam disponíveis em %earnings.shortHoldDays% dias em vez de %earnings.holdDays%, em contas com pelo menos %earnings.shortHoldMinAgeDays% dias. Locatários com a verificação em duas etapas ativada podem recarregar até %credits.topupLevel1Usd% de uma vez a partir do nível %credits.topupLevel1%, e até %credits.topupLevel2Usd% a partir do nível %credits.topupLevel2%.
+
+</Tip>
+
+**Seus níveis**, no seu painel, mostra o que o seu próximo nível desbloqueia. Outras vantagens podem ser adicionadas depois.
+
+## Contas novas
+
+<Tip id="levels.newAccounts">
+
+Os pontos de um aluguel esperam até as duas contas terem %points.newAccountDays% dias. Até lá, aparecem como retidos em **Seus níveis**, com a data em que vão contar.
+
+</Tip>
+
+## Pontos retidos para verificação
+
+<Tip id="levels.review">
+
+Às vezes o GPUFlow olha um aluguel com mais atenção, por exemplo quando duas contas parecem relacionadas ou um pagamento parece incomum. Durante a verificação, os pontos dele não contam e nenhuma das duas contas pode subir de nível. A maioria das verificações termina sozinha, e os pontos são somados quando a verificação é liberada.
+
+</Tip>
+
+O aluguel em si não é afetado. Se você acha que uma verificação é um engano, [abra um chamado de suporte](https://gpuflow.app/pt-BR/support).

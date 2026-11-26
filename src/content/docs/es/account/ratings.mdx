@@ -1,0 +1,42 @@
+---
+title: "Valoraciones"
+description: "Cómo funcionan las valoraciones en GPUFlow: los inquilinos valoran la GPU con estrellas, los proveedores dicen si volverían a alquilarle al inquilino, y nadie ve primero la valoración del otro."
+sidebar:
+  label: "Valoraciones"
+  order: 3
+---
+
+import Tip from '../../../../components/Tip.astro';
+
+Las dos partes pueden valorar cada alquiler pagado. Las valoraciones ayudan a los inquilinos a elegir una GPU, ayudan a los proveedores a decidir a quién alquilar y dan puntos a ambos.
+
+## Quién valora qué
+
+- **El inquilino** valora la GPU de 1 a 5 estrellas, con un comentario opcional de hasta %ratings.commentMax% caracteres. Puedes valorar durante %ratings.rateDays% días después de que termine el alquiler y cambiar tu reseña durante %ratings.editDays% días después de publicarla. [Cómo valorar un alquiler](/es/renters/getting-started/).
+- **El proveedor** responde una pregunta sobre el inquilino: ¿volverías a alquilarle? Sí o no, con una nota opcional que solo lee el equipo de GPUFlow.
+
+## Nadie ve primero la otra valoración
+
+<Tip id="ratings.hidden">
+
+Ninguna de las dos valoraciones se muestra hasta que están las dos, o hasta %ratings.revealDays% días después de que termine el alquiler, lo que ocurra primero. Así nadie puede valorar en respuesta a la valoración del otro. Después, la reseña aparece en el anuncio y cuenta para su media.
+
+</Tip>
+
+## Para proveedores: ¿volverías a alquilarle?
+
+<Tip id="ratings.thumbs">
+
+Después de un alquiler pagado de tu GPU, respondes una pregunta sobre el inquilino: ¿volverías a alquilarle? Los inquilinos nunca ven la respuesta de un proveedor concreto, solo su porcentaje general cuando han respondido al menos %ratings.thumbsRateMin% proveedores. Puedes cambiar tu respuesta hasta que se muestre y añadir una nota que solo lee el equipo de GPUFlow.
+
+</Tip>
+
+Puedes responder en tu panel, donde una tarjeta te pregunta por tus últimos alquileres, o en la columna **¿Volverías a alquilarle?** de la pestaña **Ganancias**. Tienes %ratings.revealDays% días después de que termine el alquiler.
+
+## Lo que ven los demás
+
+- Tu nombre público (tu nombre visible o tu nombre de usuario) y tu nivel de inquilino junto a tu reseña. Nunca tu dirección de email.
+- El proveedor puede responder públicamente una vez bajo cada reseña y cambiar la respuesta después.
+- Un proveedor no puede eliminar una reseña. El equipo retira las reseñas abusivas o falsas.
+
+Las valoraciones también dan y quitan puntos. Consulta [Niveles y puntos](/es/account/levels/).

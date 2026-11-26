@@ -1,12 +1,13 @@
 ---
 title: Cobrar
-description: Cómo cobran los proveedores de GPUFlow - la comisión del 12 %, la retención de ganancias de 7 días, la configuración de retiros con Stripe y el retiro a tu banco (mínimo $25, comisión de $2.50).
+description: Cómo cobran los proveedores de GPUFlow - la comisión del %fees.platformPercent% %, la retención de ganancias de %earnings.holdDays% días, la configuración de retiros con Stripe y el retiro a tu banco (mínimo %earnings.cashoutMinUsd%, comisión de %earnings.cashoutFeeUsd%).
 sidebar:
   label: Cobrar
   order: 4
 ---
 
 import { Aside, Steps } from '@astrojs/starlight/components';
+import Tip from '../../../../components/Tip.astro';
 import { Image } from 'astro:assets';
 import setup from '../../../../assets/screens/es/provider-payout-setup.png';
 import cashout from '../../../../assets/screens/es/provider-cash-out.png';
@@ -15,14 +16,22 @@ import cashout from '../../../../assets/screens/es/provider-cash-out.png';
 
 <Steps>
 
-1. **Termina un alquiler.** El inquilino paga el tiempo usado. GPUFlow se queda con el 12 % y el 88 % restante es tuyo.
-2. **Tus ganancias quedan retenidas 7 días.** Aparecen en **Ganancias retenidas**, en **Panel → Pagos**. Si tu cuenta tiene menos de 30 días, la retención es de 14 días. La retención protege contra el fraude con tarjetas y las reclamaciones.
+1. **Termina un alquiler.** El inquilino paga el tiempo usado. GPUFlow se queda con el %fees.platformPercent% % y el %fees.providerPercent% % restante es tuyo.
+2. **Tus ganancias quedan retenidas un tiempo.** Aparecen en **Ganancias retenidas** en **Panel → Pagos**. La retención protege contra el fraude con tarjeta y las disputas.
 3. **Quedan listas para retirar.** Después de la retención pasan a **Listo para retirar** y recibes una notificación.
 4. **Retiras el dinero** a tu banco a través de Stripe, nuestro socio de pagos.
 
 </Steps>
 
 También puedes gastar tus ganancias en alquilar otras GPUs. Los créditos que compraste con tarjeta se pueden gastar, pero no retirar.
+
+### Cuánto dura la retención
+
+<Tip id="earnings.hold">
+
+Las ganancias quedan retenidas %earnings.holdDays% días, o %earnings.newAccountHoldDays% días mientras tu cuenta tenga menos de %earnings.newAccountAgeDays% días. Desde el nivel de proveedor %earnings.shortHoldLevel%, en una cuenta con al menos %earnings.shortHoldMinAgeDays% días, la retención es de %earnings.shortHoldDays% días. Cuando tu cuenta y la del inquilino tienen las dos menos de %earnings.newPairAgeDays% días, son %earnings.newPairHoldDays% días, y un alquiler que GPUFlow revisa por posible fraude puede quedar retenido hasta %earnings.reviewHoldDays% días.
+
+</Tip>
 
 ## Configura los retiros (una sola vez)
 
@@ -49,15 +58,15 @@ A veces Stripe revisa primero tus datos. Normalmente tarda unos minutos, a veces
 
 1. Abre **Panel → Pagos**.
 2. En **Retirar**, escribe el importe o deja el importe total que aparece ya escrito.
-3. Revisa la línea de debajo: muestra la comisión de $2.50 y lo que recibes.
+3. Revisa la línea de debajo: muestra la comisión de %earnings.cashoutFeeUsd% y lo que recibes.
 4. Haz clic en **Retirar**.
 
 </Steps>
 
 <Image src={cashout} alt="El cuadro Retirar con el campo del importe y el botón Retirar resaltados" />
 
-- **Mínimo:** $25 por retiro.
-- **Comisión:** $2.50 por retiro, sea cual sea el importe. Retirar con menos frecuencia te ahorra comisiones.
+- **Mínimo:** %earnings.cashoutMinUsd% por retiro.
+- **Comisión:** %earnings.cashoutFeeUsd% por retiro, sea cual sea el importe. Retirar con menos frecuencia te ahorra comisiones.
 - El dinero se envía en dólares estadounidenses a tu cuenta de pagos de Stripe, y Stripe lo transfiere a tu banco.
 - Recibes un email y una notificación cuando se envía. Si no se completa, el importe total vuelve a tu saldo.
 - Puedes cambiar tus datos bancarios cuando quieras con **Gestionar datos de pago en Stripe**.

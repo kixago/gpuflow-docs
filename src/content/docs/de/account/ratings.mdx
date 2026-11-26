@@ -1,0 +1,42 @@
+---
+title: "Bewertungen"
+description: "So funktionieren Bewertungen bei GPUFlow: Mieter bewerten die GPU mit Sternen, Anbieter sagen, ob sie wieder an den Mieter vermieten würden, und keiner sieht die Bewertung des anderen zuerst."
+sidebar:
+  label: "Bewertungen"
+  order: 3
+---
+
+import Tip from '../../../../components/Tip.astro';
+
+Jede bezahlte Miete können beide Seiten bewerten. Bewertungen helfen Mietern bei der Wahl einer GPU, helfen Anbietern bei der Entscheidung, an wen sie vermieten, und bringen beiden Punkte.
+
+## Wer was bewertet
+
+- **Der Mieter** bewertet die GPU mit 1 bis 5 Sternen, mit einem freiwilligen Kommentar von bis zu %ratings.commentMax% Zeichen. Sie können bis %ratings.rateDays% Tage nach dem Ende der Miete bewerten und Ihre Bewertung bis %ratings.editDays% Tage nach der Veröffentlichung ändern. [So bewerten Sie eine Miete](/de/renters/getting-started/).
+- **Der Anbieter** beantwortet eine Frage zum Mieter: Würden Sie wieder an ihn vermieten? Ja oder Nein, mit einer freiwilligen Notiz, die nur das GPUFlow-Team liest.
+
+## Niemand sieht die andere Bewertung zuerst
+
+<Tip id="ratings.hidden">
+
+Keine der beiden Bewertungen wird angezeigt, bevor beide vorliegen oder %ratings.revealDays% Tage nach dem Ende der Miete vergangen sind, je nachdem, was zuerst eintritt. So kann niemand als Antwort auf die Bewertung des anderen bewerten. Danach erscheint die Bewertung beim Angebot und zählt zu seinem Durchschnitt.
+
+</Tip>
+
+## Für Anbieter: Würden Sie wieder an ihn vermieten?
+
+<Tip id="ratings.thumbs">
+
+Nach einer bezahlten Miete Ihrer GPU beantworten Sie eine Frage zum Mieter: Würden Sie wieder an ihn vermieten? Mieter sehen nie die Antwort eines einzelnen Anbieters, sondern nur ihren Gesamtanteil, sobald mindestens %ratings.thumbsRateMin% Anbieter geantwortet haben. Sie können Ihre Antwort ändern, bis sie sichtbar wird, und eine Notiz hinzufügen, die nur das GPUFlow-Team liest.
+
+</Tip>
+
+Antworten können Sie auf Ihrem Dashboard, wo eine Karte nach Ihren letzten Mieten fragt, oder in der Spalte **Wieder vermieten?** im Tab **Einnahmen**. Sie haben dafür %ratings.revealDays% Tage nach dem Ende der Miete.
+
+## Was andere sehen
+
+- Ihr öffentlicher Name (Ihr Anzeigename oder Ihr Benutzername) und Ihr Mieter-Level neben Ihrer Bewertung. Nie Ihre E-Mail-Adresse.
+- Der Anbieter kann unter jeder Bewertung einmal öffentlich antworten und die Antwort später ändern.
+- Ein Anbieter kann keine Bewertung entfernen. Das Team entfernt Bewertungen, die beleidigend oder gefälscht sind.
+
+Bewertungen bringen und kosten auch Punkte. Siehe [Level und Punkte](/de/account/levels/).

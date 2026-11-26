@@ -49,7 +49,7 @@ Les crédits servent à payer vos locations. **1 crédit = $0.01**, donc $25 vou
 <Steps>
 
 1. Ouvrez votre **Tableau de bord** et cliquez sur **Paiements** dans le menu de gauche.
-2. Sous **Ajouter des crédits**, cliquez sur un montant, ou saisissez le vôtre. Vous pouvez ajouter de $10 à $500 à la fois. Il n'y a pas de frais.
+2. Sous **Ajouter des crédits**, cliquez sur un montant, ou saisissez le vôtre. Vous pouvez ajouter de %credits.topupMinUsd% à %credits.topupMaxUsd% à la fois. Il n'y a pas de frais.
 3. Cliquez sur **Continuer vers le paiement**. Vous passez sur Stripe, notre partenaire de paiement, pour payer par carte.
 4. Après le paiement, vous revenez sur GPUFlow. Vos crédits apparaissent en moins d'une minute, en haut de la page Paiements et sur le bouton orange de l'en-tête.
 
@@ -132,7 +132,8 @@ Un commentaire utile dit à quoi vous avez utilisé le GPU et comment cela s'est
 
 Bon à savoir :
 
-- Vous pouvez noter une location pendant 30 jours après sa fin, si elle vous a coûté quelque chose.
-- Vous pouvez modifier votre avis pendant 14 jours après l'avoir publié. Cliquez sur **Modifier l'avis** dans **Historique des locations**.
-- Votre nom d'utilisateur GPUFlow s'affiche avec votre avis. Votre adresse e-mail, non.
+- Vous pouvez noter une location pendant %ratings.rateDays% jours après sa fin, si elle vous a coûté quelque chose.
+- Vous pouvez modifier votre avis pendant %ratings.editDays% jours après l'avoir publié. Cliquez sur **Modifier l'avis** dans **Historique des locations**.
+- Votre avis apparaît une fois que le fournisseur vous a évalué aussi, ou %ratings.revealDays% jours après la fin de la location. [Comment fonctionnent les évaluations](/fr/account/ratings/).
+- Votre nom public et votre niveau de locataire s'affichent avec votre avis. Votre adresse e-mail, non.
 - Le fournisseur peut répondre publiquement sous votre avis. Vous recevez alors une notification.

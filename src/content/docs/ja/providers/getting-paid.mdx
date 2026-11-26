@@ -1,12 +1,13 @@
 ---
 title: 報酬の受け取り
-description: GPUFlow のプロバイダーが報酬を受け取るしくみ。12% の手数料、7 日間の収益の保留、Stripe での出金設定、銀行口座への出金（最低 $25、手数料 $2.50）。
+description: GPUFlow のプロバイダーが報酬を受け取るしくみ。%fees.platformPercent%% の手数料、%earnings.holdDays% 日間の収益の保留、Stripe での出金設定、銀行口座への出金（最低 %earnings.cashoutMinUsd%、手数料 %earnings.cashoutFeeUsd%）。
 sidebar:
   label: 報酬の受け取り
   order: 4
 ---
 
 import { Aside, Steps } from '@astrojs/starlight/components';
+import Tip from '../../../../components/Tip.astro';
 import { Image } from 'astro:assets';
 import setup from '../../../../assets/screens/ja/provider-payout-setup.png';
 import cashout from '../../../../assets/screens/ja/provider-cash-out.png';
@@ -15,14 +16,22 @@ import cashout from '../../../../assets/screens/ja/provider-cash-out.png';
 
 <Steps>
 
-1. **レンタルが終了します。** 借り手は使った時間の分を支払います。GPUFlow が 12% を受け取り、残りの 88% があなたの収益になります。
-2. **収益は 7 日間保留されます。** 保留中の収益は、**ダッシュボード → 支払い** の **保留中の収益** に表示されます。アカウントを作成してから 30 日未満の場合、保留期間は 14 日です。保留は、カードの不正利用や異議申し立てへの備えです。
+1. **レンタルが終了します。** 借り手は使った時間の分を支払います。GPUFlow が %fees.platformPercent%% を受け取り、残りの %fees.providerPercent%% があなたの収益になります。
+2. **収益はしばらく保留されます。** 保留中の収益は、**ダッシュボード → 支払い** の **保留中の収益** に表示されます。保留は、カードの不正利用や異議申し立てへの備えです。
 3. **出金できるようになります。** 保留期間が終わると **出金可能** に移り、通知が届きます。
 4. **出金します。** 決済パートナーの Stripe を通じて、銀行口座に出金します。
 
 </Steps>
 
 収益は、ほかの GPU のレンタルに使うこともできます。カードで購入したクレジットは使うことはできますが、出金はできません。
+
+### 保留期間
+
+<Tip id="earnings.hold">
+
+収益の保留期間は %earnings.holdDays% 日で、アカウント作成から %earnings.newAccountAgeDays% 日未満の間は %earnings.newAccountHoldDays% 日です。提供者レベル %earnings.shortHoldLevel% 以上で、作成から %earnings.shortHoldMinAgeDays% 日以上たったアカウントでは %earnings.shortHoldDays% 日になります。あなたと借り手のアカウントがどちらも作成から %earnings.newPairAgeDays% 日未満の場合は %earnings.newPairHoldDays% 日で、GPUFlow が不正の可能性を確認しているレンタルは最大 %earnings.reviewHoldDays% 日保留されることがあります。
+
+</Tip>
 
 ## 出金の設定（最初の 1 回だけ）
 
@@ -49,15 +58,15 @@ Stripe が先に情報を審査することがあります。通常は数分、�
 
 1. **ダッシュボード → 支払い** を開きます。
 2. **出金する** で金額を入力します。入力済みの全額のままでもかまいません。
-3. その下の行を確認します。手数料 $2.50 と、受け取る金額が表示されています。
+3. その下の行を確認します。手数料 %earnings.cashoutFeeUsd% と、受け取る金額が表示されています。
 4. **出金する** をクリックします。
 
 </Steps>
 
 <Image src={cashout} alt="出金の欄。金額の入力欄と「出金する」ボタンが強調表示されている" />
 
-- **最低額:** 1 回の出金につき $25。
-- **手数料:** 金額にかかわらず、1 回の出金につき $2.50。まとめて出金すると、手数料を節約できます。
+- **最低額:** 1 回の出金につき %earnings.cashoutMinUsd%。
+- **手数料:** 金額にかかわらず、1 回の出金につき %earnings.cashoutFeeUsd%。まとめて出金すると、手数料を節約できます。
 - お金は米ドルで Stripe の出金口座に送られ、Stripe からあなたの銀行口座に振り込まれます。
 - 送金されると、メールと通知が届きます。出金が完了しなかった場合は、全額が残高に戻ります。
 - 銀行口座の情報は、**Stripe で出金先の情報を管理** からいつでも変更できます。

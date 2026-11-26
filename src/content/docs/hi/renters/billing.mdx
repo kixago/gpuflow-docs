@@ -7,13 +7,19 @@ sidebar:
 ---
 
 import { Aside } from '@astrojs/starlight/components';
+import Tip from '../../../../components/Tip.astro';
 
 ## क्रेडिट
 
 - आप किराये का भुगतान क्रेडिट से करते हैं। **1 क्रेडिट = $0.01।**
 - क्रेडिट आप **डैशबोर्ड → भुगतान → क्रेडिट जोड़ें** पर कार्ड से खरीदते हैं। भुगतान Stripe के ज़रिए होता है।
-- हर टॉप-अप **$10 से $500 के बीच** होता है। इस पर **कोई शुल्क नहीं** है।
 - क्रेडिट की कोई समय-सीमा नहीं होती।
+
+<Tip id="credits.limits">
+
+हर टॉप-अप %credits.topupMinUsd% से %credits.topupMaxUsd% तक का होता है, बिना किसी फ़ीस के। टू-फ़ैक्टर चालू होने पर किरायेदार, किरायेदार लेवल %credits.topupLevel1% से एक बार में %credits.topupLevel1Usd% तक और लेवल %credits.topupLevel2% से %credits.topupLevel2Usd% तक जोड़ सकते हैं ([लेवल और पॉइंट](/hi/account/levels/))। %credits.newAccountDays% दिन से कम पुराने खाते हर %credits.weeklyWindowDays% दिन में कुल %credits.newAccountWeeklyUsd% तक जोड़ सकते हैं।
+
+</Tip>
 
 ## किराये पर लेने पर क्या होता है
 

@@ -1,12 +1,13 @@
 ---
 title: Être payé
-description: Comment les fournisseurs GPUFlow sont payés - la commission de 12 %, la retenue de 7 jours sur les gains, la configuration des versements avec Stripe, et le retrait vers votre banque ($25 minimum, $2.50 de frais).
+description: Comment les fournisseurs GPUFlow sont payés - la commission de %fees.platformPercent% %, la retenue de %earnings.holdDays% jours sur les gains, la configuration des versements avec Stripe, et le retrait vers votre banque (%earnings.cashoutMinUsd% minimum, %earnings.cashoutFeeUsd% de frais).
 sidebar:
   label: Être payé
   order: 4
 ---
 
 import { Aside, Steps } from '@astrojs/starlight/components';
+import Tip from '../../../../components/Tip.astro';
 import { Image } from 'astro:assets';
 import setup from '../../../../assets/screens/fr/provider-payout-setup.png';
 import cashout from '../../../../assets/screens/fr/provider-cash-out.png';
@@ -15,14 +16,22 @@ import cashout from '../../../../assets/screens/fr/provider-cash-out.png';
 
 <Steps>
 
-1. **Une location se termine.** Le locataire paie le temps utilisé. GPUFlow garde 12 % et les 88 % restants sont pour vous.
-2. **Vos gains sont retenus 7 jours.** Ils apparaissent sous **Gains en attente** dans **Tableau de bord → Paiements**. Si votre compte a moins de 30 jours, la retenue dure 14 jours. Elle protège contre la fraude à la carte et les contestations de paiement.
+1. **Une location se termine.** Le locataire paie le temps utilisé. GPUFlow garde %fees.platformPercent% % et les %fees.providerPercent% % restants sont pour vous.
+2. **Vos gains sont retenus un certain temps.** Ils apparaissent sous **Gains en attente** dans **Tableau de bord → Paiements**. La retenue protège contre la fraude à la carte et les contestations de paiement.
 3. **Ils deviennent disponibles au retrait.** Après la retenue, ils passent dans **Disponible au retrait**, et vous recevez une notification.
 4. **Vous les retirez** vers votre banque via Stripe, notre partenaire de paiement.
 
 </Steps>
 
 Vous pouvez aussi dépenser vos gains pour louer d'autres GPU. Les crédits achetés par carte peuvent être dépensés, mais pas retirés.
+
+### Durée de la retenue
+
+<Tip id="earnings.hold">
+
+Les gains sont retenus %earnings.holdDays% jours, ou %earnings.newAccountHoldDays% jours tant que votre compte a moins de %earnings.newAccountAgeDays% jours. À partir du niveau de fournisseur %earnings.shortHoldLevel%, sur un compte d'au moins %earnings.shortHoldMinAgeDays% jours, la retenue est de %earnings.shortHoldDays% jours. Quand votre compte et celui du locataire ont tous deux moins de %earnings.newPairAgeDays% jours, elle est de %earnings.newPairHoldDays% jours, et une location que GPUFlow vérifie pour fraude possible peut être retenue jusqu'à %earnings.reviewHoldDays% jours.
+
+</Tip>
 
 ## Configurer les versements (une seule fois)
 
@@ -49,15 +58,15 @@ Il arrive que Stripe examine d'abord vos informations. Cela prend en général q
 
 1. Ouvrez **Tableau de bord → Paiements**.
 2. Dans la section **Retirer**, saisissez le montant, ou laissez le montant total déjà rempli.
-3. Vérifiez la ligne en dessous : elle indique les frais de $2.50 et ce que vous recevez.
+3. Vérifiez la ligne en dessous : elle indique les frais de %earnings.cashoutFeeUsd% et ce que vous recevez.
 4. Cliquez sur **Retirer**.
 
 </Steps>
 
 <Image src={cashout} alt="Le cadre Retirer avec le champ du montant et le bouton Retirer mis en évidence" />
 
-- **Minimum :** $25 par retrait.
-- **Frais :** $2.50 par retrait, quel que soit le montant. Retirer moins souvent vous fait économiser des frais.
+- **Minimum :** %earnings.cashoutMinUsd% par retrait.
+- **Frais :** %earnings.cashoutFeeUsd% par retrait, quel que soit le montant. Retirer moins souvent vous fait économiser des frais.
 - L'argent est envoyé en dollars US sur votre compte de versement Stripe, et Stripe le verse sur votre compte bancaire.
 - Vous recevez un e-mail et une notification quand il est envoyé. Si le retrait n'aboutit pas, le montant total revient sur votre solde.
 - Vous pouvez changer vos coordonnées bancaires à tout moment avec **Gérer mes informations de versement sur Stripe**.

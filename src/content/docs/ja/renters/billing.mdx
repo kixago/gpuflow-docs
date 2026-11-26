@@ -7,13 +7,19 @@ sidebar:
 ---
 
 import { Aside } from '@astrojs/starlight/components';
+import Tip from '../../../../components/Tip.astro';
 
 ## クレジット
 
 - レンタル料金はクレジットで支払います。**1 クレジット = $0.01。**
 - クレジットは **ダッシュボード → 支払い → クレジットを追加** でカードで購入します。決済は Stripe を通じて行われます。
-- 1 回に追加できるのは **$10〜$500** です。**手数料はかかりません**。
 - クレジットに有効期限はありません。
+
+<Tip id="credits.limits">
+
+1 回のチャージは %credits.topupMinUsd%〜%credits.topupMaxUsd% で、手数料はかかりません。2 段階認証をオンにした借り手は、借り手レベル %credits.topupLevel1% から一度に最大 %credits.topupLevel1Usd%、レベル %credits.topupLevel2% から最大 %credits.topupLevel2Usd% までチャージできます（[レベルとポイント](/ja/account/levels/)）。作成から %credits.newAccountDays% 日未満のアカウントは、%credits.weeklyWindowDays% 日間で合計 %credits.newAccountWeeklyUsd% までチャージできます。
+
+</Tip>
 
 ## レンタルするとどうなるか
 

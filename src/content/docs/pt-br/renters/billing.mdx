@@ -7,13 +7,19 @@ sidebar:
 ---
 
 import { Aside } from '@astrojs/starlight/components';
+import Tip from '../../../../components/Tip.astro';
 
 ## Créditos
 
 - Você paga os aluguéis com créditos. **1 crédito = $0.01.**
 - Você compra créditos com cartão em **Painel → Pagamentos → Adicionar créditos**. O pagamento é feito pela Stripe.
-- Cada recarga fica entre **$10 e $500**. **Não há taxa**.
 - Os créditos não expiram.
+
+<Tip id="credits.limits">
+
+Cada recarga vai de %credits.topupMinUsd% a %credits.topupMaxUsd%, sem taxa. Com a verificação em duas etapas ativada, locatários podem recarregar até %credits.topupLevel1Usd% de uma vez a partir do nível de locatário %credits.topupLevel1% e até %credits.topupLevel2Usd% a partir do nível %credits.topupLevel2% ([Níveis e pontos](/pt-br/account/levels/)). Contas com menos de %credits.newAccountDays% dias podem recarregar até %credits.newAccountWeeklyUsd% no total a cada %credits.weeklyWindowDays% dias.
+
+</Tip>
 
 ## O que acontece quando você aluga
 

@@ -1,12 +1,13 @@
 ---
 title: 수익 받기
-description: GPUFlow 제공자가 수익을 받는 방법입니다. 12% 수수료, 7일 수익 보류, Stripe로 출금 설정하기, 은행으로 출금하기(최소 $25, 수수료 $2.50)를 안내합니다.
+description: GPUFlow 제공자가 수익을 받는 방법입니다. %fees.platformPercent%% 수수료, %earnings.holdDays%일 수익 보류, Stripe로 출금 설정하기, 은행으로 출금하기(최소 %earnings.cashoutMinUsd%, 수수료 %earnings.cashoutFeeUsd%)를 안내합니다.
 sidebar:
   label: 수익 받기
   order: 4
 ---
 
 import { Aside, Steps } from '@astrojs/starlight/components';
+import Tip from '../../../../components/Tip.astro';
 import { Image } from 'astro:assets';
 import setup from '../../../../assets/screens/ko/provider-payout-setup.png';
 import cashout from '../../../../assets/screens/ko/provider-cash-out.png';
@@ -15,14 +16,22 @@ import cashout from '../../../../assets/screens/ko/provider-cash-out.png';
 
 <Steps>
 
-1. **대여가 끝납니다.** 대여자는 쓴 시간만큼 냅니다. GPUFlow가 12%를 가져가고 나머지 88%는 내 것입니다.
-2. **수익은 7일 동안 보류됩니다.** **대시보드 → 결제**의 **보류 중인 수익**에 표시됩니다. 계정을 만든 지 30일이 안 되었다면 보류 기간은 14일입니다. 보류는 카드 사기와 결제 이의 제기에 대비하기 위한 것입니다.
+1. **대여가 끝납니다.** 대여자는 쓴 시간만큼 냅니다. GPUFlow가 %fees.platformPercent%%를 가져가고 나머지 %fees.providerPercent%%는 내 것입니다.
+2. **수익은 일정 기간 보류됩니다.** **대시보드 → 결제**의 **보류 중인 수익**에 표시됩니다. 보류는 카드 사기와 결제 이의 제기에 대비하기 위한 것입니다.
 3. **출금할 수 있게 됩니다.** 보류 기간이 끝나면 수익이 **출금 가능**으로 옮겨지고 알림을 받습니다.
 4. 결제 파트너인 Stripe를 통해 **은행으로 출금합니다.**
 
 </Steps>
 
 수익으로 다른 GPU를 대여할 수도 있습니다. 카드로 산 크레딧은 쓸 수는 있지만 출금할 수는 없습니다.
+
+### 보류 기간
+
+<Tip id="earnings.hold">
+
+수익은 %earnings.holdDays%일 동안 보류되며, 가입한 지 %earnings.newAccountAgeDays%일이 안 된 계정은 %earnings.newAccountHoldDays%일입니다. 제공자 레벨 %earnings.shortHoldLevel% 이상이고 가입 %earnings.shortHoldMinAgeDays%일 이상 된 계정은 %earnings.shortHoldDays%일입니다. 내 계정과 대여자 계정이 모두 가입 %earnings.newPairAgeDays%일 미만이면 %earnings.newPairHoldDays%일이며, GPUFlow가 사기 가능성을 확인하는 대여는 최대 %earnings.reviewHoldDays%일까지 보류될 수 있습니다.
+
+</Tip>
 
 ## 출금 설정하기(한 번만)
 
@@ -49,15 +58,15 @@ Stripe가 정보를 먼저 검토하는 경우도 있습니다. 보통 몇 분, 
 
 1. **대시보드 → 결제**를 엽니다.
 2. **출금하기**에서 금액을 입력하거나, 미리 채워진 전체 금액을 그대로 둡니다.
-3. 그 아래 줄을 확인합니다. $2.50 수수료와 실제로 받는 금액이 나옵니다.
+3. 그 아래 줄을 확인합니다. %earnings.cashoutFeeUsd% 수수료와 실제로 받는 금액이 나옵니다.
 4. **출금하기**를 클릭합니다.
 
 </Steps>
 
 <Image src={cashout} alt="출금하기 상자. 금액 입력란과 출금하기 버튼이 강조되어 있습니다" />
 
-- **최소 금액:** 출금 1회당 $25.
-- **수수료:** 금액과 상관없이 출금 1회당 $2.50. 출금 횟수를 줄이면 수수료를 아낄 수 있습니다.
+- **최소 금액:** 출금 1회당 %earnings.cashoutMinUsd%.
+- **수수료:** 금액과 상관없이 출금 1회당 %earnings.cashoutFeeUsd%. 출금 횟수를 줄이면 수수료를 아낄 수 있습니다.
 - 돈은 미국 달러로 Stripe 출금 계정에 보내지고, Stripe가 은행으로 지급합니다.
 - 송금되면 이메일과 알림을 받습니다. 출금이 실패하면 전체 금액이 잔액으로 돌아옵니다.
 - 은행 정보는 **Stripe에서 출금 정보 관리**에서 언제든 바꿀 수 있습니다.

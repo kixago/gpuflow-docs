@@ -1,0 +1,85 @@
+---
+title: "Niveaux et points"
+description: "Comment fonctionnent les points et les niveaux sur GPUFlow pour les locataires et les fournisseurs : ce qui rapporte et coûte des points, les %levels.max% niveaux et ce que débloque chacun."
+sidebar:
+  label: "Niveaux et points"
+  order: 2
+---
+
+import Tip from '../../../../components/Tip.astro';
+
+Vous avez deux niveaux, un pour louer et un comme fournisseur, chacun avec ses propres points. Les locataires voient votre niveau de fournisseur sur vos annonces et votre page de fournisseur. Votre niveau de locataire apparaît à côté de vos avis et est visible des fournisseurs chez qui vous louez. Les deux ne sont jamais affichés ensemble. Votre tableau de bord montre les deux dans **Vos niveaux**, avec vos derniers points.
+
+## Comment fonctionnent les points
+
+<Tip id="levels.points">
+
+Les points viennent des locations payées terminées et des évaluations. Le locataire et le fournisseur gagnent des points pour chaque heure payée, jusqu'à %points.maxPerRental% par location, et les évaluations ajoutent ou retirent des points. Chaque changement est enregistré, donc votre total peut toujours être expliqué ligne par ligne.
+
+</Tip>
+
+| Ce qui se passe | Locataire | Fournisseur |
+| --- | --- | --- |
+| Une location payée se termine | +%points.perPaidHour% par heure payée, jusqu'à %points.maxPerRental% | +%points.perPaidHour% par heure payée, jusqu'à %points.maxPerRental% |
+| Vous évaluez l'autre partie | %points.ratingGiven% | %points.ratingGiven% |
+| Avis reçu : 5 / 4 / 3 / 2 / 1 étoiles | — | %points.stars5% / %points.stars4% / %points.stars3% / %points.stars2% / %points.stars1% |
+| Le fournisseur vous louerait / ne vous louerait pas à nouveau | %points.thumbsUp% / %points.thumbsDown% | — |
+| La machine est restée en ligne pendant toute la location | — | %points.onlineWholeRental% |
+| La machine s'est déconnectée pendant la location | — | %points.machineOffline% |
+| Un de vos paiements par carte est contesté | %points.cardDispute% | — |
+| L'équipe retire votre avis pour abus | %points.reviewHidden% | — |
+
+### Ce qui ne rapporte pas de points
+
+- Les locations de moins de %points.minPaidMinutes% minutes payées.
+- Plus de %points.pairMonthlyCap% locations par mois entre le même locataire et le même fournisseur. Seules les %points.pairMonthlyCap% premières comptent.
+- Les locations en cours de vérification (voir plus bas).
+
+## Niveaux
+
+<Tip id="levels.levels">
+
+Il y a %levels.max% niveaux. Vous montez dès que vos points atteignent le niveau suivant. Votre niveau ne baisse jamais parce que vous êtes inactif. Il ne baisse que si vos points passent sous le niveau inférieur au vôtre, pour qu'une seule mauvaise location ne le fasse pas monter et descendre.
+
+</Tip>
+
+| Niveau | Points nécessaires |
+| --- | --- |
+| 1 | %levels.thresholds.0% |
+| 2 | %levels.thresholds.1% |
+| 3 | %levels.thresholds.2% |
+| 4 | %levels.thresholds.3% |
+| 5 | %levels.thresholds.4% |
+| 6 | %levels.thresholds.5% |
+| 7 | %levels.thresholds.6% |
+| 8 | %levels.thresholds.7% |
+| 9 | %levels.thresholds.8% |
+| 10 | %levels.thresholds.9% |
+
+## Ce que débloquent les niveaux
+
+<Tip id="levels.perks">
+
+Les fournisseurs à partir du niveau %levels.searchLevel% apparaissent avant les autres dans la recherche à prix ou note égal, et à partir du niveau %earnings.shortHoldLevel% leurs gains sont disponibles après %earnings.shortHoldDays% jours au lieu de %earnings.holdDays%, pour les comptes d'au moins %earnings.shortHoldMinAgeDays% jours. Les locataires qui ont activé la validation en deux étapes peuvent recharger jusqu'à %credits.topupLevel1Usd% en une fois à partir du niveau %credits.topupLevel1%, et jusqu'à %credits.topupLevel2Usd% à partir du niveau %credits.topupLevel2%.
+
+</Tip>
+
+**Vos niveaux**, sur votre tableau de bord, indique ce que débloque votre prochain niveau. D'autres avantages pourront s'ajouter.
+
+## Nouveaux comptes
+
+<Tip id="levels.newAccounts">
+
+Les points d'une location attendent que les deux comptes aient %points.newAccountDays% jours. En attendant, ils apparaissent comme en attente dans **Vos niveaux**, avec la date à laquelle ils compteront.
+
+</Tip>
+
+## Points en attente d'une vérification
+
+<Tip id="levels.review">
+
+Parfois, GPUFlow examine une location de plus près, par exemple quand deux comptes semblent liés ou qu'un paiement paraît inhabituel. Pendant la vérification, ses points ne comptent pas et aucun des deux comptes ne peut monter de niveau. La plupart des vérifications se terminent d'elles-mêmes, et les points sont ajoutés une fois la vérification levée.
+
+</Tip>
+
+La location elle-même n'est pas concernée. Si vous pensez qu'une vérification est une erreur, [ouvrez un ticket d'assistance](https://gpuflow.app/fr/support).

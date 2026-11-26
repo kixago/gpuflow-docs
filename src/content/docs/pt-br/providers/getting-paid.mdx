@@ -1,12 +1,13 @@
 ---
 title: Como receber
-description: Como os provedores do GPUFlow recebem - a taxa de 12%, a retenção de 7 dias dos ganhos, a configuração dos saques com a Stripe e o saque para o seu banco (mínimo de $25, taxa de $2.50).
+description: Como os provedores do GPUFlow recebem - a taxa de %fees.platformPercent%%, a retenção de %earnings.holdDays% dias dos ganhos, a configuração dos saques com a Stripe e o saque para o seu banco (mínimo de %earnings.cashoutMinUsd%, taxa de %earnings.cashoutFeeUsd%).
 sidebar:
   label: Como receber
   order: 4
 ---
 
 import { Aside, Steps } from '@astrojs/starlight/components';
+import Tip from '../../../../components/Tip.astro';
 import { Image } from 'astro:assets';
 import setup from '../../../../assets/screens/pt-br/provider-payout-setup.png';
 import cashout from '../../../../assets/screens/pt-br/provider-cash-out.png';
@@ -15,14 +16,22 @@ import cashout from '../../../../assets/screens/pt-br/provider-cash-out.png';
 
 <Steps>
 
-1. **Um aluguel termina.** O locatário paga pelo tempo usado. O GPUFlow fica com 12%, e os outros 88% são seus.
-2. **Seus ganhos ficam retidos por 7 dias.** Eles aparecem em **Ganhos retidos** em **Painel → Pagamentos**. Se a sua conta tem menos de 30 dias, a retenção é de 14 dias. A retenção protege contra fraudes com cartão e contestações.
+1. **Um aluguel termina.** O locatário paga pelo tempo usado. O GPUFlow fica com %fees.platformPercent%%, e os outros %fees.providerPercent%% são seus.
+2. **Seus ganhos ficam retidos por um tempo.** Eles aparecem em **Ganhos retidos** em **Painel → Pagamentos**. A retenção protege contra fraudes com cartão e contestações.
 3. **Eles ficam disponíveis para saque.** Depois da retenção, eles passam para **Disponível para saque**, e você recebe uma notificação.
 4. **Você saca** para o seu banco pela Stripe, nossa parceira de pagamentos.
 
 </Steps>
 
 Você também pode usar seus ganhos para alugar outras GPUs. Créditos que você comprou com cartão podem ser usados, mas não podem ser sacados.
+
+### Quanto tempo dura a retenção
+
+<Tip id="earnings.hold">
+
+Os ganhos ficam retidos por %earnings.holdDays% dias, ou %earnings.newAccountHoldDays% dias enquanto sua conta tiver menos de %earnings.newAccountAgeDays% dias. A partir do nível de provedor %earnings.shortHoldLevel%, em uma conta com pelo menos %earnings.shortHoldMinAgeDays% dias, a retenção é de %earnings.shortHoldDays% dias. Quando a sua conta e a do locatário têm as duas menos de %earnings.newPairAgeDays% dias, são %earnings.newPairHoldDays% dias, e um aluguel que o GPUFlow verifica por possível fraude pode ficar retido por até %earnings.reviewHoldDays% dias.
+
+</Tip>
 
 ## Configure os saques (uma vez)
 
@@ -49,15 +58,15 @@ Você precisa de um endereço de e-mail confirmado e de uma conta de recebimento
 
 1. Abra **Painel → Pagamentos**.
 2. Em **Sacar**, digite o valor ou deixe o valor total que já vem preenchido.
-3. Confira a linha abaixo: ela mostra a taxa de $2.50 e quanto você recebe.
+3. Confira a linha abaixo: ela mostra a taxa de %earnings.cashoutFeeUsd% e quanto você recebe.
 4. Clique em **Sacar**.
 
 </Steps>
 
 <Image src={cashout} alt="A caixa Sacar com o campo de valor e o botão Sacar em destaque" />
 
-- **Mínimo:** $25 por saque.
-- **Taxa:** $2.50 por saque, seja qual for o valor. Sacar com menos frequência economiza taxas.
+- **Mínimo:** %earnings.cashoutMinUsd% por saque.
+- **Taxa:** %earnings.cashoutFeeUsd% por saque, seja qual for o valor. Sacar com menos frequência economiza taxas.
 - O dinheiro é enviado em dólares americanos para a sua conta de recebimento na Stripe, e a Stripe paga no seu banco.
 - Você recebe um e-mail e uma notificação quando o saque é enviado. Se ele não for concluído, o valor total volta para o seu saldo.
 - Altere seus dados bancários quando quiser em **Gerenciar dados de recebimento na Stripe**.

@@ -1,0 +1,85 @@
+---
+title: "レベルとポイント"
+description: "GPUFlow の借り手とプロバイダーのポイントとレベルのしくみ。ポイントが増える・減る行動、%levels.max% 段階のレベル、各レベルの特典を説明します。"
+sidebar:
+  label: "レベルとポイント"
+  order: 2
+---
+
+import Tip from '../../../../components/Tip.astro';
+
+レベルは 2 つあります。借りる側と提供する側で、それぞれに別のポイントがあります。提供者レベルは出品とプロバイダーページで借り手に表示されます。借り手レベルはレビューの横に表示され、あなたが借りる相手のプロバイダーにも見えます。2 つが並んで表示されることはありません。ダッシュボードの **あなたのレベル** で、両方のレベルと最近のポイントを確認できます。
+
+## ポイントのしくみ
+
+<Tip id="levels.points">
+
+ポイントは、支払い済みで終了したレンタルと評価から得られます。借り手とプロバイダーの両方が、支払い済みの 1 時間ごとにポイントを得ます（1 回のレンタルにつき最大 %points.maxPerRental%）。評価でもポイントが増えたり減ったりします。変化はすべて記録されるので、合計はいつでも 1 行ずつ確認できます。
+
+</Tip>
+
+| できごと | 借り手 | プロバイダー |
+| --- | --- | --- |
+| 支払い済みのレンタルが終了 | 支払い済み 1 時間ごとに +%points.perPaidHour%（最大 %points.maxPerRental%） | 支払い済み 1 時間ごとに +%points.perPaidHour%（最大 %points.maxPerRental%） |
+| 相手を評価した | %points.ratingGiven% | %points.ratingGiven% |
+| 受け取ったレビュー: 星 5 / 4 / 3 / 2 / 1 | — | %points.stars5% / %points.stars4% / %points.stars3% / %points.stars2% / %points.stars1% |
+| プロバイダーが「また貸したい」/「貸したくない」と回答 | %points.thumbsUp% / %points.thumbsDown% | — |
+| レンタル中ずっとマシンがオンラインだった | — | %points.onlineWholeRental% |
+| レンタル中にマシンがオフラインになった | — | %points.machineOffline% |
+| あなたのカード支払いに異議申し立てがあった | %points.cardDispute% | — |
+| 不適切なためスタッフがレビューを削除 | %points.reviewHidden% | — |
+
+### ポイントにならないもの
+
+- 支払い済みの時間が %points.minPaidMinutes% 分未満のレンタル。
+- 同じ借り手とプロバイダーの間で 1 か月に %points.pairMonthlyCap% 回を超えるレンタル。最初の %points.pairMonthlyCap% 回だけが対象です。
+- 確認中のレンタル（下記を参照）。
+
+## レベル
+
+<Tip id="levels.levels">
+
+レベルは %levels.max% 段階あります。ポイントが次のレベルに届くとすぐに上がります。しばらく利用しなくてもレベルは下がりません。下がるのは、ポイントが 1 つ下のレベルの基準を下回ったときだけなので、1 回の悪いレンタルで上下をくり返すことはありません。
+
+</Tip>
+
+| レベル | 必要なポイント |
+| --- | --- |
+| 1 | %levels.thresholds.0% |
+| 2 | %levels.thresholds.1% |
+| 3 | %levels.thresholds.2% |
+| 4 | %levels.thresholds.3% |
+| 5 | %levels.thresholds.4% |
+| 6 | %levels.thresholds.5% |
+| 7 | %levels.thresholds.6% |
+| 8 | %levels.thresholds.7% |
+| 9 | %levels.thresholds.8% |
+| 10 | %levels.thresholds.9% |
+
+## レベルの特典
+
+<Tip id="levels.perks">
+
+レベル %levels.searchLevel% 以上のプロバイダーは、価格や評価が同じほかのプロバイダーより検索で上に表示されます。レベル %earnings.shortHoldLevel% 以上では、作成から %earnings.shortHoldMinAgeDays% 日以上たったアカウントなら、収益が %earnings.holdDays% 日ではなく %earnings.shortHoldDays% 日で受け取れるようになります。2 段階認証をオンにしている借り手は、レベル %credits.topupLevel1% から一度に最大 %credits.topupLevel1Usd%、レベル %credits.topupLevel2% から最大 %credits.topupLevel2Usd% までチャージできます。
+
+</Tip>
+
+ダッシュボードの **あなたのレベル** に、次のレベルで得られる特典が表示されます。特典は今後増えることがあります。
+
+## 新しいアカウント
+
+<Tip id="levels.newAccounts">
+
+レンタルのポイントは、両方のアカウントが作成から %points.newAccountDays% 日たつまで保留されます。それまでは **あなたのレベル** に保留中として、加算される日付とともに表示されます。
+
+</Tip>
+
+## 確認中で保留されるポイント
+
+<Tip id="levels.review">
+
+2 つのアカウントが関係していそうなときや、支払いがいつもと違うときなど、GPUFlow がレンタルを詳しく確認することがあります。確認中はそのレンタルのポイントは加算されず、どちらのアカウントもレベルが上がりません。ほとんどの確認は自動で終わり、問題がなければポイントが加算されます。
+
+</Tip>
+
+レンタル自体には影響しません。確認が誤りだと思う場合は、[サポートチケットを作成](https://gpuflow.app/ja/support)してください。

@@ -7,13 +7,19 @@ sidebar:
 ---
 
 import { Aside } from '@astrojs/starlight/components';
+import Tip from '../../../../components/Tip.astro';
 
 ## קרדיטים
 
 - משלמים על השכרות בקרדיטים. **קרדיט אחד = $0.01.**
 - קונים קרדיטים בכרטיס אשראי ב-**לוח מחוונים ← תשלומים ← הוספת קרדיטים**. התשלום עובר דרך Stripe.
-- כל טעינה היא **בין $10 ל-$500**. **אין עמלה**.
 - לקרדיטים אין תאריך תפוגה.
+
+<Tip id="credits.limits">
+
+כל טעינה היא בין %credits.topupMinUsd% ל-%credits.topupMaxUsd%, בלי עמלה. עם אימות דו-שלבי פעיל, שוכרים יכולים לטעון עד %credits.topupLevel1Usd% בבת אחת מרמת שוכר %credits.topupLevel1%, ועד %credits.topupLevel2Usd% מרמה %credits.topupLevel2% ([רמות ונקודות](/he/account/levels/)). חשבונות בני פחות מ-%credits.newAccountDays% יום יכולים לטעון עד %credits.newAccountWeeklyUsd% בסך הכול בכל %credits.weeklyWindowDays% ימים.
+
+</Tip>
 
 ## מה קורה כששוכרים
 

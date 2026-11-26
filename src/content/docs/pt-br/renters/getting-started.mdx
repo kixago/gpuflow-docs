@@ -49,7 +49,7 @@ Você paga os aluguéis com créditos. **1 crédito = $0.01**. Então $25 compra
 <Steps>
 
 1. Abra seu **Painel** e clique em **Pagamentos** no menu à esquerda.
-2. Em **Adicionar créditos**, clique em um valor ou digite o seu. Você pode adicionar de $10 a $500 por vez. Não há taxa.
+2. Em **Adicionar créditos**, clique em um valor ou digite o seu. Você pode adicionar de %credits.topupMinUsd% a %credits.topupMaxUsd% por vez. Não há taxa.
 3. Clique em **Continuar para o pagamento**. Você vai para a Stripe, nossa parceira de pagamentos, para pagar com cartão.
 4. Depois de pagar, você volta para o GPUFlow. Seus créditos aparecem em até um minuto, no topo da página Pagamentos e no botão laranja do cabeçalho.
 
@@ -132,7 +132,8 @@ Um comentário útil diz para que você usou a GPU e como foi. Por exemplo:
 
 É bom saber:
 
-- Você pode avaliar um aluguel por até 30 dias depois que ele termina, se ele custou alguma coisa para você.
-- Você pode alterar sua avaliação por até 14 dias depois de publicá-la. Clique em **Editar avaliação** em **Histórico de Aluguéis**.
-- Seu nome de usuário do GPUFlow aparece junto com a avaliação. Seu endereço de e-mail, não.
+- Você pode avaliar um aluguel por até %ratings.rateDays% dias depois que ele termina, se ele custou alguma coisa para você.
+- Você pode alterar sua avaliação por até %ratings.editDays% dias depois de publicá-la. Clique em **Editar avaliação** em **Histórico de Aluguéis**.
+- Sua avaliação aparece quando o provedor também avaliar você, ou %ratings.revealDays% dias depois do fim do aluguel. [Como funcionam as avaliações](/pt-br/account/ratings/).
+- Seu nome público e seu nível de locatário aparecem junto com a avaliação. Seu endereço de e-mail, não.
 - O provedor pode responder publicamente abaixo da sua avaliação. Você recebe uma notificação quando isso acontece.

@@ -1,0 +1,42 @@
+---
+title: "Évaluations"
+description: "Comment fonctionnent les évaluations sur GPUFlow : les locataires notent le GPU avec des étoiles, les fournisseurs disent s'ils loueraient à nouveau au locataire, et personne ne voit l'évaluation de l'autre en premier."
+sidebar:
+  label: "Évaluations"
+  order: 3
+---
+
+import Tip from '../../../../components/Tip.astro';
+
+Les deux parties peuvent évaluer chaque location payée. Les évaluations aident les locataires à choisir un GPU, aident les fournisseurs à décider à qui louer, et rapportent des points aux deux.
+
+## Qui évalue quoi
+
+- **Le locataire** note le GPU de 1 à 5 étoiles, avec un commentaire facultatif de %ratings.commentMax% caractères au plus. Vous pouvez noter pendant %ratings.rateDays% jours après la fin de la location et modifier votre avis pendant %ratings.editDays% jours après l'avoir publié. [Comment noter une location](/fr/renters/getting-started/).
+- **Le fournisseur** répond à une question sur le locataire : lui loueriez-vous à nouveau ? Oui ou non, avec une note facultative que seule l'équipe GPUFlow lit.
+
+## Personne ne voit l'autre évaluation en premier
+
+<Tip id="ratings.hidden">
+
+Aucune des deux évaluations n'est affichée avant que les deux soient là, ou avant %ratings.revealDays% jours après la fin de la location, selon ce qui arrive en premier. Ainsi, personne ne peut noter en réponse à l'évaluation de l'autre. Ensuite, l'avis apparaît sur l'annonce et compte dans sa moyenne.
+
+</Tip>
+
+## Pour les fournisseurs : lui loueriez-vous à nouveau ?
+
+<Tip id="ratings.thumbs">
+
+Après une location payée de votre GPU, vous répondez à une question sur le locataire : lui loueriez-vous à nouveau ? Les locataires ne voient jamais la réponse d'un fournisseur en particulier, seulement leur part globale une fois qu'au moins %ratings.thumbsRateMin% fournisseurs ont répondu. Vous pouvez changer votre réponse jusqu'à ce qu'elle soit révélée et ajouter une note que seule l'équipe GPUFlow lit.
+
+</Tip>
+
+Vous pouvez répondre sur votre tableau de bord, où une carte vous interroge sur vos dernières locations, ou dans la colonne **Leur louer à nouveau ?** de l'onglet **Gains**. Vous avez %ratings.revealDays% jours après la fin de la location.
+
+## Ce que voient les autres
+
+- Votre nom public (votre nom affiché ou votre nom d'utilisateur) et votre niveau de locataire à côté de votre avis. Jamais votre adresse e-mail.
+- Le fournisseur peut répondre publiquement une fois sous chaque avis et modifier sa réponse plus tard.
+- Un fournisseur ne peut pas supprimer un avis. L'équipe retire les avis injurieux ou faux.
+
+Les évaluations rapportent et coûtent aussi des points. Voir [Niveaux et points](/fr/account/levels/).

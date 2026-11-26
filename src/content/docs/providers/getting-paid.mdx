@@ -1,12 +1,13 @@
 ---
 title: Getting paid
-description: How GPUFlow providers get paid - the 12% fee, the 7-day earnings hold, setting up payouts with Stripe, and cashing out to your bank ($25 minimum, $2.50 fee).
+description: How GPUFlow providers get paid - the %fees.platformPercent%% fee, the %earnings.holdDays%-day earnings hold, setting up payouts with Stripe, and cashing out to your bank (%earnings.cashoutMinUsd% minimum, %earnings.cashoutFeeUsd% fee).
 sidebar:
   label: Getting paid
   order: 4
 ---
 
 import { Aside, Steps } from '@astrojs/starlight/components';
+import Tip from '../../../components/Tip.astro';
 import { Image } from 'astro:assets';
 import setup from '../../../assets/screens/en/provider-payout-setup.png';
 import cashout from '../../../assets/screens/en/provider-cash-out.png';
@@ -15,14 +16,22 @@ import cashout from '../../../assets/screens/en/provider-cash-out.png';
 
 <Steps>
 
-1. **A rental ends.** The renter pays for the time used. GPUFlow keeps 12% and the other 88% is yours.
-2. **Your earnings are held for 7 days.** They show under **Earnings on hold** on **Dashboard → Payments**. If your account is less than 30 days old, the hold is 14 days. The hold protects against card fraud and disputes.
+1. **A rental ends.** The renter pays for the time used. GPUFlow keeps %fees.platformPercent%% and the other %fees.providerPercent%% is yours.
+2. **Your earnings are held for a while.** They show under **Earnings on hold** on **Dashboard → Payments**. The hold protects against card fraud and disputes.
 3. **They become ready to cash out.** After the hold they move to **Ready to cash out**, and you get a notification.
 4. **You cash out** to your bank through Stripe, our payment partner.
 
 </Steps>
 
 You can also spend your earnings on renting other GPUs. Credits you bought with a card can be spent, but they can't be cashed out.
+
+### How long the hold is
+
+<Tip id="earnings.hold">
+
+Earnings are held for %earnings.holdDays% days, or %earnings.newAccountHoldDays% days while your account is less than %earnings.newAccountAgeDays% days old. From provider level %earnings.shortHoldLevel%, on an account at least %earnings.shortHoldMinAgeDays% days old, the hold is %earnings.shortHoldDays% days. When both you and the renter have accounts less than %earnings.newPairAgeDays% days old, it's %earnings.newPairHoldDays% days, and a rental GPUFlow checks for possible fraud can be held for up to %earnings.reviewHoldDays% days.
+
+</Tip>
 
 ## Set up payouts (once)
 
@@ -49,15 +58,15 @@ Stripe sometimes reviews your details first. That usually takes a few minutes, s
 
 1. Open **Dashboard → Payments**.
 2. Under **Cash out**, type the amount, or leave the full amount that's filled in.
-3. Check the line under it: it shows the $2.50 fee and what you receive.
+3. Check the line under it: it shows the %earnings.cashoutFeeUsd% fee and what you receive.
 4. Click **Cash out**.
 
 </Steps>
 
 <Image src={cashout} alt="The Cash out box with the amount field and the Cash out button highlighted" />
 
-- **Minimum:** $25 per cash-out.
-- **Fee:** $2.50 per cash-out, no matter the amount. Cashing out less often saves fees.
+- **Minimum:** %earnings.cashoutMinUsd% per cash-out.
+- **Fee:** %earnings.cashoutFeeUsd% per cash-out, no matter the amount. Cashing out less often saves fees.
 - The money is sent in US dollars to your Stripe payout account, and Stripe pays it to your bank.
 - You get an email and a notification when it's sent. If it doesn't go through, the full amount returns to your balance.
 - Change your bank details any time with **Manage payout details on Stripe**.

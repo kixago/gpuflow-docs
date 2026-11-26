@@ -1,0 +1,42 @@
+---
+title: "Avaliações"
+description: "Como funcionam as avaliações no GPUFlow: locatários avaliam a GPU com estrelas, provedores dizem se alugariam de novo para o locatário, e ninguém vê a avaliação do outro primeiro."
+sidebar:
+  label: "Avaliações"
+  order: 3
+---
+
+import Tip from '../../../../components/Tip.astro';
+
+Os dois lados podem avaliar cada aluguel pago. As avaliações ajudam os locatários a escolher uma GPU, ajudam os provedores a decidir para quem alugar e dão pontos aos dois.
+
+## Quem avalia o quê
+
+- **O locatário** avalia a GPU de 1 a 5 estrelas, com um comentário opcional de até %ratings.commentMax% caracteres. Você pode avaliar por %ratings.rateDays% dias depois que o aluguel termina e alterar sua avaliação por %ratings.editDays% dias depois de publicá-la. [Como avaliar um aluguel](/pt-br/renters/getting-started/).
+- **O provedor** responde uma pergunta sobre o locatário: você alugaria para ele de novo? Sim ou não, com uma nota opcional que só a equipe do GPUFlow lê.
+
+## Ninguém vê a outra avaliação primeiro
+
+<Tip id="ratings.hidden">
+
+Nenhuma das duas avaliações aparece até que as duas existam, ou até %ratings.revealDays% dias depois do fim do aluguel, o que acontecer primeiro. Assim ninguém avalia em resposta à avaliação do outro. Depois, a avaliação aparece no anúncio e entra na média dele.
+
+</Tip>
+
+## Para provedores: você alugaria para ele de novo?
+
+<Tip id="ratings.thumbs">
+
+Depois de um aluguel pago da sua GPU, você responde uma pergunta sobre o locatário: você alugaria para ele de novo? Os locatários nunca veem a resposta de um provedor específico, só a porcentagem geral, quando pelo menos %ratings.thumbsRateMin% provedores já responderam. Você pode mudar sua resposta até ela ser revelada e adicionar uma nota que só a equipe do GPUFlow lê.
+
+</Tip>
+
+Você pode responder no seu painel, onde um cartão pergunta sobre seus aluguéis mais recentes, ou na coluna **Alugaria de novo?** da aba **Ganhos**. Você tem %ratings.revealDays% dias depois do fim do aluguel.
+
+## O que os outros veem
+
+- Seu nome público (seu nome de exibição ou seu nome de usuário) e seu nível de locatário ao lado da sua avaliação. Nunca o seu e-mail.
+- O provedor pode responder publicamente uma vez abaixo de cada avaliação e alterar a resposta depois.
+- Um provedor não pode remover uma avaliação. A equipe remove avaliações abusivas ou falsas.
+
+As avaliações também dão e tiram pontos. Veja [Níveis e pontos](/pt-br/account/levels/).

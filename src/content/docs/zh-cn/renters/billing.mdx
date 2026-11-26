@@ -7,13 +7,19 @@ sidebar:
 ---
 
 import { Aside } from '@astrojs/starlight/components';
+import Tip from '../../../../components/Tip.astro';
 
 ## 额度
 
 - 租用时用额度付款。**1 额度 = $0.01**。
 - 在 **仪表板 → 支付 → 充值额度** 中用银行卡购买额度。付款通过 Stripe 进行。
-- 每次充值金额在 **$10 到 $500** 之间，**无手续费**。
 - 额度不会过期。
+
+<Tip id="credits.limits">
+
+每次充值金额为 %credits.topupMinUsd% 到 %credits.topupMaxUsd%，不收手续费。开启两步验证后，租用者从租用者等级 %credits.topupLevel1% 起单次最多可充值 %credits.topupLevel1Usd%，从等级 %credits.topupLevel2% 起最多 %credits.topupLevel2Usd%（[等级和积分](/zh-cn/account/levels/)）。注册不满 %credits.newAccountDays% 天的账户，每 %credits.weeklyWindowDays% 天合计最多可充值 %credits.newAccountWeeklyUsd%。
+
+</Tip>
 
 ## 租用时会发生什么
 

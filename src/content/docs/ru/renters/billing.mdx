@@ -7,13 +7,19 @@ sidebar:
 ---
 
 import { Aside } from '@astrojs/starlight/components';
+import Tip from '../../../../components/Tip.astro';
 
 ## Кредиты
 
 - За аренду вы платите кредитами. **1 кредит = $0.01.**
 - Кредиты покупаются картой на странице **Панель управления → Платежи → Пополнить кредиты**. Оплата проходит через Stripe.
-- Одно пополнение — от **$10 до $500**. **Комиссии нет.**
 - У кредитов нет срока действия.
+
+<Tip id="credits.limits">
+
+Одно пополнение — от %credits.topupMinUsd% до %credits.topupMaxUsd%, без комиссии. С включённой двухэтапной проверкой арендаторы могут пополнять до %credits.topupLevel1Usd% за раз с уровня арендатора %credits.topupLevel1% и до %credits.topupLevel2Usd% с уровня %credits.topupLevel2% ([Уровни и баллы](/ru/account/levels/)). Аккаунты младше %credits.newAccountDays% дней могут пополнить не больше %credits.newAccountWeeklyUsd% в сумме за %credits.weeklyWindowDays% дней.
+
+</Tip>
 
 ## Что происходит, когда вы арендуете GPU
 

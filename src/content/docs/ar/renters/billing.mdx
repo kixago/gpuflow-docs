@@ -7,13 +7,19 @@ sidebar:
 ---
 
 import { Aside } from '@astrojs/starlight/components';
+import Tip from '../../../../components/Tip.astro';
 
 ## الرصيد
 
 - تدفع مقابل الاستئجار من رصيدك. **1 رصيد = $0.01.**
 - تشتري الرصيد بالبطاقة من **لوحة التحكم ← المدفوعات ← شحن الرصيد**. يتم الدفع عبر Stripe.
-- تتراوح كل عملية شحن بين **$10 و$500**. **لا توجد رسوم**.
 - لا تنتهي صلاحية الرصيد.
+
+<Tip id="credits.limits">
+
+كل عملية شحن بين %credits.topupMinUsd% و%credits.topupMaxUsd% بلا رسوم. مع تفعيل التحقق بخطوتين، يستطيع المستأجرون شحن ما يصل إلى %credits.topupLevel1Usd% دفعة واحدة من مستوى المستأجر %credits.topupLevel1%، وما يصل إلى %credits.topupLevel2Usd% من المستوى %credits.topupLevel2% ([المستويات والنقاط](/ar/account/levels/)). يمكن للحسابات التي يقل عمرها عن %credits.newAccountDays% يوماً شحن ما يصل إلى %credits.newAccountWeeklyUsd% إجمالاً كل %credits.weeklyWindowDays% أيام.
+
+</Tip>
 
 ## ماذا يحدث عند الاستئجار
 

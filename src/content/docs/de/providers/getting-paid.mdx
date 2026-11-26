@@ -1,12 +1,13 @@
 ---
 title: So werden Sie bezahlt
-description: So werden GPUFlow-Anbieter bezahlt - die Gebühr von 12 %, die 7-tägige Haltefrist für Einnahmen, Auszahlungen mit Stripe einrichten und auf Ihr Bankkonto auszahlen (mindestens $25, Gebühr $2.50).
+description: So werden GPUFlow-Anbieter bezahlt - die Gebühr von %fees.platformPercent% %, die %earnings.holdDays%-tägige Haltefrist für Einnahmen, Auszahlungen mit Stripe einrichten und auf Ihr Bankkonto auszahlen (mindestens %earnings.cashoutMinUsd%, Gebühr %earnings.cashoutFeeUsd%).
 sidebar:
   label: So werden Sie bezahlt
   order: 4
 ---
 
 import { Aside, Steps } from '@astrojs/starlight/components';
+import Tip from '../../../../components/Tip.astro';
 import { Image } from 'astro:assets';
 import setup from '../../../../assets/screens/de/provider-payout-setup.png';
 import cashout from '../../../../assets/screens/de/provider-cash-out.png';
@@ -15,14 +16,22 @@ import cashout from '../../../../assets/screens/de/provider-cash-out.png';
 
 <Steps>
 
-1. **Eine Miete endet.** Der Mieter zahlt für die genutzte Zeit. GPUFlow behält 12 %, die übrigen 88 % gehören Ihnen.
-2. **Ihre Einnahmen werden 7 Tage zurückgehalten.** Sie stehen unter **Einnahmen im Rückhalt** auf **Dashboard → Zahlungen**. Ist Ihr Konto jünger als 30 Tage, beträgt die Haltefrist 14 Tage. Sie schützt vor Kartenbetrug und Zahlungsanfechtungen.
+1. **Eine Miete endet.** Der Mieter zahlt für die genutzte Zeit. GPUFlow behält %fees.platformPercent% %, die übrigen %fees.providerPercent% % gehören Ihnen.
+2. **Ihre Einnahmen werden eine Zeit lang zurückgehalten.** Sie stehen unter **Einnahmen im Rückhalt** auf **Dashboard → Zahlungen**. Die Haltefrist schützt vor Kartenbetrug und Zahlungsanfechtungen.
 3. **Sie werden auszahlbar.** Nach der Haltefrist wandern sie zu **Auszahlbar**, und Sie bekommen eine Benachrichtigung.
 4. **Sie zahlen aus**, über Stripe, unseren Zahlungspartner, auf Ihr Bankkonto.
 
 </Steps>
 
 Sie können Ihre Einnahmen auch ausgeben, um andere GPUs zu mieten. Credits, die Sie per Karte gekauft haben, können Sie ausgeben, aber nicht auszahlen.
+
+### Wie lange die Haltefrist dauert
+
+<Tip id="earnings.hold">
+
+Einnahmen werden %earnings.holdDays% Tage zurückgehalten, oder %earnings.newAccountHoldDays% Tage, solange Ihr Konto jünger als %earnings.newAccountAgeDays% Tage ist. Ab Anbieter-Level %earnings.shortHoldLevel% beträgt die Haltefrist bei einem Konto, das mindestens %earnings.shortHoldMinAgeDays% Tage alt ist, %earnings.shortHoldDays% Tage. Sind Ihr Konto und das des Mieters beide jünger als %earnings.newPairAgeDays% Tage, sind es %earnings.newPairHoldDays% Tage, und eine Miete, die GPUFlow auf möglichen Betrug prüft, kann bis zu %earnings.reviewHoldDays% Tage zurückgehalten werden.
+
+</Tip>
 
 ## Auszahlungen einrichten (einmalig)
 
@@ -49,15 +58,15 @@ Manchmal prüft Stripe Ihre Angaben zuerst. Das dauert meist wenige Minuten, man
 
 1. Öffnen Sie **Dashboard → Zahlungen**.
 2. Geben Sie unter **Auszahlen** den Betrag ein oder lassen Sie den vorausgefüllten Gesamtbetrag stehen.
-3. Prüfen Sie die Zeile darunter: Sie zeigt die Gebühr von $2.50 und was Sie erhalten.
+3. Prüfen Sie die Zeile darunter: Sie zeigt die Gebühr von %earnings.cashoutFeeUsd% und was Sie erhalten.
 4. Klicken Sie auf **Auszahlen**.
 
 </Steps>
 
 <Image src={cashout} alt="Der Bereich Auszahlen mit dem Betragsfeld und der Schaltfläche Auszahlen hervorgehoben" />
 
-- **Mindestbetrag:** $25 pro Auszahlung.
-- **Gebühr:** $2.50 pro Auszahlung, unabhängig vom Betrag. Wer seltener auszahlt, spart Gebühren.
+- **Mindestbetrag:** %earnings.cashoutMinUsd% pro Auszahlung.
+- **Gebühr:** %earnings.cashoutFeeUsd% pro Auszahlung, unabhängig vom Betrag. Wer seltener auszahlt, spart Gebühren.
 - Das Geld wird in US-Dollar an Ihr Stripe-Auszahlungskonto gesendet, und Stripe überweist es auf Ihr Bankkonto.
 - Sie bekommen eine E-Mail und eine Benachrichtigung, sobald es gesendet ist. Geht die Auszahlung nicht durch, kommt der volle Betrag zurück auf Ihr Guthaben.
 - Ihre Bankdaten ändern Sie jederzeit über **Auszahlungsdaten bei Stripe verwalten**.

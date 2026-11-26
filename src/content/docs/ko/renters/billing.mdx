@@ -7,13 +7,19 @@ sidebar:
 ---
 
 import { Aside } from '@astrojs/starlight/components';
+import Tip from '../../../../components/Tip.astro';
 
 ## 크레딧
 
 - 대여 요금은 크레딧으로 냅니다. **1크레딧 = $0.01.**
 - 크레딧은 **대시보드 → 결제 → 크레딧 충전**에서 카드로 삽니다. 결제는 Stripe를 통해 처리됩니다.
-- 한 번에 **$10부터 $500까지** 충전할 수 있습니다. **수수료는 없습니다.**
 - 크레딧은 만료되지 않습니다.
+
+<Tip id="credits.limits">
+
+충전은 1회 %credits.topupMinUsd%~%credits.topupMaxUsd%이며 수수료는 없습니다. 2단계 인증을 켠 대여자는 대여자 레벨 %credits.topupLevel1%부터 한 번에 최대 %credits.topupLevel1Usd%, 레벨 %credits.topupLevel2%부터 최대 %credits.topupLevel2Usd%까지 충전할 수 있습니다([레벨과 포인트](/ko/account/levels/)). 가입한 지 %credits.newAccountDays%일이 안 된 계정은 %credits.weeklyWindowDays%일 동안 합계 최대 %credits.newAccountWeeklyUsd%까지 충전할 수 있습니다.
+
+</Tip>
 
 ## 대여하면 일어나는 일
 

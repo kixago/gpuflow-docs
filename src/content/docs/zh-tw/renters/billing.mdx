@@ -7,13 +7,19 @@ sidebar:
 ---
 
 import { Aside } from '@astrojs/starlight/components';
+import Tip from '../../../../components/Tip.astro';
 
 ## 額度
 
 - 租用費用以額度支付。**1 額度 = $0.01**。
 - 您可以在 **儀表板 → 支付 → 儲值額度** 用信用卡購買額度。付款透過 Stripe 處理。
-- 每次儲值金額介於 **$10 至 $500**。**不收手續費**。
 - 額度沒有使用期限。
+
+<Tip id="credits.limits">
+
+每次儲值金額為 %credits.topupMinUsd% 到 %credits.topupMaxUsd%，不收手續費。開啟兩步驟驗證後，租用者從租用者等級 %credits.topupLevel1% 起單次最多可儲值 %credits.topupLevel1Usd%，從等級 %credits.topupLevel2% 起最多 %credits.topupLevel2Usd%（[等級和點數](/zh-tw/account/levels/)）。註冊未滿 %credits.newAccountDays% 天的帳戶，每 %credits.weeklyWindowDays% 天合計最多可儲值 %credits.newAccountWeeklyUsd%。
+
+</Tip>
 
 ## 租用時會發生什麼事
 

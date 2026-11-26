@@ -1,0 +1,85 @@
+---
+title: "Niveles y puntos"
+description: "Cómo funcionan los puntos y los niveles en GPUFlow para inquilinos y proveedores: qué da y qué quita puntos, los %levels.max% niveles y qué desbloquea cada uno."
+sidebar:
+  label: "Niveles y puntos"
+  order: 2
+---
+
+import Tip from '../../../../components/Tip.astro';
+
+Tienes dos niveles, uno para alquilar y otro como proveedor, cada uno con sus propios puntos. Los inquilinos ven tu nivel de proveedor en tus anuncios y en tu página de proveedor. Tu nivel de inquilino aparece junto a tus reseñas y lo ven los proveedores a los que alquilas. Nunca se muestran juntos. Tu panel muestra los dos en **Tus niveles**, con tus últimos puntos.
+
+## Cómo funcionan los puntos
+
+<Tip id="levels.points">
+
+Los puntos vienen de los alquileres pagados terminados y de las valoraciones. El inquilino y el proveedor ganan puntos por cada hora pagada, hasta %points.maxPerRental% por alquiler, y las valoraciones suman o restan puntos. Cada cambio queda registrado, así que tu total siempre se puede explicar línea por línea.
+
+</Tip>
+
+| Qué pasa | Inquilino | Proveedor |
+| --- | --- | --- |
+| Termina un alquiler pagado | +%points.perPaidHour% por hora pagada, hasta %points.maxPerRental% | +%points.perPaidHour% por hora pagada, hasta %points.maxPerRental% |
+| Valoras a la otra parte | %points.ratingGiven% | %points.ratingGiven% |
+| Reseña recibida: 5 / 4 / 3 / 2 / 1 estrellas | — | %points.stars5% / %points.stars4% / %points.stars3% / %points.stars2% / %points.stars1% |
+| El proveedor volvería / no volvería a alquilarte | %points.thumbsUp% / %points.thumbsDown% | — |
+| La máquina estuvo en línea todo el alquiler | — | %points.onlineWholeRental% |
+| La máquina se desconectó durante el alquiler | — | %points.machineOffline% |
+| Se disputa un pago con tarjeta que hiciste | %points.cardDispute% | — |
+| El equipo retira tu reseña por abuso | %points.reviewHidden% | — |
+
+### Lo que no da puntos
+
+- Alquileres con menos de %points.minPaidMinutes% minutos pagados.
+- Más de %points.pairMonthlyCap% alquileres al mes entre el mismo inquilino y proveedor. Solo cuentan los %points.pairMonthlyCap% primeros.
+- Alquileres que se están revisando (ver más abajo).
+
+## Niveles
+
+<Tip id="levels.levels">
+
+Hay %levels.max% niveles. Subes en cuanto tus puntos llegan al siguiente nivel. Tu nivel nunca baja por estar inactivo. Solo baja si tus puntos caen por debajo del nivel inferior al tuyo, para que un mal alquiler no lo haga subir y bajar.
+
+</Tip>
+
+| Nivel | Puntos necesarios |
+| --- | --- |
+| 1 | %levels.thresholds.0% |
+| 2 | %levels.thresholds.1% |
+| 3 | %levels.thresholds.2% |
+| 4 | %levels.thresholds.3% |
+| 5 | %levels.thresholds.4% |
+| 6 | %levels.thresholds.5% |
+| 7 | %levels.thresholds.6% |
+| 8 | %levels.thresholds.7% |
+| 9 | %levels.thresholds.8% |
+| 10 | %levels.thresholds.9% |
+
+## Qué desbloquean los niveles
+
+<Tip id="levels.perks">
+
+Los proveedores desde el nivel %levels.searchLevel% aparecen antes en la búsqueda que otros con el mismo precio o valoración, y desde el nivel %earnings.shortHoldLevel% sus ganancias están listas a los %earnings.shortHoldDays% días en lugar de %earnings.holdDays%, en cuentas con al menos %earnings.shortHoldMinAgeDays% días. Los inquilinos con la verificación en dos pasos activada pueden recargar hasta %credits.topupLevel1Usd% de una vez desde el nivel %credits.topupLevel1%, y hasta %credits.topupLevel2Usd% desde el nivel %credits.topupLevel2%.
+
+</Tip>
+
+**Tus niveles**, en tu panel, muestra qué desbloquea tu siguiente nivel. Puede que se añadan más ventajas.
+
+## Cuentas nuevas
+
+<Tip id="levels.newAccounts">
+
+Los puntos de un alquiler esperan a que las dos cuentas tengan %points.newAccountDays% días. Hasta entonces aparecen como retenidos en **Tus niveles**, con la fecha en que contarán.
+
+</Tip>
+
+## Puntos retenidos por una revisión
+
+<Tip id="levels.review">
+
+A veces GPUFlow revisa un alquiler más a fondo, por ejemplo cuando dos cuentas parecen relacionadas o un pago parece inusual. Mientras se revisa, sus puntos no cuentan y ninguna de las dos cuentas puede subir de nivel. La mayoría de las revisiones terminan solas, y los puntos se suman cuando la revisión se aprueba.
+
+</Tip>
+
+El alquiler en sí no se ve afectado. Si crees que una revisión es un error, [abre un ticket de soporte](https://gpuflow.app/es/support).

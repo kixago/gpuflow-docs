@@ -49,7 +49,7 @@ Credits are what you pay for rentals with. **1 credit = $0.01**, so $25 buys 2,5
 <Steps>
 
 1. Open your **Dashboard** and click **Payments** in the menu on the left.
-2. Under **Add credits**, click an amount, or type your own. You can add from $10 to $500 at a time. There is no fee.
+2. Under **Add credits**, click an amount, or type your own. You can add from %credits.topupMinUsd% to %credits.topupMaxUsd% at a time. There is no fee.
 3. Click **Continue to payment**. You go to Stripe, our payment partner, to pay by card.
 4. After paying you come back to GPUFlow. Your credits show up within a minute, at the top of the Payments page and on the orange button in the header.
 
@@ -132,7 +132,8 @@ A useful comment says what you used the GPU for and how it went. For example:
 
 Good to know:
 
-- You can rate a rental for 30 days after it ends, if it cost you something.
-- You can change your review for 14 days after you post it. Click **Edit review** in **Rental History**.
-- Your GPUFlow username is shown with your review. Your email address is not.
+- You can rate a rental for %ratings.rateDays% days after it ends, if it cost you something.
+- You can change your review for %ratings.editDays% days after you post it. Click **Edit review** in **Rental History**.
+- Your review appears once the provider has rated you too, or %ratings.revealDays% days after the rental ends. [How ratings work](/account/ratings/).
+- Your public name and your renter level are shown with your review. Your email address is not.
 - The provider can reply publicly under your review. You get a notification when they do.

@@ -1,0 +1,85 @@
+---
+title: "Level und Punkte"
+description: "Wie Punkte und Level bei GPUFlow für Mieter und Anbieter funktionieren: was Punkte bringt und kostet, die %levels.max% Level und was jedes Level freischaltet."
+sidebar:
+  label: "Level und Punkte"
+  order: 2
+---
+
+import Tip from '../../../../components/Tip.astro';
+
+Sie haben zwei Level, eines fürs Mieten und eines fürs Anbieten, jedes mit eigenen Punkten. Mieter sehen Ihr Anbieter-Level bei Ihren Angeboten und auf Ihrer Anbieterseite. Ihr Mieter-Level steht neben Ihren Bewertungen und ist für Anbieter sichtbar, bei denen Sie mieten. Beide werden nie zusammen angezeigt. Ihr Dashboard zeigt beide unter **Ihre Level**, mit Ihren neuesten Punkten.
+
+## So funktionieren Punkte
+
+<Tip id="levels.points">
+
+Punkte gibt es für abgeschlossene, bezahlte Mieten und für Bewertungen. Mieter und Anbieter bekommen Punkte für jede bezahlte Stunde, bis zu %points.maxPerRental% pro Miete, und Bewertungen bringen oder kosten Punkte. Jede Änderung wird festgehalten, sodass sich Ihr Stand jederzeit Zeile für Zeile nachvollziehen lässt.
+
+</Tip>
+
+| Was passiert | Mieter | Anbieter |
+| --- | --- | --- |
+| Eine bezahlte Miete endet | +%points.perPaidHour% pro bezahlter Stunde, bis zu %points.maxPerRental% | +%points.perPaidHour% pro bezahlter Stunde, bis zu %points.maxPerRental% |
+| Sie bewerten die andere Seite | %points.ratingGiven% | %points.ratingGiven% |
+| Bewertung erhalten: 5 / 4 / 3 / 2 / 1 Sterne | — | %points.stars5% / %points.stars4% / %points.stars3% / %points.stars2% / %points.stars1% |
+| Der Anbieter würde wieder / nicht wieder an Sie vermieten | %points.thumbsUp% / %points.thumbsDown% | — |
+| Die Maschine war während der ganzen Miete online | — | %points.onlineWholeRental% |
+| Die Maschine ging während der Miete offline | — | %points.machineOffline% |
+| Eine Ihrer Kartenzahlungen wird angefochten | %points.cardDispute% | — |
+| Das Team entfernt Ihre Bewertung wegen Missbrauchs | %points.reviewHidden% | — |
+
+### Was keine Punkte bringt
+
+- Mieten mit weniger als %points.minPaidMinutes% bezahlten Minuten.
+- Mehr als %points.pairMonthlyCap% Mieten im Monat zwischen demselben Mieter und Anbieter. Nur die ersten %points.pairMonthlyCap% zählen.
+- Mieten, die gerade geprüft werden (siehe unten).
+
+## Level
+
+<Tip id="levels.levels">
+
+Es gibt %levels.max% Level. Sie steigen auf, sobald Ihre Punkte das nächste Level erreichen. Ihr Level sinkt nie, weil Sie eine Zeit lang nicht aktiv sind. Es sinkt nur, wenn Ihre Punkte unter das Level unter Ihrem fallen, damit eine einzelne schlechte Miete es nicht hin und her springen lässt.
+
+</Tip>
+
+| Level | Nötige Punkte |
+| --- | --- |
+| 1 | %levels.thresholds.0% |
+| 2 | %levels.thresholds.1% |
+| 3 | %levels.thresholds.2% |
+| 4 | %levels.thresholds.3% |
+| 5 | %levels.thresholds.4% |
+| 6 | %levels.thresholds.5% |
+| 7 | %levels.thresholds.6% |
+| 8 | %levels.thresholds.7% |
+| 9 | %levels.thresholds.8% |
+| 10 | %levels.thresholds.9% |
+
+## Was Level freischalten
+
+<Tip id="levels.perks">
+
+Anbieter ab Level %levels.searchLevel% stehen in der Suche vor anderen mit gleichem Preis oder gleicher Bewertung, und ab Level %earnings.shortHoldLevel% sind ihre Einnahmen nach %earnings.shortHoldDays% statt %earnings.holdDays% Tagen verfügbar, bei Konten, die mindestens %earnings.shortHoldMinAgeDays% Tage alt sind. Mieter mit eingeschalteter Zwei-Faktor-Anmeldung können ab Level %credits.topupLevel1% bis zu %credits.topupLevel1Usd% auf einmal aufladen und ab Level %credits.topupLevel2% bis zu %credits.topupLevel2Usd%.
+
+</Tip>
+
+**Ihre Level** auf Ihrem Dashboard zeigt, was Ihr nächstes Level freischaltet. Weitere Vorteile können später dazukommen.
+
+## Neue Konten
+
+<Tip id="levels.newAccounts">
+
+Punkte aus einer Miete warten, bis beide Konten %points.newAccountDays% Tage alt sind. Bis dahin stehen sie unter **Ihre Level** als zurückgehalten, mit dem Datum, ab dem sie zählen.
+
+</Tip>
+
+## Punkte während einer Prüfung
+
+<Tip id="levels.review">
+
+Manchmal sieht sich GPUFlow eine Miete genauer an, etwa wenn zwei Konten zusammenzugehören scheinen oder eine Zahlung ungewöhnlich wirkt. Während der Prüfung zählen ihre Punkte nicht, und keines der beiden Konten kann im Level steigen. Die meisten Prüfungen enden von selbst, und die Punkte kommen hinzu, sobald eine Prüfung abgeschlossen ist.
+
+</Tip>
+
+Die Miete selbst ist davon nicht betroffen. Halten Sie eine Prüfung für einen Fehler, [eröffnen Sie ein Support-Ticket](https://gpuflow.app/de/support).

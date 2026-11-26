@@ -1,0 +1,12 @@
+---
+// A paragraph the app shows behind its ⓘ buttons. The build copies the text
+// of every <Tip id="..."> into /tips/<lang>.json with a link to it, so the
+// app and the docs say the same thing. Keep the same ids in every language.
+interface Props {
+  id: string;
+}
+const { id } = Astro.props;
+const anchor = `tip-${id.replaceAll(".", "-")}`;
+---
+
+<div class="gpuflow-tip" id={anchor} data-tip={id}><slot /></div>

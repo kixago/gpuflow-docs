@@ -1,12 +1,13 @@
 ---
 title: 收款
-description: GPUFlow 提供者如何收款：12% 的费用、7 天的收益暂扣期、通过 Stripe 设置收款，以及提现到银行账户（最低 $25，手续费 $2.50）。
+description: GPUFlow 提供者如何收款：%fees.platformPercent%% 的费用、%earnings.holdDays% 天的收益暂扣期、通过 Stripe 设置收款，以及提现到银行账户（最低 %earnings.cashoutMinUsd%，手续费 %earnings.cashoutFeeUsd%）。
 sidebar:
   label: 收款
   order: 4
 ---
 
 import { Aside, Steps } from '@astrojs/starlight/components';
+import Tip from '../../../../components/Tip.astro';
 import { Image } from 'astro:assets';
 import setup from '../../../../assets/screens/zh-cn/provider-payout-setup.png';
 import cashout from '../../../../assets/screens/zh-cn/provider-cash-out.png';
@@ -15,14 +16,22 @@ import cashout from '../../../../assets/screens/zh-cn/provider-cash-out.png';
 
 <Steps>
 
-1. **租用结束**。租用者为使用的时间付费。GPUFlow 收取 12%，其余 88% 归您。
-2. **您的收益会暂扣 7 天**。它们显示在 **仪表板 → 支付** 的 **暂扣收益** 下。如果您的账户注册不满 30 天，暂扣期为 14 天。暂扣是为了防范银行卡欺诈和付款争议。
+1. **租用结束**。租用者为使用的时间付费。GPUFlow 收取 %fees.platformPercent%%，其余 %fees.providerPercent%% 归您。
+2. **您的收益会暂扣一段时间**。它们显示在 **仪表板 → 支付** 的 **暂扣收益** 下。暂扣是为了防范银行卡欺诈和付款争议。
 3. **收益变为可提现**。暂扣期结束后，收益会转入 **可提现**，您会收到一条通知。
 4. **您提现**，通过我们的支付合作伙伴 Stripe 转到您的银行账户。
 
 </Steps>
 
 您也可以用收益去租用其他 GPU。用银行卡购买的额度可以消费，但不能提现。
+
+### 暂扣多久
+
+<Tip id="earnings.hold">
+
+收益暂扣 %earnings.holdDays% 天；账户注册不满 %earnings.newAccountAgeDays% 天时为 %earnings.newAccountHoldDays% 天。提供者等级 %earnings.shortHoldLevel% 及以上、且账户注册满 %earnings.shortHoldMinAgeDays% 天时，暂扣期为 %earnings.shortHoldDays% 天。如果您和租用者的账户都注册不满 %earnings.newPairAgeDays% 天，暂扣期为 %earnings.newPairHoldDays% 天；GPUFlow 因可能存在欺诈而核查的租用，最多可暂扣 %earnings.reviewHoldDays% 天。
+
+</Tip>
 
 ## 设置收款（只需一次）
 
@@ -49,15 +58,15 @@ Stripe 有时会先审核您的资料。通常需要几分钟，有时需要一�
 
 1. 打开 **仪表板 → 支付**。
 2. 在 **提现** 下，输入金额，或保留已填好的全部金额。
-3. 看一下下方那一行：它显示 $2.50 的手续费，以及您实际收到的金额。
+3. 看一下下方那一行：它显示 %earnings.cashoutFeeUsd% 的手续费，以及您实际收到的金额。
 4. 点击 **提现**。
 
 </Steps>
 
 <Image src={cashout} alt="提现框，金额字段和“提现”按钮已高亮" />
 
-- **最低金额**：每次提现 $25。
-- **手续费**：每次提现 $2.50，与金额无关。减少提现次数可以省下手续费。
+- **最低金额**：每次提现 %earnings.cashoutMinUsd%。
+- **手续费**：每次提现 %earnings.cashoutFeeUsd%，与金额无关。减少提现次数可以省下手续费。
 - 钱以美元发送到您的 Stripe 收款账户，再由 Stripe 转到您的银行账户。
 - 发出后，您会收到一封邮件和一条通知。如果提现未成功，全部金额会退回您的余额。
 - 您可以随时通过 **在 Stripe 管理收款信息** 更改银行信息。

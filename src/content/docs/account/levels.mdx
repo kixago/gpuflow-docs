@@ -1,0 +1,85 @@
+---
+title: "Levels and points"
+description: "How points and levels work on GPUFlow for renters and providers: what earns and costs points, the %levels.max% levels, and what each level unlocks."
+sidebar:
+  label: "Levels and points"
+  order: 2
+---
+
+import Tip from '../../../components/Tip.astro';
+
+You have two levels, one for renting and one for providing, each with its own points. Renters see your provider level on your listings and provider page. Your renter level is shown next to your reviews and to providers you rent from. The two are never shown together. Your dashboard shows both in **Your levels**, with your latest points.
+
+## How points work
+
+<Tip id="levels.points">
+
+Points come from completed paid rentals and from ratings. Both the renter and the provider earn points for every paid hour, up to %points.maxPerRental% per rental, and ratings add or take away points. Every change is recorded, so your total can always be explained line by line.
+
+</Tip>
+
+| What happens | Renter | Provider |
+| --- | --- | --- |
+| A paid rental ends | +%points.perPaidHour% per paid hour, up to %points.maxPerRental% | +%points.perPaidHour% per paid hour, up to %points.maxPerRental% |
+| You rate the other side | %points.ratingGiven% | %points.ratingGiven% |
+| Review received: 5 / 4 / 3 / 2 / 1 stars | — | %points.stars5% / %points.stars4% / %points.stars3% / %points.stars2% / %points.stars1% |
+| The provider would / wouldn't rent to you again | %points.thumbsUp% / %points.thumbsDown% | — |
+| The machine stayed online for the whole rental | — | %points.onlineWholeRental% |
+| The machine went offline during the rental | — | %points.machineOffline% |
+| A card payment you made is disputed | %points.cardDispute% | — |
+| Staff remove your review for abuse | %points.reviewHidden% | — |
+
+### What doesn't earn points
+
+- Rentals with less than %points.minPaidMinutes% paid minutes.
+- More than %points.pairMonthlyCap% rentals in a month between the same renter and provider. Only the first %points.pairMonthlyCap% count.
+- Rentals that are being checked (see below).
+
+## Levels
+
+<Tip id="levels.levels">
+
+There are %levels.max% levels. You move up as soon as your points reach the next level. Your level never drops because you're away. It drops only if your points fall below the level beneath yours, so one bad rental doesn't flip it back and forth.
+
+</Tip>
+
+| Level | Points needed |
+| --- | --- |
+| 1 | %levels.thresholds.0% |
+| 2 | %levels.thresholds.1% |
+| 3 | %levels.thresholds.2% |
+| 4 | %levels.thresholds.3% |
+| 5 | %levels.thresholds.4% |
+| 6 | %levels.thresholds.5% |
+| 7 | %levels.thresholds.6% |
+| 8 | %levels.thresholds.7% |
+| 9 | %levels.thresholds.8% |
+| 10 | %levels.thresholds.9% |
+
+## What levels unlock
+
+<Tip id="levels.perks">
+
+Providers from level %levels.searchLevel% are listed higher in search than others at the same price or rating, and from level %earnings.shortHoldLevel% their earnings are ready after %earnings.shortHoldDays% days instead of %earnings.holdDays%, on accounts at least %earnings.shortHoldMinAgeDays% days old. Renters with two-step verification turned on can add up to %credits.topupLevel1Usd% at a time from level %credits.topupLevel1%, and up to %credits.topupLevel2Usd% from level %credits.topupLevel2%.
+
+</Tip>
+
+**Your levels** on your dashboard lists what your next level unlocks. More perks may be added later.
+
+## New accounts
+
+<Tip id="levels.newAccounts">
+
+Points from a rental wait until both accounts are %points.newAccountDays% days old. Until then they show as on hold in **Your levels**, with the date they'll count.
+
+</Tip>
+
+## Points on hold for a check
+
+<Tip id="levels.review">
+
+Sometimes GPUFlow takes a closer look at a rental, for example when two accounts seem related or a payment looks unusual. While it's being checked, its points don't count and neither account can move up a level. Most checks end on their own, and the points are added when a check is cleared.
+
+</Tip>
+
+The rental itself isn't affected. If you think a check is a mistake, [open a support ticket](https://gpuflow.app/en/support).

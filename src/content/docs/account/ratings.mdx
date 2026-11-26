@@ -1,0 +1,42 @@
+---
+title: "Ratings"
+description: "How ratings work on GPUFlow: renters rate the GPU with stars, providers say whether they'd rent to the renter again, and neither sees the other's rating first."
+sidebar:
+  label: "Ratings"
+  order: 3
+---
+
+import Tip from '../../../components/Tip.astro';
+
+Every paid rental can be rated by both sides. Ratings help renters choose a GPU, help providers decide whom to rent to, and earn points for both.
+
+## Who rates what
+
+- **The renter** rates the GPU from 1 to 5 stars, with an optional comment of up to %ratings.commentMax% characters. You can rate for %ratings.rateDays% days after the rental ends, and change your review for %ratings.editDays% days after posting it. [How to rate a rental](/renters/getting-started/).
+- **The provider** answers one question about the renter: would you rent to them again? Yes or no, with an optional note that only GPUFlow staff read.
+
+## Nobody sees the other rating first
+
+<Tip id="ratings.hidden">
+
+Neither rating is shown until both are in, or until %ratings.revealDays% days after the rental ends, whichever comes first. That way nobody can rate in reply to the other's rating. Then the review appears on the listing and counts toward its average.
+
+</Tip>
+
+## For providers: would you rent to them again?
+
+<Tip id="ratings.thumbs">
+
+After a paid rental of your GPU, you answer one question about the renter: would you rent to them again? Renters never see a single provider's answer, only their overall share once at least %ratings.thumbsRateMin% providers have answered. You can change your answer until it's revealed and add a note that only GPUFlow staff read.
+
+</Tip>
+
+You can answer on your dashboard, where a card asks about your latest rentals, or in the **Rent to them again?** column on the **Earnings** tab. You have %ratings.revealDays% days after the rental ends.
+
+## What others see
+
+- Your public name (your display name, or your username) and your renter level next to your review. Never your email address.
+- The provider can reply publicly once under each review and change the reply later.
+- A provider can't remove a review. Staff remove reviews that are abusive or fake.
+
+Ratings also earn and cost points. See [Levels and points](/account/levels/).
