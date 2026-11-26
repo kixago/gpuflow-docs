@@ -1,6 +1,6 @@
 ---
 title: Getting paid
-description: How GPUFlow providers get paid - the %fees.platformPercent%% fee, the %earnings.holdDays%-day earnings hold, setting up payouts with Stripe, and cashing out to your bank (%earnings.cashoutMinUsd% minimum, %earnings.cashoutFeeUsd% fee).
+description: How GPUFlow providers get paid - the %fees.platformPercent%% fee, the %earnings.holdDays%-day earnings hold, setting up payouts on the site, and cashing out to your bank (%earnings.cashoutMinUsd% minimum, %earnings.cashoutFeeUsd% fee).
 sidebar:
   label: Getting paid
   order: 4
@@ -19,7 +19,7 @@ import cashout from '../../../assets/screens/en/provider-cash-out.png';
 1. **A rental ends.** The renter pays for the time used. GPUFlow keeps %fees.platformPercent%% and the other %fees.providerPercent%% is yours.
 2. **Your earnings are held for a while.** They show under **Earnings on hold** on **Dashboard → Payments**. The hold protects against card fraud and disputes.
 3. **They become ready to cash out.** After the hold they move to **Ready to cash out**, and you get a notification.
-4. **You cash out** to your bank through Stripe, our payment partner.
+4. **You cash out** to your bank account, right from the Payments page.
 
 </Steps>
 
@@ -35,22 +35,41 @@ Earnings are held for %earnings.holdDays% days, or %earnings.newAccountHoldDays%
 
 ## Set up payouts (once)
 
-You need a confirmed email address and a payout account with Stripe. Stripe checks your identity and asks for your bank details. It takes a few minutes.
+You need a confirmed email address, two-factor sign-in turned on, and a payout account. You set it up without leaving GPUFlow: a secure form on the Payments page checks your identity and asks for your bank details. It takes a few minutes.
 
 <Steps>
 
 1. Open **Dashboard → Payments**.
 2. Under **Cash out**, choose the country where you live or where your business is registered.
-3. Click **Set up payouts with Stripe** and follow Stripe's steps. Have an ID and your bank details ready.
-4. When you finish, Stripe sends you back to GPUFlow.
+3. Click **Set up payouts**. If you haven't confirmed it's you in the last 10 minutes, you're asked for your two-factor code first.
+4. Fill in the form that opens in the box. Have an ID and your bank details ready.
+5. Click **Close** when you're done. The box checks your details and shows the result.
 
 </Steps>
 
-<Image src={setup} alt="The Cash out box: the country list and the Set up payouts with Stripe button highlighted" />
+<Image src={setup} alt="The Cash out box: the country list and the Set up payouts button highlighted" />
 
-Stripe sometimes reviews your details first. That usually takes a few minutes, sometimes a day or two. If a step is still missing, you'll see **Continue setup on Stripe**.
+Your details are sometimes checked first. That usually takes a few minutes, sometimes a day or two. If a step is still missing, you'll see **Continue setup**. If more details are needed later, you get an email and a notice in the box with an **Add details** button.
+
+<Aside type="note">
+The setup form comes in English, German, Spanish, French, Japanese, Korean, Portuguese and Chinese. In other languages it opens in English; the rest of the page stays in your language.
+</Aside>
 
 **Countries where payouts work:** United States, Canada, United Kingdom, Switzerland, and the European Economic Area: Austria, Belgium, Bulgaria, Croatia, Cyprus, Czechia, Denmark, Estonia, Finland, France, Germany, Greece, Hungary, Iceland, Ireland, Italy, Latvia, Liechtenstein, Lithuania, Luxembourg, Malta, Netherlands, Norway, Poland, Portugal, Romania, Slovakia, Slovenia, Spain and Sweden.
+
+## Your bank accounts
+
+Under **Where we send your money** you see the bank accounts and debit cards on file, for example *Chase ••6789*, and which one is the **Default**.
+
+- **Make default** sends future cash-outs to another account.
+- **Remove** deletes an account that isn't the default.
+- **Add or change a bank account** opens the form in the box.
+
+<Tip id="earnings.newBank">
+
+For your protection, a cash-out to a bank account you just added waits %earnings.newBankHours% hours (your very first bank account doesn't wait). When a bank account is added, you get an email. If it wasn't you, click the link in that email to pause payouts: nothing is sent until our team has checked your account with you.
+
+</Tip>
 
 ## Cash out
 
@@ -67,9 +86,16 @@ Stripe sometimes reviews your details first. That usually takes a few minutes, s
 
 - **Minimum:** %earnings.cashoutMinUsd% per cash-out.
 - **Fee:** %earnings.cashoutFeeUsd% per cash-out, no matter the amount. Cashing out less often saves fees.
-- The money is sent in US dollars to your Stripe payout account, and Stripe pays it to your bank.
+- The money is sent in US dollars to your payout account and paid out to your bank on the usual schedule.
 - You get an email and a notification when it's sent. If it doesn't go through, the full amount returns to your balance.
-- Change your bank details any time with **Manage payout details on Stripe**.
+
+### When a cash-out is reviewed
+
+<Tip id="earnings.review">
+
+Some cash-outs are checked by our team before they're sent, for example when the same bank account is also used by another GPUFlow account. The cash-out shows **Under review** and you get an email when it's decided. While the check is open, the balances of the accounts involved are on hold: no cash-outs, rentals or top-ups, and earnings don't clear. Rentals already running continue.
+
+</Tip>
 
 ## If a renter disputes a card payment
 

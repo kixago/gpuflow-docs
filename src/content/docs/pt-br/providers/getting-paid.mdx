@@ -1,6 +1,6 @@
 ---
 title: Como receber
-description: Como os provedores do GPUFlow recebem - a taxa de %fees.platformPercent%%, a retenção de %earnings.holdDays% dias dos ganhos, a configuração dos saques com a Stripe e o saque para o seu banco (mínimo de %earnings.cashoutMinUsd%, taxa de %earnings.cashoutFeeUsd%).
+description: Como os provedores do GPUFlow recebem - a taxa de %fees.platformPercent% %, a retenção de ganhos de %earnings.holdDays% dias, a configuração dos saques no próprio site e o saque para o seu banco (mínimo de %earnings.cashoutMinUsd%, taxa de %earnings.cashoutFeeUsd%).
 sidebar:
   label: Como receber
   order: 4
@@ -19,7 +19,7 @@ import cashout from '../../../../assets/screens/pt-br/provider-cash-out.png';
 1. **Um aluguel termina.** O locatário paga pelo tempo usado. O GPUFlow fica com %fees.platformPercent%%, e os outros %fees.providerPercent%% são seus.
 2. **Seus ganhos ficam retidos por um tempo.** Eles aparecem em **Ganhos retidos** em **Painel → Pagamentos**. A retenção protege contra fraudes com cartão e contestações.
 3. **Eles ficam disponíveis para saque.** Depois da retenção, eles passam para **Disponível para saque**, e você recebe uma notificação.
-4. **Você saca** para o seu banco pela Stripe, nossa parceira de pagamentos.
+4. **Você saca** para a sua conta bancária, direto da página Pagamentos.
 
 </Steps>
 
@@ -35,22 +35,41 @@ Os ganhos ficam retidos por %earnings.holdDays% dias, ou %earnings.newAccountHol
 
 ## Configure os saques (uma vez)
 
-Você precisa de um endereço de e-mail confirmado e de uma conta de recebimento na Stripe. A Stripe verifica a sua identidade e pede seus dados bancários. Isso leva alguns minutos.
+Você precisa de um endereço de e-mail confirmado, do login em duas etapas ativado e de uma conta de pagamentos. Você configura tudo sem sair do GPUFlow: um formulário seguro na página Pagamentos verifica a sua identidade e pede seus dados bancários. Isso leva alguns minutos.
 
 <Steps>
 
 1. Abra **Painel → Pagamentos**.
 2. Em **Sacar**, escolha o país onde você mora ou onde a sua empresa está registrada.
-3. Clique em **Configurar saques com a Stripe** e siga os passos da Stripe. Tenha em mãos um documento de identidade e seus dados bancários.
-4. Quando você terminar, a Stripe manda você de volta para o GPUFlow.
+3. Clique em **Configurar pagamentos**. Se você não confirmou que é você nos últimos 10 minutos, primeiro será pedido o seu código de duas etapas.
+4. Preencha o formulário que abre na caixa. Tenha em mãos um documento de identidade e seus dados bancários.
+5. Clique em **Fechar** quando terminar. A caixa verifica seus dados e mostra o resultado.
 
 </Steps>
 
-<Image src={setup} alt="A caixa Sacar: a lista de países e o botão Configurar saques com a Stripe em destaque" />
+<Image src={setup} alt="A caixa Sacar: a lista de países e o botão Configurar pagamentos destacados" />
 
-Às vezes a Stripe analisa seus dados antes. Isso costuma levar alguns minutos, às vezes um ou dois dias. Se ainda faltar algum passo, você vai ver **Continuar a configuração na Stripe**.
+Às vezes seus dados são verificados antes. Isso costuma levar alguns minutos, às vezes um ou dois dias. Se ainda faltar uma etapa, você verá **Continuar a configuração**. Se mais dados forem necessários depois, você recebe um e-mail e um aviso na caixa com o botão **Adicionar dados**.
+
+<Aside type="note">
+O formulário de configuração está disponível em inglês, alemão, espanhol, francês, japonês, coreano, português e chinês. Em outros idiomas ele abre em inglês; o restante da página continua no seu idioma.
+</Aside>
 
 **Países onde os saques funcionam:** Estados Unidos, Canadá, Reino Unido, Suíça e o Espaço Econômico Europeu: Áustria, Bélgica, Bulgária, Croácia, Chipre, Tchéquia, Dinamarca, Estônia, Finlândia, França, Alemanha, Grécia, Hungria, Islândia, Irlanda, Itália, Letônia, Liechtenstein, Lituânia, Luxemburgo, Malta, Países Baixos, Noruega, Polônia, Portugal, Romênia, Eslováquia, Eslovênia, Espanha e Suécia.
+
+## Suas contas bancárias
+
+Em **Para onde enviamos seu dinheiro** você vê as contas bancárias e os cartões de débito cadastrados, por exemplo *Chase ••6789*, e qual é a **Padrão**.
+
+- **Tornar padrão** envia os próximos saques para outra conta.
+- **Remover** apaga uma conta que não seja a padrão.
+- **Adicionar ou alterar uma conta bancária** abre o formulário na caixa.
+
+<Tip id="earnings.newBank">
+
+Para sua proteção, um saque para uma conta bancária que você acabou de adicionar aguarda %earnings.newBankHours% horas (a sua primeira conta bancária não aguarda). Quando uma conta bancária é adicionada, você recebe um e-mail. Se não foi você, clique no link desse e-mail para pausar os pagamentos: nada é enviado até que nossa equipe verifique sua conta com você.
+
+</Tip>
 
 ## Saque
 
@@ -67,9 +86,16 @@ Você precisa de um endereço de e-mail confirmado e de uma conta de recebimento
 
 - **Mínimo:** %earnings.cashoutMinUsd% por saque.
 - **Taxa:** %earnings.cashoutFeeUsd% por saque, seja qual for o valor. Sacar com menos frequência economiza taxas.
-- O dinheiro é enviado em dólares americanos para a sua conta de recebimento na Stripe, e a Stripe paga no seu banco.
-- Você recebe um e-mail e uma notificação quando o saque é enviado. Se ele não for concluído, o valor total volta para o seu saldo.
-- Altere seus dados bancários quando quiser em **Gerenciar dados de recebimento na Stripe**.
+- O dinheiro é enviado em dólares americanos para a sua conta de pagamentos e pago ao seu banco no prazo habitual.
+- Você recebe um e-mail e uma notificação quando ele é enviado. Se não der certo, o valor total volta para o seu saldo.
+
+### Quando um saque é analisado
+
+<Tip id="earnings.review">
+
+Nossa equipe confere alguns saques antes de enviá-los, por exemplo quando a mesma conta bancária também é usada por outra conta do GPUFlow. O saque mostra **Em análise** e você recebe um e-mail quando houver uma decisão. Enquanto a análise estiver aberta, o saldo das contas envolvidas fica retido: sem saques, aluguéis ou recargas, e os ganhos não são liberados. Aluguéis em andamento continuam.
+
+</Tip>
 
 ## Se um locatário contestar um pagamento com cartão
 

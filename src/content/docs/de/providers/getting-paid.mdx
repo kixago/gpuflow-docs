@@ -1,6 +1,6 @@
 ---
 title: So werden Sie bezahlt
-description: So werden GPUFlow-Anbieter bezahlt - die Gebühr von %fees.platformPercent% %, die %earnings.holdDays%-tägige Haltefrist für Einnahmen, Auszahlungen mit Stripe einrichten und auf Ihr Bankkonto auszahlen (mindestens %earnings.cashoutMinUsd%, Gebühr %earnings.cashoutFeeUsd%).
+description: So werden GPUFlow-Anbieter bezahlt - die Gebühr von %fees.platformPercent% %, die %earnings.holdDays%-tägige Haltefrist für Einnahmen, Auszahlungen direkt auf der Website einrichten und auf Ihr Bankkonto auszahlen (mindestens %earnings.cashoutMinUsd%, Gebühr %earnings.cashoutFeeUsd%).
 sidebar:
   label: So werden Sie bezahlt
   order: 4
@@ -19,7 +19,7 @@ import cashout from '../../../../assets/screens/de/provider-cash-out.png';
 1. **Eine Miete endet.** Der Mieter zahlt für die genutzte Zeit. GPUFlow behält %fees.platformPercent% %, die übrigen %fees.providerPercent% % gehören Ihnen.
 2. **Ihre Einnahmen werden eine Zeit lang zurückgehalten.** Sie stehen unter **Einnahmen im Rückhalt** auf **Dashboard → Zahlungen**. Die Haltefrist schützt vor Kartenbetrug und Zahlungsanfechtungen.
 3. **Sie werden auszahlbar.** Nach der Haltefrist wandern sie zu **Auszahlbar**, und Sie bekommen eine Benachrichtigung.
-4. **Sie zahlen aus**, über Stripe, unseren Zahlungspartner, auf Ihr Bankkonto.
+4. **Sie zahlen aus**, direkt von der Seite Zahlungen auf Ihr Bankkonto.
 
 </Steps>
 
@@ -35,22 +35,41 @@ Einnahmen werden %earnings.holdDays% Tage zurückgehalten, oder %earnings.newAcc
 
 ## Auszahlungen einrichten (einmalig)
 
-Sie brauchen eine bestätigte E-Mail-Adresse und ein Auszahlungskonto bei Stripe. Stripe prüft Ihre Identität und fragt nach Ihren Bankdaten. Das dauert wenige Minuten.
+Sie brauchen eine bestätigte E-Mail-Adresse, eingeschaltete Zwei-Faktor-Anmeldung und ein Auszahlungskonto. Sie richten es ein, ohne GPUFlow zu verlassen: Ein sicheres Formular auf der Seite Zahlungen prüft Ihre Identität und fragt nach Ihren Bankdaten. Das dauert wenige Minuten.
 
 <Steps>
 
 1. Öffnen Sie **Dashboard → Zahlungen**.
 2. Wählen Sie unter **Auszahlen** das Land, in dem Sie wohnen oder in dem Ihr Unternehmen registriert ist.
-3. Klicken Sie auf **Auszahlungen mit Stripe einrichten** und folgen Sie den Schritten bei Stripe. Halten Sie einen Ausweis und Ihre Bankdaten bereit.
-4. Wenn Sie fertig sind, schickt Stripe Sie zurück zu GPUFlow.
+3. Klicken Sie auf **Auszahlungen einrichten**. Haben Sie sich in den letzten 10 Minuten nicht bestätigt, werden Sie zuerst nach Ihrem Zwei-Faktor-Code gefragt.
+4. Füllen Sie das Formular aus, das sich im Bereich öffnet. Halten Sie einen Ausweis und Ihre Bankdaten bereit.
+5. Klicken Sie auf **Schließen**, wenn Sie fertig sind. Der Bereich prüft Ihre Angaben und zeigt das Ergebnis.
 
 </Steps>
 
-<Image src={setup} alt="Der Bereich Auszahlen: die Länderliste und die Schaltfläche Auszahlungen mit Stripe einrichten hervorgehoben" />
+<Image src={setup} alt="Der Bereich Auszahlen: die Länderliste und die Schaltfläche Auszahlungen einrichten hervorgehoben" />
 
-Manchmal prüft Stripe Ihre Angaben zuerst. Das dauert meist wenige Minuten, manchmal ein bis zwei Tage. Fehlt noch ein Schritt, sehen Sie **Einrichtung bei Stripe fortsetzen**.
+Manchmal werden Ihre Angaben zuerst geprüft. Das dauert meist wenige Minuten, manchmal ein bis zwei Tage. Fehlt noch ein Schritt, sehen Sie **Einrichtung fortsetzen**. Werden später weitere Angaben benötigt, bekommen Sie eine E-Mail und einen Hinweis im Bereich mit der Schaltfläche **Angaben ergänzen**.
+
+<Aside type="note">
+Das Einrichtungsformular gibt es auf Englisch, Deutsch, Spanisch, Französisch, Japanisch, Koreanisch, Portugiesisch und Chinesisch. In anderen Sprachen öffnet es sich auf Englisch; der Rest der Seite bleibt in Ihrer Sprache.
+</Aside>
 
 **Länder, in denen Auszahlungen möglich sind:** USA, Kanada, Großbritannien, Schweiz und der Europäische Wirtschaftsraum: Belgien, Bulgarien, Dänemark, Deutschland, Estland, Finnland, Frankreich, Griechenland, Irland, Island, Italien, Kroatien, Lettland, Liechtenstein, Litauen, Luxemburg, Malta, Niederlande, Norwegen, Österreich, Polen, Portugal, Rumänien, Schweden, Slowakei, Slowenien, Spanien, Tschechien, Ungarn und Zypern.
+
+## Ihre Bankkonten
+
+Unter **Wohin wir Ihr Geld senden** sehen Sie die hinterlegten Bankkonten und Debitkarten, zum Beispiel *Chase ••6789*, und welches davon **Standard** ist.
+
+- **Als Standard festlegen** schickt künftige Auszahlungen auf ein anderes Konto.
+- **Entfernen** löscht ein Konto, das nicht der Standard ist.
+- **Bankkonto hinzufügen oder ändern** öffnet das Formular im Bereich.
+
+<Tip id="earnings.newBank">
+
+Zu Ihrem Schutz wartet eine Auszahlung auf ein gerade hinzugefügtes Bankkonto %earnings.newBankHours% Stunden (Ihr allererstes Bankkonto wartet nicht). Wird ein Bankkonto hinzugefügt, bekommen Sie eine E-Mail. Waren Sie das nicht, klicken Sie auf den Link in dieser E-Mail, um die Auszahlungen zu pausieren: Es wird nichts gesendet, bis unser Team Ihr Konto mit Ihnen geprüft hat.
+
+</Tip>
 
 ## Auszahlen
 
@@ -67,9 +86,16 @@ Manchmal prüft Stripe Ihre Angaben zuerst. Das dauert meist wenige Minuten, man
 
 - **Mindestbetrag:** %earnings.cashoutMinUsd% pro Auszahlung.
 - **Gebühr:** %earnings.cashoutFeeUsd% pro Auszahlung, unabhängig vom Betrag. Wer seltener auszahlt, spart Gebühren.
-- Das Geld wird in US-Dollar an Ihr Stripe-Auszahlungskonto gesendet, und Stripe überweist es auf Ihr Bankkonto.
+- Das Geld wird in US-Dollar an Ihr Auszahlungskonto gesendet und im üblichen Rhythmus auf Ihr Bankkonto ausgezahlt.
 - Sie bekommen eine E-Mail und eine Benachrichtigung, sobald es gesendet ist. Geht die Auszahlung nicht durch, kommt der volle Betrag zurück auf Ihr Guthaben.
-- Ihre Bankdaten ändern Sie jederzeit über **Auszahlungsdaten bei Stripe verwalten**.
+
+### Wenn eine Auszahlung geprüft wird
+
+<Tip id="earnings.review">
+
+Manche Auszahlungen prüft unser Team, bevor sie gesendet werden, zum Beispiel wenn dasselbe Bankkonto auch von einem anderen GPUFlow-Konto genutzt wird. Die Auszahlung zeigt **In Prüfung**, und Sie bekommen eine E-Mail, sobald entschieden ist. Solange die Prüfung läuft, ist das Guthaben der beteiligten Konten gesperrt: keine Auszahlungen, Mieten oder Aufladungen, und Einnahmen werden nicht freigegeben. Laufende Mieten gehen weiter.
+
+</Tip>
 
 ## Wenn ein Mieter eine Kartenzahlung anficht
 

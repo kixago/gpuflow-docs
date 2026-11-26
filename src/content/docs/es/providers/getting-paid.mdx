@@ -1,6 +1,6 @@
 ---
 title: Cobrar
-description: Cómo cobran los proveedores de GPUFlow - la comisión del %fees.platformPercent% %, la retención de ganancias de %earnings.holdDays% días, la configuración de retiros con Stripe y el retiro a tu banco (mínimo %earnings.cashoutMinUsd%, comisión de %earnings.cashoutFeeUsd%).
+description: Cómo cobran los proveedores de GPUFlow - la comisión del %fees.platformPercent% %, la retención de ganancias de %earnings.holdDays% días, la configuración de los retiros en el propio sitio y el retiro a tu banco (mínimo %earnings.cashoutMinUsd%, comisión de %earnings.cashoutFeeUsd%).
 sidebar:
   label: Cobrar
   order: 4
@@ -19,7 +19,7 @@ import cashout from '../../../../assets/screens/es/provider-cash-out.png';
 1. **Termina un alquiler.** El inquilino paga el tiempo usado. GPUFlow se queda con el %fees.platformPercent% % y el %fees.providerPercent% % restante es tuyo.
 2. **Tus ganancias quedan retenidas un tiempo.** Aparecen en **Ganancias retenidas** en **Panel → Pagos**. La retención protege contra el fraude con tarjeta y las disputas.
 3. **Quedan listas para retirar.** Después de la retención pasan a **Listo para retirar** y recibes una notificación.
-4. **Retiras el dinero** a tu banco a través de Stripe, nuestro socio de pagos.
+4. **Retiras** a tu cuenta bancaria, directamente desde la página Pagos.
 
 </Steps>
 
@@ -35,22 +35,41 @@ Las ganancias quedan retenidas %earnings.holdDays% días, o %earnings.newAccount
 
 ## Configura los retiros (una sola vez)
 
-Necesitas una dirección de email confirmada y una cuenta de pagos en Stripe. Stripe verifica tu identidad y te pide tus datos bancarios. Tarda unos minutos.
+Necesitas una dirección de email confirmada, el inicio de sesión en dos pasos activado y una cuenta de pagos. La configuras sin salir de GPUFlow: un formulario seguro en la página Pagos verifica tu identidad y te pide tus datos bancarios. Tarda unos minutos.
 
 <Steps>
 
 1. Abre **Panel → Pagos**.
 2. En **Retirar**, elige el país donde vives o donde está registrada tu empresa.
-3. Haz clic en **Configurar retiros con Stripe** y sigue los pasos de Stripe. Ten a mano un documento de identidad y tus datos bancarios.
-4. Cuando termines, Stripe te devuelve a GPUFlow.
+3. Haz clic en **Configurar pagos**. Si no has confirmado que eres tú en los últimos 10 minutos, primero se te pide tu código de dos pasos.
+4. Rellena el formulario que se abre en el recuadro. Ten a mano un documento de identidad y tus datos bancarios.
+5. Haz clic en **Cerrar** cuando termines. El recuadro comprueba tus datos y muestra el resultado.
 
 </Steps>
 
-<Image src={setup} alt="El cuadro Retirar: la lista de países y el botón Configurar retiros con Stripe resaltados" />
+<Image src={setup} alt="El recuadro Retirar: la lista de países y el botón Configurar pagos resaltados" />
 
-A veces Stripe revisa primero tus datos. Normalmente tarda unos minutos, a veces uno o dos días. Si todavía falta algún paso, verás **Continuar la configuración en Stripe**.
+A veces tus datos se revisan primero. Suele tardar unos minutos, a veces uno o dos días. Si aún falta un paso, verás **Continuar la configuración**. Si más adelante hacen falta más datos, recibirás un email y un aviso en el recuadro con el botón **Añadir datos**.
+
+<Aside type="note">
+El formulario de configuración está disponible en inglés, alemán, español, francés, japonés, coreano, portugués y chino. En otros idiomas se abre en inglés; el resto de la página sigue en tu idioma.
+</Aside>
 
 **Países donde funcionan los retiros:** Estados Unidos, Canadá, Reino Unido, Suiza y el Espacio Económico Europeo: Alemania, Austria, Bélgica, Bulgaria, Chequia, Chipre, Croacia, Dinamarca, Eslovaquia, Eslovenia, España, Estonia, Finlandia, Francia, Grecia, Hungría, Irlanda, Islandia, Italia, Letonia, Liechtenstein, Lituania, Luxemburgo, Malta, Noruega, Países Bajos, Polonia, Portugal, Rumania y Suecia.
+
+## Tus cuentas bancarias
+
+En **Adónde enviamos tu dinero** ves las cuentas bancarias y tarjetas de débito registradas, por ejemplo *Chase ••6789*, y cuál es la **Predeterminada**.
+
+- **Hacer predeterminada** envía los próximos retiros a otra cuenta.
+- **Quitar** elimina una cuenta que no sea la predeterminada.
+- **Añadir o cambiar una cuenta bancaria** abre el formulario en el recuadro.
+
+<Tip id="earnings.newBank">
+
+Para protegerte, un retiro a una cuenta bancaria que acabas de añadir espera %earnings.newBankHours% horas (tu primera cuenta bancaria no espera). Cuando se añade una cuenta bancaria, recibes un email. Si no fuiste tú, haz clic en el enlace de ese email para pausar los pagos: no se envía nada hasta que nuestro equipo revise tu cuenta contigo.
+
+</Tip>
 
 ## Retira tu dinero
 
@@ -67,9 +86,16 @@ A veces Stripe revisa primero tus datos. Normalmente tarda unos minutos, a veces
 
 - **Mínimo:** %earnings.cashoutMinUsd% por retiro.
 - **Comisión:** %earnings.cashoutFeeUsd% por retiro, sea cual sea el importe. Retirar con menos frecuencia te ahorra comisiones.
-- El dinero se envía en dólares estadounidenses a tu cuenta de pagos de Stripe, y Stripe lo transfiere a tu banco.
+- El dinero se envía en dólares estadounidenses a tu cuenta de pagos y se paga a tu banco según el calendario habitual.
 - Recibes un email y una notificación cuando se envía. Si no se completa, el importe total vuelve a tu saldo.
-- Puedes cambiar tus datos bancarios cuando quieras con **Gestionar datos de pago en Stripe**.
+
+### Cuando se revisa un retiro
+
+<Tip id="earnings.review">
+
+Nuestro equipo revisa algunos retiros antes de enviarlos, por ejemplo cuando otra cuenta de GPUFlow también usa la misma cuenta bancaria. El retiro muestra **En revisión** y recibes un email cuando se decide. Mientras dura la revisión, el saldo de las cuentas implicadas queda retenido: sin retiros, alquileres ni recargas, y las ganancias no se liberan. Los alquileres en curso continúan.
+
+</Tip>
 
 ## Si un inquilino reclama un pago con tarjeta
 

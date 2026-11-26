@@ -438,18 +438,18 @@ export default defineConfig({
         starlightLlmsTxt({
           projectName: "GPUFlow",
           description:
-            "GPUFlow (gpuflow.app) is a marketplace where people rent GPUs by the hour from other people. A renter adds credits by card, rents a GPU for a number of hours and gets an OpenAI-compatible API key for it. A provider runs one command on a Linux machine with a GPU, lists it with an hourly price, and cashes out earnings to a bank account through Stripe.",
+            "GPUFlow (gpuflow.app) is a marketplace where people rent GPUs by the hour from other people. A renter adds credits by card, rents a GPU for a number of hours and gets an OpenAI-compatible API key for it. A provider runs one command on a Linux machine with a GPU, lists it with an hourly price, and cashes out earnings to a bank account.",
           details: fill(`
 ## Key facts
 
-- Renters pay with credits bought by card through Stripe (%credits.topupMinUsd% to %credits.topupMaxUsd% per top-up, more at higher renter levels; accounts under %credits.newAccountDays% days old up to %credits.newAccountWeeklyUsd% per %credits.weeklyWindowDays% days; no fee). 1 credit = $0.01.
+- Renters pay with credits bought by card (%credits.topupMinUsd% to %credits.topupMaxUsd% per top-up, more at higher renter levels; accounts under %credits.newAccountDays% days old up to %credits.newAccountWeeklyUsd% per %credits.weeklyWindowDays% days; no fee). 1 credit = $0.01.
 - A rental holds credits for the hours booked (1 to 168 hours unless the listing says otherwise). Use is billed to the second with a 1-minute minimum; unused time goes back to the renter's credits when the rental ends.
 - A rental is an OpenAI-compatible API: base URL https://gpuflow.app/v1, key starting with gfk_, endpoints /v1/models and /v1/chat/completions (streaming supported). No SSH, shell or VPN.
 - If the provider's machine is offline for %rentals.offlineMinutes% minutes, the rental ends and the renter pays only until it went offline.
 - After a paid rental ends, the renter rates it 1 to 5 stars with an optional comment (within %ratings.rateDays% days, editable for %ratings.editDays% days), and the provider answers whether they'd rent to the renter again. Neither rating shows until both are in, or %ratings.revealDays% days after the end. The average shows on the listing; the provider can reply publicly once per review.
 - Renters and providers earn points from paid rentals and ratings, on two separate levels from 1 to %levels.max%. Higher levels unlock larger top-ups for renters and a shorter earnings hold and better search position for providers.
 - Providers install the agent with one command on 64-bit Linux with systemd (NVIDIA tested; AMD through Ollama's ROCm support). No Docker, no open ports.
-- GPUFlow keeps a %fees.platformPercent%% fee from each rental. Earnings are held %earnings.holdDays% days (%earnings.newAccountHoldDays% days for accounts younger than %earnings.newAccountAgeDays% days, %earnings.shortHoldDays% days from provider level %earnings.shortHoldLevel%), then can be cashed out: minimum %earnings.cashoutMinUsd%, %earnings.cashoutFeeUsd% fee per cash-out, to a bank account through Stripe in the US, Canada, the UK, Switzerland and the European Economic Area.
+- GPUFlow keeps a %fees.platformPercent%% fee from each rental. Earnings are held %earnings.holdDays% days (%earnings.newAccountHoldDays% days for accounts younger than %earnings.newAccountAgeDays% days, %earnings.shortHoldDays% days from provider level %earnings.shortHoldLevel%), then can be cashed out: minimum %earnings.cashoutMinUsd%, %earnings.cashoutFeeUsd% fee per cash-out, to a bank account in the US, Canada, the UK, Switzerland and the European Economic Area.
 - The documentation is available in 13 languages; English is at the root, other languages under /de/, /es/, /fr/, /ja/, /ko/, /zh-cn/, /zh-tw/, /pt-br/, /ru/, /he/, /ar/, /hi/.
           `.trim()),
           optionalLinks: [

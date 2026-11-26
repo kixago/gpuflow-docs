@@ -1,6 +1,6 @@
 ---
 title: Être payé
-description: Comment les fournisseurs GPUFlow sont payés - la commission de %fees.platformPercent% %, la retenue de %earnings.holdDays% jours sur les gains, la configuration des versements avec Stripe, et le retrait vers votre banque (%earnings.cashoutMinUsd% minimum, %earnings.cashoutFeeUsd% de frais).
+description: Comment les fournisseurs GPUFlow sont payés - les frais de %fees.platformPercent% %, la rétention des gains de %earnings.holdDays% jours, la configuration des versements directement sur le site et le retrait vers votre banque (minimum %earnings.cashoutMinUsd%, frais de %earnings.cashoutFeeUsd%).
 sidebar:
   label: Être payé
   order: 4
@@ -19,7 +19,7 @@ import cashout from '../../../../assets/screens/fr/provider-cash-out.png';
 1. **Une location se termine.** Le locataire paie le temps utilisé. GPUFlow garde %fees.platformPercent% % et les %fees.providerPercent% % restants sont pour vous.
 2. **Vos gains sont retenus un certain temps.** Ils apparaissent sous **Gains en attente** dans **Tableau de bord → Paiements**. La retenue protège contre la fraude à la carte et les contestations de paiement.
 3. **Ils deviennent disponibles au retrait.** Après la retenue, ils passent dans **Disponible au retrait**, et vous recevez une notification.
-4. **Vous les retirez** vers votre banque via Stripe, notre partenaire de paiement.
+4. **Vous retirez** vers votre compte bancaire, directement depuis la page Paiements.
 
 </Steps>
 
@@ -35,22 +35,41 @@ Les gains sont retenus %earnings.holdDays% jours, ou %earnings.newAccountHoldDay
 
 ## Configurer les versements (une seule fois)
 
-Il vous faut une adresse e-mail confirmée et un compte de versement chez Stripe. Stripe vérifie votre identité et vous demande vos coordonnées bancaires. Cela prend quelques minutes.
+Il vous faut une adresse e-mail confirmée, la connexion en deux étapes activée et un compte de versement. Vous le configurez sans quitter GPUFlow : un formulaire sécurisé sur la page Paiements vérifie votre identité et vous demande vos coordonnées bancaires. Cela prend quelques minutes.
 
 <Steps>
 
 1. Ouvrez **Tableau de bord → Paiements**.
 2. Dans la section **Retirer**, choisissez le pays où vous résidez ou où votre entreprise est immatriculée.
-3. Cliquez sur **Configurer les retraits avec Stripe** et suivez les étapes de Stripe. Ayez sous la main une pièce d'identité et vos coordonnées bancaires.
-4. Une fois terminé, Stripe vous renvoie sur GPUFlow.
+3. Cliquez sur **Configurer les versements**. Si vous n'avez pas confirmé votre identité dans les 10 dernières minutes, votre code de connexion en deux étapes vous est d'abord demandé.
+4. Remplissez le formulaire qui s'ouvre dans la section. Ayez sous la main une pièce d'identité et vos coordonnées bancaires.
+5. Cliquez sur **Fermer** une fois terminé. La section vérifie vos informations et affiche le résultat.
 
 </Steps>
 
-<Image src={setup} alt="Le cadre Retirer : la liste des pays et le bouton Configurer les retraits avec Stripe mis en évidence" />
+<Image src={setup} alt="La section Retirer : la liste des pays et le bouton Configurer les versements mis en évidence" />
 
-Il arrive que Stripe examine d'abord vos informations. Cela prend en général quelques minutes, parfois un ou deux jours. S'il manque encore une étape, vous verrez **Continuer la configuration sur Stripe**.
+Vos informations sont parfois vérifiées d'abord. Cela prend généralement quelques minutes, parfois un ou deux jours. S'il manque encore une étape, vous verrez **Continuer la configuration**. Si d'autres informations sont nécessaires plus tard, vous recevez un e-mail et un avis dans la section avec le bouton **Ajouter les informations**.
+
+<Aside type="note">
+Le formulaire de configuration existe en anglais, allemand, espagnol, français, japonais, coréen, portugais et chinois. Dans les autres langues, il s'ouvre en anglais ; le reste de la page reste dans votre langue.
+</Aside>
 
 **Pays où les versements sont possibles :** États-Unis, Canada, Royaume-Uni, Suisse et l'Espace économique européen : Allemagne, Autriche, Belgique, Bulgarie, Chypre, Croatie, Danemark, Espagne, Estonie, Finlande, France, Grèce, Hongrie, Irlande, Islande, Italie, Lettonie, Liechtenstein, Lituanie, Luxembourg, Malte, Norvège, Pays-Bas, Pologne, Portugal, Roumanie, Slovaquie, Slovénie, Suède et Tchéquie.
+
+## Vos comptes bancaires
+
+Sous **Où nous envoyons votre argent**, vous voyez les comptes bancaires et cartes de débit enregistrés, par exemple *Chase ••6789*, et celui qui est **Par défaut**.
+
+- **Définir par défaut** envoie les prochains retraits vers un autre compte.
+- **Supprimer** supprime un compte qui n'est pas celui par défaut.
+- **Ajouter ou modifier un compte bancaire** ouvre le formulaire dans la section.
+
+<Tip id="earnings.newBank">
+
+Pour votre protection, un retrait vers un compte bancaire que vous venez d'ajouter attend %earnings.newBankHours% heures (votre tout premier compte bancaire n'attend pas). Quand un compte bancaire est ajouté, vous recevez un e-mail. Si ce n'était pas vous, cliquez sur le lien de cet e-mail pour suspendre les versements : rien n'est envoyé tant que notre équipe n'a pas vérifié votre compte avec vous.
+
+</Tip>
 
 ## Retirer
 
@@ -67,9 +86,16 @@ Il arrive que Stripe examine d'abord vos informations. Cela prend en général q
 
 - **Minimum :** %earnings.cashoutMinUsd% par retrait.
 - **Frais :** %earnings.cashoutFeeUsd% par retrait, quel que soit le montant. Retirer moins souvent vous fait économiser des frais.
-- L'argent est envoyé en dollars US sur votre compte de versement Stripe, et Stripe le verse sur votre compte bancaire.
-- Vous recevez un e-mail et une notification quand il est envoyé. Si le retrait n'aboutit pas, le montant total revient sur votre solde.
-- Vous pouvez changer vos coordonnées bancaires à tout moment avec **Gérer mes informations de versement sur Stripe**.
+- L'argent est envoyé en dollars américains sur votre compte de versement, puis versé sur votre compte bancaire selon le calendrier habituel.
+- Vous recevez un e-mail et une notification lors de l'envoi. Si le retrait échoue, le montant total revient sur votre solde.
+
+### Quand un retrait est examiné
+
+<Tip id="earnings.review">
+
+Notre équipe vérifie certains retraits avant leur envoi, par exemple quand le même compte bancaire est aussi utilisé par un autre compte GPUFlow. Le retrait affiche **En cours d'examen** et vous recevez un e-mail dès qu'une décision est prise. Pendant l'examen, le solde des comptes concernés est bloqué : pas de retraits, de locations ni de recharges, et les gains ne sont pas libérés. Les locations en cours continuent.
+
+</Tip>
 
 ## Si un locataire conteste un paiement par carte
 
