@@ -7,6 +7,7 @@ sidebar:
 ---
 
 import { Aside } from '@astrojs/starlight/components';
+import Tip from '../../../../components/Tip.astro';
 import { Image } from 'astro:assets';
 import form from '../../../../assets/screens/ko/provider-list-gpu.png';
 import reply from '../../../../assets/screens/ko/provider-reply.png';
@@ -57,6 +58,22 @@ import reply from '../../../../assets/screens/ko/provider-reply.png';
 - **게시 중단:** 리스팅을 삭제하지 않고 마켓플레이스에서 숨깁니다. **게시**를 누르면 다시 나타납니다.
 - **삭제:** 리스팅을 완전히 지웁니다. 대여 중인 리스팅은 삭제할 수 없습니다.
 - **온라인으로 전환:** 머신이 오프라인인 리스팅에 쓸 명령어를 받습니다.
+
+## API 한도(고급)
+
+양식 아래쪽의 **고급: API 한도**에서 대여자 한 명의 API 키가 머신에 얼마나 요청할 수 있는지 정합니다. 대부분의 제공자는 권장 값을 그대로 둡니다. 한도는 이 등록에서 대여자가 받는 모든 키에 적용되며, 등록이 대여 중이 아닐 때 언제든 바꿀 수 있습니다.
+
+<Tip id="api-limits.perMinute">
+
+**분당 요청 수**는 키 하나가 1분에 시작할 수 있는 요청 수입니다. 권장 값 60이면 채팅과 대부분의 스크립트에 충분합니다. 작은 모델을 빠르게 돌리는 카드라면 120이나 원하는 숫자(최대 10,000), 또는 **제한 없음**을 선택하세요. 한도를 넘은 키는 `Retry-After` 헤더와 함께 HTTP 429를 받고, 그 1분이 지나면 계속할 수 있습니다.
+
+</Tip>
+
+<Tip id="api-limits.concurrent">
+
+**동시 요청 수**는 키 하나가 동시에 실행할 수 있는 요청 수입니다. 권장 값 4면 GPU 하나에서도 응답이 빠릅니다. 카드가 작은 모델을 병렬로 잘 처리한다면 올리거나(최대 64) **제한 없음**을 선택하세요. 한도를 넘은 요청은 HTTP 429를 받으며 1초 뒤에 다시 보낼 수 있습니다.
+
+</Tip>
 
 ## 대여자에게 보이는 모습
 

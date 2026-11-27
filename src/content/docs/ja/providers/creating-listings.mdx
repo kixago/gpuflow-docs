@@ -7,6 +7,7 @@ sidebar:
 ---
 
 import { Aside } from '@astrojs/starlight/components';
+import Tip from '../../../../components/Tip.astro';
 import { Image } from 'astro:assets';
 import form from '../../../../assets/screens/ja/provider-list-gpu.png';
 import reply from '../../../../assets/screens/ja/provider-reply.png';
@@ -57,6 +58,22 @@ import reply from '../../../../assets/screens/ja/provider-reply.png';
 - **非公開にする:** 出品を削除せずに、マーケットプレイスから隠します。**公開** で元に戻せます。
 - **削除:** 出品を完全に削除します。レンタル中の出品は削除できません。
 - **オンラインにする:** マシンがオフラインになっている出品用のコマンドを表示します。
+
+## API の上限（詳細設定）
+
+フォームの下にある **詳細設定: API の上限** で、借り手 1 人の API キーがマシンにどれだけ要求できるかを設定します。ほとんどの提供者は推奨値のままにしています。上限はこの出品で借り手が受け取るすべてのキーに適用され、出品がレンタル中でなければいつでも変更できます。
+
+<Tip id="api-limits.perMinute">
+
+**1 分あたりのリクエスト数** は、1 つのキーが 1 分間に開始できるリクエスト数です。推奨の 60 はチャットやほとんどのスクリプトに十分です。小さなモデルを高速に動かせるカードなら 120 か任意の数（最大 10,000）、または **上限なし** を選んでください。上限を超えたキーには `Retry-After` ヘッダー付きの HTTP 429 が返り、その 1 分が終われば続けられます。
+
+</Tip>
+
+<Tip id="api-limits.concurrent">
+
+**同時リクエスト数** は、1 つのキーが同時に実行できるリクエスト数です。推奨の 4 なら 1 台の GPU でも応答が速いままです。小さなモデルを並列でうまく処理できるカードなら上げるか（最大 64）、**上限なし** を選んでください。上限を超えたリクエストには HTTP 429 が返り、1 秒後に送り直せます。
+
+</Tip>
 
 ## 借り手からの見え方
 

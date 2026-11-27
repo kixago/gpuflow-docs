@@ -22,6 +22,8 @@ When something goes wrong, the API answers with an error code. Look for the `cod
 | 503 | `relay_unreachable` | GPUFlow couldn't reach the connection to the machine. | Try again in a moment. If it keeps happening, open a support ticket. |
 | 502 | `provider_error` | The machine answered with nothing. | Try again. If it keeps happening, report the rental. |
 | 503 | `provider_unbound` | Your key isn't attached to a GPU. | Open a support ticket. |
+| 429 | `rate_limit_exceeded` | Your key sent more requests this minute than this listing allows. | Wait the seconds in the `Retry-After` header, then send it again. Most OpenAI libraries retry on their own. The limits are on your rental card on the dashboard. |
+| 429 | `concurrency_limit_exceeded` | Too many of your requests are running at once for this listing. | Wait for one to finish, or try again after a second. |
 
 **"model … not found":** you asked for a model the machine doesn't have. Run the `/v1/models` check from [Use your API key](/renters/api-quickstart/) and use that name.
 

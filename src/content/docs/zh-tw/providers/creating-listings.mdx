@@ -7,6 +7,7 @@ sidebar:
 ---
 
 import { Aside } from '@astrojs/starlight/components';
+import Tip from '../../../../components/Tip.astro';
 import { Image } from 'astro:assets';
 import form from '../../../../assets/screens/zh-tw/provider-list-gpu.png';
 import reply from '../../../../assets/screens/zh-tw/provider-reply.png';
@@ -57,6 +58,22 @@ import reply from '../../../../assets/screens/zh-tw/provider-reply.png';
 - **下架**：讓上架資訊從市集中隱藏，但不刪除。點擊 **發布** 即可重新上架。
 - **刪除**：永久移除。上架資訊正在出租時無法刪除。
 - **上線**：為機器離線的上架資訊取得指令。
+
+## API 限制（進階）
+
+在表單底部的 **進階：API 限制** 中，你可以設定一位租用者的 API 金鑰能向你的機器提出多少請求。大多數提供者保留建議值。這些限制適用於租用者為此刊登取得的每組金鑰，只要刊登未被租用，你隨時可以修改。
+
+<Tip id="api-limits.perMinute">
+
+**每分鐘請求數** 是一組金鑰每分鐘可以發起的請求數。建議的 60 足夠聊天和大多數腳本使用。如果你的顯示卡執行小模型很快，可以選擇 120 或自訂數值（最多 10,000），或選擇 **不限**。超出限制的金鑰會收到附 `Retry-After` 標頭的 HTTP 429，等這一分鐘結束即可繼續。
+
+</Tip>
+
+<Tip id="api-limits.concurrent">
+
+**同時請求數** 是一組金鑰可以同時執行的請求數。建議的 4 能讓單張 GPU 的回覆保持快速。如果你的顯示卡能很好地平行處理小模型，可以調高（最多 64），或選擇 **不限**。超出限制的請求會收到 HTTP 429，一秒後可以重新送出。
+
+</Tip>
 
 ## 租用者會看到什麼
 

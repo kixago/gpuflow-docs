@@ -7,6 +7,7 @@ sidebar:
 ---
 
 import { Aside } from '@astrojs/starlight/components';
+import Tip from '../../../../components/Tip.astro';
 import { Image } from 'astro:assets';
 import form from '../../../../assets/screens/de/provider-list-gpu.png';
 import reply from '../../../../assets/screens/de/provider-reply.png';
@@ -57,6 +58,22 @@ Unter **Meine GPUs** können Sie:
 - **Zurückziehen:** das Angebot auf dem Marktplatz ausblenden, ohne es zu löschen. **Veröffentlichen** macht es wieder sichtbar.
 - **Löschen:** das Angebot endgültig entfernen. Solange es vermietet ist, können Sie es nicht löschen.
 - **Online schalten:** den Befehl für ein Angebot abrufen, dessen Rechner offline ist.
+
+## API-Limits (Erweitert)
+
+Unten im Formular legen Sie unter **Erweitert: API-Limits** fest, wie viel der API-Schlüssel eines Mieters von Ihrer Maschine verlangen darf. Die meisten Anbieter behalten die empfohlenen Werte. Die Limits gelten für jeden Schlüssel, den Mieter für dieses Angebot erhalten, und Sie können sie ändern, solange das Angebot nicht vermietet ist.
+
+<Tip id="api-limits.perMinute">
+
+**Anfragen pro Minute** gibt an, wie viele Anfragen ein Schlüssel pro Minute starten darf. Die empfohlenen 60 reichen für Chat und die meisten Skripte. Wählen Sie 120 oder einen eigenen Wert (bis 10.000) für eine schnelle Karte mit kleinen Modellen, oder **Kein Limit**. Ein Schlüssel darüber erhält HTTP 429 mit einem `Retry-After`-Header und kann weitermachen, sobald die Minute um ist.
+
+</Tip>
+
+<Tip id="api-limits.concurrent">
+
+**Gleichzeitige Anfragen** gibt an, wie viele Anfragen ein Schlüssel gleichzeitig laufen lassen darf. Die empfohlenen 4 halten die Antworten auf einer GPU schnell. Erhöhen Sie den Wert (bis 64), wenn Ihre Karte ein kleines Modell gut parallel bedient, oder wählen Sie **Kein Limit**. Eine Anfrage über dem Limit erhält HTTP 429 und kann eine Sekunde später erneut gesendet werden.
+
+</Tip>
 
 ## Was Mieter sehen
 

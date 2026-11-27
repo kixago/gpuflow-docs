@@ -22,6 +22,8 @@ sidebar:
 | 503 | `relay_unreachable` | GPUFlow가 머신과의 연결에 닿지 못했습니다. | 잠시 후 다시 시도하세요. 계속 발생하면 지원 티켓을 여세요. |
 | 502 | `provider_error` | 머신이 빈 응답을 보냈습니다. | 다시 시도하세요. 계속 발생하면 그 대여를 신고하세요. |
 | 503 | `provider_unbound` | 키가 GPU에 연결되어 있지 않습니다. | 지원 티켓을 여세요. |
+| 429 | `rate_limit_exceeded` | 이번 1분 동안 키가 이 등록에서 허용하는 것보다 많은 요청을 보냈습니다. | `Retry-After` 헤더의 초만큼 기다린 뒤 다시 보내세요. 대부분의 OpenAI 라이브러리는 알아서 재시도합니다. 한도는 대시보드의 대여 카드에 나와 있습니다. |
+| 429 | `concurrency_limit_exceeded` | 이 등록에서 동시에 실행 중인 요청이 너무 많습니다. | 하나가 끝날 때까지 기다리거나 1초 뒤에 다시 시도하세요. |
 
 **"model … not found":** 머신에 없는 모델을 요청했습니다. [API 키 사용하기](/ko/renters/api-quickstart/)에 있는 `/v1/models` 확인을 실행하고 거기 나온 이름을 쓰세요.
 

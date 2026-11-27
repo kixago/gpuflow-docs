@@ -7,6 +7,7 @@ sidebar:
 ---
 
 import { Aside } from '@astrojs/starlight/components';
+import Tip from '../../../../components/Tip.astro';
 import { Image } from 'astro:assets';
 import form from '../../../../assets/screens/es/provider-list-gpu.png';
 import reply from '../../../../assets/screens/es/provider-reply.png';
@@ -57,6 +58,22 @@ En **Mis GPUs** puedes:
 - **Ocultar:** sacar el anuncio del mercado sin borrarlo. **Publicar** lo vuelve a mostrar.
 - **Eliminar:** borrarlo para siempre. No puedes eliminar un anuncio mientras está alquilado.
 - **Conectar:** obtener el comando para un anuncio cuya máquina está desconectada.
+
+## Límites de la API (Avanzado)
+
+Al final del formulario, **Avanzado: límites de la API** define cuánto puede pedirle a tu máquina la clave API de un inquilino. La mayoría de los proveedores deja los valores recomendados. Los límites se aplican a todas las claves que reciban los inquilinos de este anuncio, y puedes cambiarlos siempre que el anuncio no esté alquilado.
+
+<Tip id="api-limits.perMinute">
+
+**Solicitudes por minuto** es cuántas solicitudes puede iniciar una clave en un minuto. Las 60 recomendadas bastan para chat y la mayoría de los scripts. Elige 120 o tu propio número (hasta 10.000) para una tarjeta rápida con modelos pequeños, o **Sin límite**. Una clave que se pasa recibe HTTP 429 con un encabezado `Retry-After` y puede seguir cuando termine el minuto.
+
+</Tip>
+
+<Tip id="api-limits.concurrent">
+
+**Solicitudes a la vez** es cuántas solicitudes puede tener en curso una clave al mismo tiempo. Las 4 recomendadas mantienen rápidas las respuestas en una GPU. Súbelo (hasta 64) si tu tarjeta sirve bien un modelo pequeño en paralelo, o elige **Sin límite**. Una solicitud por encima del límite recibe HTTP 429 y puede reenviarse un segundo después.
+
+</Tip>
 
 ## Qué ven los inquilinos
 

@@ -22,6 +22,8 @@ Cuando algo falla, la API responde con un código de error. Busca el `code` en l
 | 503 | `relay_unreachable` | GPUFlow no pudo llegar a la conexión con la máquina. | Vuelve a intentarlo en un momento. Si sigue pasando, abre un ticket de soporte. |
 | 502 | `provider_error` | La máquina respondió sin contenido. | Vuelve a intentarlo. Si sigue pasando, reporta el alquiler. |
 | 503 | `provider_unbound` | Tu clave no está vinculada a ninguna GPU. | Abre un ticket de soporte. |
+| 429 | `rate_limit_exceeded` | Tu clave envió en este minuto más solicitudes de las que permite este anuncio. | Espera los segundos del encabezado `Retry-After` y vuelve a enviarla. La mayoría de las bibliotecas de OpenAI reintenta sola. Los límites aparecen en la tarjeta de tu alquiler en el panel. |
+| 429 | `concurrency_limit_exceeded` | Tienes demasiadas solicitudes en curso a la vez para este anuncio. | Espera a que termine una, o vuelve a intentarlo tras un segundo. |
 
 **"model … not found":** pediste un modelo que la máquina no tiene. Haz la comprobación de `/v1/models` de [Usar tu clave API](/es/renters/api-quickstart/) y usa ese nombre.
 

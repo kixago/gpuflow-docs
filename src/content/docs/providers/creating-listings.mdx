@@ -7,6 +7,7 @@ sidebar:
 ---
 
 import { Aside } from '@astrojs/starlight/components';
+import Tip from '../../../components/Tip.astro';
 import { Image } from 'astro:assets';
 import form from '../../../assets/screens/en/provider-list-gpu.png';
 import reply from '../../../assets/screens/en/provider-reply.png';
@@ -57,6 +58,22 @@ On **My GPUs** you can:
 - **Unpublish:** hide the listing from the marketplace without deleting it. **Publish** brings it back.
 - **Delete:** remove it for good. You can't delete a listing while it's rented.
 - **Bring Online:** get the command for a listing whose machine is offline.
+
+## API limits (Advanced)
+
+At the bottom of the form, **Advanced: API limits** sets how much one renter's API key can ask of your machine. Most providers keep the recommended values. The limits apply to every key renters get for this listing, and you can change them whenever the listing isn't rented.
+
+<Tip id="api-limits.perMinute">
+
+**Requests per minute** is how many requests one key can start in a minute. The recommended 60 is plenty for chat and most scripts. Choose 120 or your own number (up to 10,000) for a fast card serving small models, or **No limit**. A key that goes over gets HTTP 429 with a `Retry-After` header and can carry on when the minute is up.
+
+</Tip>
+
+<Tip id="api-limits.concurrent">
+
+**Requests at once** is how many requests one key can have running at the same time. The recommended 4 keeps replies quick on one GPU. Raise it (up to 64) if your card serves a small model well in parallel, or choose **No limit**. A request over the limit gets HTTP 429 and can be sent again a second later.
+
+</Tip>
 
 ## What renters see
 

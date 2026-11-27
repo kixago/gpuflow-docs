@@ -7,6 +7,7 @@ sidebar:
 ---
 
 import { Aside } from '@astrojs/starlight/components';
+import Tip from '../../../../components/Tip.astro';
 import { Image } from 'astro:assets';
 import form from '../../../../assets/screens/zh-cn/provider-list-gpu.png';
 import reply from '../../../../assets/screens/zh-cn/provider-reply.png';
@@ -57,6 +58,22 @@ import reply from '../../../../assets/screens/zh-cn/provider-reply.png';
 - **下架**：在市场中隐藏这条上架信息，但不删除。**发布** 可以让它重新出现。
 - **删除**：永久移除。上架信息正在被租用时无法删除。
 - **上线**：为机器离线的上架信息获取命令。
+
+## API 限制（高级）
+
+在表单底部的 **高级：API 限制** 中，你可以设置一位租用者的 API 密钥能向你的机器提出多少请求。大多数提供者保留推荐值。这些限制适用于租用者为此挂牌获得的每个密钥，只要挂牌未被租用，你随时可以修改。
+
+<Tip id="api-limits.perMinute">
+
+**每分钟请求数** 是一个密钥每分钟可以发起的请求数。推荐的 60 足够聊天和大多数脚本使用。如果你的显卡运行小模型很快，可以选择 120 或自定义数值（最多 10,000），或选择 **不限**。超出限制的密钥会收到带 `Retry-After` 头的 HTTP 429，等这一分钟结束即可继续。
+
+</Tip>
+
+<Tip id="api-limits.concurrent">
+
+**同时请求数** 是一个密钥可以同时运行的请求数。推荐的 4 能让单块 GPU 的回复保持快速。如果你的显卡能很好地并行处理小模型，可以调高（最多 64），或选择 **不限**。超出限制的请求会收到 HTTP 429，一秒后可以重新发送。
+
+</Tip>
 
 ## 租用者看到的内容
 

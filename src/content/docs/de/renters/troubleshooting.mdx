@@ -22,6 +22,8 @@ Wenn etwas schiefgeht, antwortet die API mit einem Fehlercode. Achten Sie in der
 | 503 | `relay_unreachable` | GPUFlow konnte die Verbindung zum Rechner nicht erreichen. | Versuchen Sie es gleich noch einmal. Passiert es immer wieder, eröffnen Sie ein Support-Ticket. |
 | 502 | `provider_error` | Der Rechner hat eine leere Antwort geliefert. | Versuchen Sie es erneut. Passiert es immer wieder, melden Sie die Miete. |
 | 503 | `provider_unbound` | Ihr Schlüssel ist mit keiner GPU verknüpft. | Eröffnen Sie ein Support-Ticket. |
+| 429 | `rate_limit_exceeded` | Ihr Schlüssel hat in dieser Minute mehr Anfragen gesendet, als dieses Angebot erlaubt. | Warten Sie die Sekunden aus dem `Retry-After`-Header ab und senden Sie die Anfrage erneut. Die meisten OpenAI-Bibliotheken wiederholen von selbst. Die Limits stehen auf Ihrer Mietkarte im Dashboard. |
+| 429 | `concurrency_limit_exceeded` | Zu viele Ihrer Anfragen laufen bei diesem Angebot gleichzeitig. | Warten Sie, bis eine fertig ist, oder versuchen Sie es nach einer Sekunde erneut. |
 
 **„model … not found“:** Sie haben ein Modell angefragt, das auf dem Rechner nicht vorhanden ist. Führen Sie die `/v1/models`-Prüfung aus [Ihren API-Schlüssel verwenden](/de/renters/api-quickstart/) aus und verwenden Sie den Namen, der dort steht.
 

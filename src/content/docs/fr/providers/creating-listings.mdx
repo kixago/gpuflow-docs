@@ -7,6 +7,7 @@ sidebar:
 ---
 
 import { Aside } from '@astrojs/starlight/components';
+import Tip from '../../../../components/Tip.astro';
 import { Image } from 'astro:assets';
 import form from '../../../../assets/screens/fr/provider-list-gpu.png';
 import reply from '../../../../assets/screens/fr/provider-reply.png';
@@ -57,6 +58,22 @@ Dans **Mes GPU**, vous pouvez :
 - **Masquer :** faire disparaître l'annonce de la place de marché sans la supprimer. **Publier** la fait réapparaître.
 - **Supprimer :** l'effacer définitivement. Vous ne pouvez pas supprimer une annonce pendant qu'elle est louée.
 - **Mettre en ligne :** obtenir la commande pour une annonce dont la machine est hors ligne.
+
+## Limites de l'API (Avancé)
+
+En bas du formulaire, **Avancé : limites de l'API** fixe ce que la clé API d'un locataire peut demander à votre machine. La plupart des fournisseurs gardent les valeurs recommandées. Les limites s'appliquent à toutes les clés que les locataires reçoivent pour cette annonce, et vous pouvez les modifier tant que l'annonce n'est pas louée.
+
+<Tip id="api-limits.perMinute">
+
+**Requêtes par minute** indique combien de requêtes une clé peut lancer par minute. Les 60 recommandées suffisent pour le chat et la plupart des scripts. Choisissez 120 ou votre propre nombre (jusqu'à 10 000) pour une carte rapide qui sert de petits modèles, ou **Sans limite**. Une clé qui dépasse reçoit HTTP 429 avec un en-tête `Retry-After` et peut reprendre à la fin de la minute.
+
+</Tip>
+
+<Tip id="api-limits.concurrent">
+
+**Requêtes simultanées** indique combien de requêtes une clé peut avoir en cours en même temps. Les 4 recommandées gardent des réponses rapides sur un seul GPU. Augmentez-le (jusqu'à 64) si votre carte sert bien un petit modèle en parallèle, ou choisissez **Sans limite**. Une requête au-delà de la limite reçoit HTTP 429 et peut être renvoyée une seconde plus tard.
+
+</Tip>
 
 ## Ce que voient les locataires
 

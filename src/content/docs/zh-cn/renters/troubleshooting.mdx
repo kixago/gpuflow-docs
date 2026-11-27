@@ -22,6 +22,8 @@ sidebar:
 | 503 | `relay_unreachable` | GPUFlow 无法连上与这台机器之间的连接通道。 | 稍后再试。如果反复出现，请提交客服工单。 |
 | 502 | `provider_error` | 机器返回了空回复。 | 再试一次。如果反复出现，请报告这次租用。 |
 | 503 | `provider_unbound` | 您的密钥没有关联到任何 GPU。 | 请提交客服工单。 |
+| 429 | `rate_limit_exceeded` | 你的密钥本分钟发送的请求超过了此挂牌允许的数量。 | 等待 `Retry-After` 头中的秒数后重新发送。大多数 OpenAI 库会自动重试。限制显示在控制台的租用卡片上。 |
+| 429 | `concurrency_limit_exceeded` | 你在此挂牌上同时运行的请求过多。 | 等其中一个完成，或一秒后再试。 |
 
 **“model … not found”**：您请求的模型在这台机器上不存在。运行[使用您的 API 密钥](/zh-cn/renters/api-quickstart/)中的 `/v1/models` 检查，并使用查到的名称。
 
