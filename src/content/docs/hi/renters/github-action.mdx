@@ -1,0 +1,66 @@
+---
+title: इसे GitHub Actions में इस्तेमाल करें
+description: GPUFlow Inference एक्शन की मदद से GitHub Actions के वर्कफ़्लो से अपने किराये के GPU पर प्रॉम्प्ट चलाएँ।
+sidebar:
+  label: इसे GitHub Actions में इस्तेमाल करें
+  order: 3
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+[GPUFlow Inference](https://github.com/gpuflow-app/inference) एक्शन GitHub Actions के वर्कफ़्लो से सीधे उस GPU को प्रॉम्प्ट भेजता है जो आपने किराये पर लिया है। जवाब जॉब के लॉग में दिखता है और बाद के चरण उसे इस्तेमाल कर सकते हैं। लोग इससे रिलीज़ नोट्स का मसौदा बनाते हैं, बदलावों का सार लिखते हैं या issues पर लेबल लगाते हैं।
+
+## इसे सेट अप करें
+
+<Steps>
+
+1. **डैशबोर्ड → वर्तमान किराये** से अपनी API कुंजी कॉपी करें। यह `gfk_` से शुरू होती है।
+2. अपनी GitHub रिपॉज़िटरी में **Settings → Secrets and variables → Actions** खोलें और **New repository secret** पर क्लिक करें। इसका नाम `GPUFLOW_API_KEY` रखें और कुंजी पेस्ट करें।
+3. किसी वर्कफ़्लो में यह चरण जोड़ें:
+
+</Steps>
+
+```yaml
+jobs:
+  ask:
+    runs-on: ubuntu-latest
+    steps:
+      - id: gpu
+        uses: gpuflow-app/inference@v1
+        with:
+          api-key: ${{ secrets.GPUFLOW_API_KEY }}
+          prompt: Explain what a GPU is in three sentences.
+
+      - run: echo "$ANSWER"
+        env:
+          ANSWER: ${{ steps.gpu.outputs.response }}
+```
+
+मॉडल बताना ज़रूरी नहीं है। एक्शन उसी मॉडल का इस्तेमाल करता है जो आपके किराये के GPU पर है।
+
+## फ़ाइल भेजें, जवाब सहेजें
+
+```yaml
+- uses: actions/checkout@v7
+- uses: gpuflow-app/inference@v1
+  with:
+    api-key: ${{ secrets.GPUFLOW_API_KEY }}
+    system: You write release notes. Be brief and factual.
+    prompt-file: .github/prompts/release-notes.md
+    output-file: notes/draft.md
+    max-tokens: 800
+```
+
+`prompt-file` और `output-file` आपकी रिपॉज़िटरी के अंदर के पाथ हैं। सारी सेटिंग्स [एक्शन के पेज](https://github.com/gpuflow-app/inference#inputs) पर दी गई हैं।
+
+## जानने लायक बातें
+
+- **कुंजी तब तक चलती है जब तक किराया चलता है।** किराया खत्म होने पर चरण `invalid_api_key` के साथ विफल हो जाता है। नया किराया शुरू करें और नई कुंजी सीक्रेट में डालें।
+- **सीमाएँ।** अगर वर्कफ़्लो लिस्टिंग की अनुमति से ज़्यादा अनुरोध भेजता है, तो एक्शन रुककर अपने आप दोबारा कोशिश करता है। एक ही कुंजी इस्तेमाल करने वाले जॉब बारी-बारी से चलते हैं।
+- **फ़ोर्क से आए पुल रिक्वेस्ट** को आपके सीक्रेट नहीं मिलते, इसलिए वहाँ यह चरण नहीं चल सकता।
+
+<Aside type="caution" title="आपके प्रॉम्प्ट किसी दूसरे व्यक्ति के कंप्यूटर पर चलते हैं">
+AI मॉडल प्रदाता की मशीन पर चलता है, इसलिए आपके प्रॉम्प्ट और जवाब उसी मशीन से होकर जाते हैं। पासवर्ड, कार्ड नंबर या ऐसी कोई भी गोपनीय जानकारी न भेजें जो आप किसी अजनबी को नहीं बताते।
+</Aside>
+
+कुछ काम नहीं कर रहा? [समस्या ठीक करें](/hi/renters/troubleshooting/) देखें।

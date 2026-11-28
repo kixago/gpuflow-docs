@@ -1,0 +1,66 @@
+---
+title: L'utiliser dans GitHub Actions
+description: Exécutez des prompts sur votre GPU loué depuis un workflow GitHub Actions avec l'action GPUFlow Inference.
+sidebar:
+  label: L'utiliser dans GitHub Actions
+  order: 3
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+L'action [GPUFlow Inference](https://github.com/gpuflow-app/inference) envoie un prompt au GPU que vous avez loué, directement depuis un workflow GitHub Actions. La réponse s'affiche dans le journal du job et les étapes suivantes peuvent s'en servir. On l'utilise par exemple pour rédiger des notes de version, résumer des modifications ou étiqueter des issues.
+
+## Mise en place
+
+<Steps>
+
+1. Copiez votre clé API dans **Tableau de bord → Locations Actuelles**. Elle commence par `gfk_`.
+2. Dans votre dépôt GitHub, ouvrez **Settings → Secrets and variables → Actions** et cliquez sur **New repository secret**. Nommez le secret `GPUFLOW_API_KEY` et collez la clé.
+3. Ajoutez l'étape à un workflow :
+
+</Steps>
+
+```yaml
+jobs:
+  ask:
+    runs-on: ubuntu-latest
+    steps:
+      - id: gpu
+        uses: gpuflow-app/inference@v1
+        with:
+          api-key: ${{ secrets.GPUFLOW_API_KEY }}
+          prompt: Explain what a GPU is in three sentences.
+
+      - run: echo "$ANSWER"
+        env:
+          ANSWER: ${{ steps.gpu.outputs.response }}
+```
+
+Vous n'avez pas besoin d'indiquer un modèle. L'action utilise celui du GPU que vous avez loué.
+
+## Envoyer un fichier, enregistrer la réponse
+
+```yaml
+- uses: actions/checkout@v7
+- uses: gpuflow-app/inference@v1
+  with:
+    api-key: ${{ secrets.GPUFLOW_API_KEY }}
+    system: You write release notes. Be brief and factual.
+    prompt-file: .github/prompts/release-notes.md
+    output-file: notes/draft.md
+    max-tokens: 800
+```
+
+`prompt-file` et `output-file` sont des chemins dans votre dépôt. Tous les réglages figurent sur la [page de l'action](https://github.com/gpuflow-app/inference#inputs).
+
+## Bon à savoir
+
+- **La clé dure aussi longtemps que la location.** Quand la location se termine, l'étape échoue avec `invalid_api_key`. Démarrez une nouvelle location et mettez la nouvelle clé dans le secret.
+- **Limites.** Si le workflow envoie plus de requêtes que l'annonce ne l'autorise, l'action attend et réessaie d'elle-même. Les jobs qui partagent une clé passent chacun leur tour.
+- **Les pull requests venant de forks** ne reçoivent pas vos secrets : l'étape ne peut donc pas s'y exécuter.
+
+<Aside type="caution" title="Vos prompts tournent sur l'ordinateur d'un particulier">
+Le modèle d'IA tourne sur la machine du fournisseur : vos prompts et les réponses y passent donc. N'envoyez pas de mots de passe, de numéros de carte ni d'autres secrets que vous ne confieriez pas à un inconnu.
+</Aside>
+
+Quelque chose ne marche pas ? Consultez [Résoudre un problème](/fr/renters/troubleshooting/).

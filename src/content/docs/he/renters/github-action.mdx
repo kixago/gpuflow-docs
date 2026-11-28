@@ -1,0 +1,66 @@
+---
+title: שימוש ב-GitHub Actions
+description: הריצו פרומפטים על ה-GPU ששכרתם מתוך תהליך עבודה של GitHub Actions, בעזרת הפעולה GPUFlow Inference.
+sidebar:
+  label: שימוש ב-GitHub Actions
+  order: 3
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+הפעולה [GPUFlow Inference](https://github.com/gpuflow-app/inference) שולחת פרומפט ל-GPU ששכרתם, ישירות מתוך תהליך עבודה של GitHub Actions. התשובה מופיעה ביומן המשימה, ושלבים מאוחרים יותר יכולים להשתמש בה. משתמשים בה, למשל, לניסוח הערות גרסה, לסיכום שינויים או לתיוג issues.
+
+## הגדרה
+
+<Steps>
+
+1. העתיקו את מפתח ה-API מתוך **לוח מחוונים ← השכרות נוכחיות**. הוא מתחיל ב-`gfk_`.
+2. במאגר שלכם ב-GitHub, פתחו את **Settings → Secrets and variables → Actions** ולחצו על **New repository secret**. קראו לו `GPUFLOW_API_KEY` והדביקו את המפתח.
+3. הוסיפו את השלב לתהליך עבודה:
+
+</Steps>
+
+```yaml
+jobs:
+  ask:
+    runs-on: ubuntu-latest
+    steps:
+      - id: gpu
+        uses: gpuflow-app/inference@v1
+        with:
+          api-key: ${{ secrets.GPUFLOW_API_KEY }}
+          prompt: Explain what a GPU is in three sentences.
+
+      - run: echo "$ANSWER"
+        env:
+          ANSWER: ${{ steps.gpu.outputs.response }}
+```
+
+אין צורך לציין מודל. הפעולה משתמשת במודל שעל ה-GPU ששכרתם.
+
+## שליחת קובץ ושמירת התשובה
+
+```yaml
+- uses: actions/checkout@v7
+- uses: gpuflow-app/inference@v1
+  with:
+    api-key: ${{ secrets.GPUFLOW_API_KEY }}
+    system: You write release notes. Be brief and factual.
+    prompt-file: .github/prompts/release-notes.md
+    output-file: notes/draft.md
+    max-tokens: 800
+```
+
+`prompt-file` ו-`output-file` הם נתיבים בתוך המאגר שלכם. כל ההגדרות מפורטות ב[עמוד הפעולה](https://github.com/gpuflow-app/inference#inputs).
+
+## כדאי לדעת
+
+- **המפתח תקף כל עוד ההשכרה פעילה.** כשההשכרה מסתיימת, השלב נכשל עם `invalid_api_key`. התחילו השכרה חדשה ושמרו את המפתח החדש בסוד.
+- **מגבלות.** אם תהליך העבודה שולח יותר בקשות ממה שהמודעה מתירה, הפעולה ממתינה ומנסה שוב בעצמה. משימות שחולקות מפתח אחד רצות בתור.
+- **בקשות משיכה מ-forks** אינן מקבלות את הסודות שלכם, ולכן השלב לא יכול לרוץ שם.
+
+<Aside type="caution" title="הפרומפטים שלכם רצים על המחשב של מישהו אחר">
+מודל ה-AI רץ על המכונה של הספק, ולכן הפרומפטים והתשובות עוברים דרכה. אל תשלחו סיסמאות, מספרי כרטיסי אשראי או סודות אחרים שלא הייתם משתפים עם אדם זר.
+</Aside>
+
+משהו לא עובד? ראו [פתרון בעיות](/he/renters/troubleshooting/).

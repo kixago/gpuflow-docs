@@ -1,0 +1,66 @@
+---
+title: Use no GitHub Actions
+description: Execute prompts na sua GPU alugada a partir de um workflow do GitHub Actions com a action GPUFlow Inference.
+sidebar:
+  label: Use no GitHub Actions
+  order: 3
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+A action [GPUFlow Inference](https://github.com/gpuflow-app/inference) envia um prompt para a GPU que você alugou, direto de um workflow do GitHub Actions. A resposta aparece no log do job e as etapas seguintes podem usá-la. Ela serve, por exemplo, para rascunhar notas de versão, resumir alterações ou rotular issues.
+
+## Configure
+
+<Steps>
+
+1. Copie sua chave de API em **Painel → Aluguéis Atuais**. Ela começa com `gfk_`.
+2. No seu repositório do GitHub, abra **Settings → Secrets and variables → Actions** e clique em **New repository secret**. Dê o nome `GPUFLOW_API_KEY` e cole a chave.
+3. Adicione a etapa a um workflow:
+
+</Steps>
+
+```yaml
+jobs:
+  ask:
+    runs-on: ubuntu-latest
+    steps:
+      - id: gpu
+        uses: gpuflow-app/inference@v1
+        with:
+          api-key: ${{ secrets.GPUFLOW_API_KEY }}
+          prompt: Explain what a GPU is in three sentences.
+
+      - run: echo "$ANSWER"
+        env:
+          ANSWER: ${{ steps.gpu.outputs.response }}
+```
+
+Você não precisa informar um modelo. A action usa o da GPU que você alugou.
+
+## Envie um arquivo e salve a resposta
+
+```yaml
+- uses: actions/checkout@v7
+- uses: gpuflow-app/inference@v1
+  with:
+    api-key: ${{ secrets.GPUFLOW_API_KEY }}
+    system: You write release notes. Be brief and factual.
+    prompt-file: .github/prompts/release-notes.md
+    output-file: notes/draft.md
+    max-tokens: 800
+```
+
+`prompt-file` e `output-file` são caminhos dentro do seu repositório. Todas as opções estão na [página da action](https://github.com/gpuflow-app/inference#inputs).
+
+## Bom saber
+
+- **A chave dura enquanto durar o aluguel.** Quando o aluguel termina, a etapa falha com `invalid_api_key`. Inicie um novo aluguel e coloque a nova chave no segredo.
+- **Limites.** Se o workflow enviar mais solicitações do que o anúncio permite, a action espera e tenta de novo sozinha. Jobs que compartilham uma chave se revezam.
+- **Pull requests de forks** não recebem seus segredos, então a etapa não pode ser executada neles.
+
+<Aside type="caution" title="Seus prompts rodam no computador de outra pessoa">
+O modelo de IA roda na máquina do provedor. Então seus prompts e as respostas passam por ela. Não envie senhas, números de cartão ou outros segredos que você não contaria a um desconhecido.
+</Aside>
+
+Algo não funciona? Veja [resolva um problema](/pt-br/renters/troubleshooting/).

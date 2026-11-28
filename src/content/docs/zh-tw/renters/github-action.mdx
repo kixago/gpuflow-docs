@@ -1,0 +1,66 @@
+---
+title: 在 GitHub Actions 中使用
+description: 使用 GPUFlow Inference 動作，從 GitHub Actions 工作流程在您租用的 GPU 上執行提示詞。
+sidebar:
+  label: 在 GitHub Actions 中使用
+  order: 3
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+[GPUFlow Inference](https://github.com/gpuflow-app/inference) 動作可以從 GitHub Actions 工作流程直接把提示詞傳送到您租用的 GPU。回答會顯示在工作記錄中，後續步驟也可以使用。常見用途包括草擬版本說明、摘要變更或為 Issue 加上標籤。
+
+## 設定
+
+<Steps>
+
+1. 在 **儀表板 → 目前租用** 複製您的 API 金鑰。金鑰以 `gfk_` 開頭。
+2. 在您的 GitHub 儲存庫中開啟 **Settings → Secrets and variables → Actions**，點擊 **New repository secret**。將名稱設為 `GPUFLOW_API_KEY` 並貼上金鑰。
+3. 在工作流程中加入這個步驟：
+
+</Steps>
+
+```yaml
+jobs:
+  ask:
+    runs-on: ubuntu-latest
+    steps:
+      - id: gpu
+        uses: gpuflow-app/inference@v1
+        with:
+          api-key: ${{ secrets.GPUFLOW_API_KEY }}
+          prompt: Explain what a GPU is in three sentences.
+
+      - run: echo "$ANSWER"
+        env:
+          ANSWER: ${{ steps.gpu.outputs.response }}
+```
+
+您不必指定模型。此動作會使用您租用的 GPU 上的模型。
+
+## 傳送檔案並儲存回答
+
+```yaml
+- uses: actions/checkout@v7
+- uses: gpuflow-app/inference@v1
+  with:
+    api-key: ${{ secrets.GPUFLOW_API_KEY }}
+    system: You write release notes. Be brief and factual.
+    prompt-file: .github/prompts/release-notes.md
+    output-file: notes/draft.md
+    max-tokens: 800
+```
+
+`prompt-file` 和 `output-file` 是儲存庫內的路徑。所有設定都列在[此動作的頁面](https://github.com/gpuflow-app/inference#inputs)上。
+
+## 須知
+
+- **金鑰的有效期與租用期相同。** 租用結束後，此步驟會以 `invalid_api_key` 失敗。請開始新的租用，並把新金鑰填入密碼。
+- **限制。** 如果工作流程傳送的請求超過該刊登項目允許的數量，動作會等待並自動重試。共用同一把金鑰的工作會依序執行。
+- **來自分支儲存庫（fork）的提取要求**不會收到您的密碼，因此此步驟無法在那裡執行。
+
+<Aside type="caution" title="您的提示詞是在別人自己的電腦上執行">
+AI 模型在提供者的機器上執行，所以您的提示詞和回答都會經過那台機器。不要傳送密碼、卡號，或任何您不願告訴陌生人的機密資訊。
+</Aside>
+
+遇到問題了嗎？請參閱[排解問題](/zh-tw/renters/troubleshooting/)。

@@ -1,0 +1,66 @@
+---
+title: GitHub Actions에서 사용하기
+description: GPUFlow Inference 액션으로 GitHub Actions 워크플로에서 대여한 GPU에 프롬프트를 실행합니다.
+sidebar:
+  label: GitHub Actions에서 사용하기
+  order: 3
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+[GPUFlow Inference](https://github.com/gpuflow-app/inference) 액션은 GitHub Actions 워크플로에서 대여한 GPU로 프롬프트를 바로 보냅니다. 답변은 작업 로그에 표시되고, 이후 단계에서 사용할 수 있습니다. 릴리스 노트 초안 작성, 변경 사항 요약, 이슈 라벨 지정 등에 쓰입니다.
+
+## 설정하기
+
+<Steps>
+
+1. **대시보드 → 현재 대여**에서 API 키를 복사합니다. 키는 `gfk_`로 시작합니다.
+2. GitHub 저장소에서 **Settings → Secrets and variables → Actions**를 열고 **New repository secret**을 클릭합니다. 이름을 `GPUFLOW_API_KEY`로 하고 키를 붙여 넣습니다.
+3. 워크플로에 단계를 추가합니다.
+
+</Steps>
+
+```yaml
+jobs:
+  ask:
+    runs-on: ubuntu-latest
+    steps:
+      - id: gpu
+        uses: gpuflow-app/inference@v1
+        with:
+          api-key: ${{ secrets.GPUFLOW_API_KEY }}
+          prompt: Explain what a GPU is in three sentences.
+
+      - run: echo "$ANSWER"
+        env:
+          ANSWER: ${{ steps.gpu.outputs.response }}
+```
+
+모델을 지정하지 않아도 됩니다. 액션은 대여한 GPU의 모델을 사용합니다.
+
+## 파일을 보내고 답변 저장하기
+
+```yaml
+- uses: actions/checkout@v7
+- uses: gpuflow-app/inference@v1
+  with:
+    api-key: ${{ secrets.GPUFLOW_API_KEY }}
+    system: You write release notes. Be brief and factual.
+    prompt-file: .github/prompts/release-notes.md
+    output-file: notes/draft.md
+    max-tokens: 800
+```
+
+`prompt-file`과 `output-file`은 저장소 안의 경로입니다. 모든 설정은 [액션 페이지](https://github.com/gpuflow-app/inference#inputs)에 있습니다.
+
+## 알아 두면 좋은 점
+
+- **키는 대여 기간 동안만 유효합니다.** 대여가 끝나면 단계가 `invalid_api_key`로 실패합니다. 새로 대여한 뒤 새 키를 시크릿에 넣으세요.
+- **한도.** 워크플로가 등록 상품에서 허용한 것보다 많은 요청을 보내면, 액션이 기다렸다가 자동으로 다시 시도합니다. 같은 키를 쓰는 작업은 차례대로 실행됩니다.
+- **포크에서 온 풀 리퀘스트**에는 시크릿이 전달되지 않으므로 그곳에서는 단계를 실행할 수 없습니다.
+
+<Aside type="caution" title="프롬프트는 다른 사람의 컴퓨터에서 실행됩니다">
+AI 모델은 제공자의 머신에서 실행되므로 프롬프트와 답변이 그 머신을 거칩니다. 비밀번호, 카드 번호처럼 모르는 사람에게 알려 주지 않을 정보는 보내지 마세요.
+</Aside>
+
+잘 안 되나요? [문제 해결](/ko/renters/troubleshooting/)을 참고하세요.

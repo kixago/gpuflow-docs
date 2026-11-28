@@ -1,0 +1,66 @@
+---
+title: استخدامه في GitHub Actions
+description: شغّل الأوامر النصية على الـ GPU الذي استأجرته من سير عمل في GitHub Actions باستخدام الإجراء GPUFlow Inference.
+sidebar:
+  label: استخدامه في GitHub Actions
+  order: 3
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+يرسل الإجراء [GPUFlow Inference](https://github.com/gpuflow-app/inference) أمرًا نصيًا إلى الـ GPU الذي استأجرته، مباشرةً من سير عمل في GitHub Actions. تظهر الإجابة في سجل المهمة، ويمكن للخطوات التالية استخدامها. يُستخدم مثلًا لصياغة ملاحظات الإصدار، أو تلخيص التغييرات، أو وضع تصنيفات على الـ issues.
+
+## الإعداد
+
+<Steps>
+
+1. انسخ مفتاح API من **لوحة التحكم ← الإيجارات الحالية**. يبدأ المفتاح بـ `gfk_`.
+2. في مستودعك على GitHub، افتح **Settings → Secrets and variables → Actions** وانقر على **New repository secret**. سمِّه `GPUFLOW_API_KEY` والصق المفتاح.
+3. أضف الخطوة إلى سير عمل:
+
+</Steps>
+
+```yaml
+jobs:
+  ask:
+    runs-on: ubuntu-latest
+    steps:
+      - id: gpu
+        uses: gpuflow-app/inference@v1
+        with:
+          api-key: ${{ secrets.GPUFLOW_API_KEY }}
+          prompt: Explain what a GPU is in three sentences.
+
+      - run: echo "$ANSWER"
+        env:
+          ANSWER: ${{ steps.gpu.outputs.response }}
+```
+
+لا حاجة إلى تحديد نموذج. يستخدم الإجراء النموذج الموجود على الـ GPU الذي استأجرته.
+
+## إرسال ملف وحفظ الإجابة
+
+```yaml
+- uses: actions/checkout@v7
+- uses: gpuflow-app/inference@v1
+  with:
+    api-key: ${{ secrets.GPUFLOW_API_KEY }}
+    system: You write release notes. Be brief and factual.
+    prompt-file: .github/prompts/release-notes.md
+    output-file: notes/draft.md
+    max-tokens: 800
+```
+
+`prompt-file` و`output-file` مساران داخل مستودعك. جميع الإعدادات مذكورة في [صفحة الإجراء](https://github.com/gpuflow-app/inference#inputs).
+
+## من المفيد أن تعرف
+
+- **يبقى المفتاح صالحًا ما دام الاستئجار قائمًا.** عند انتهاء الاستئجار تفشل الخطوة مع `invalid_api_key`. ابدأ استئجارًا جديدًا وضع المفتاح الجديد في السر.
+- **الحدود.** إذا أرسل سير العمل طلبات أكثر مما يسمح به العرض، ينتظر الإجراء ثم يعيد المحاولة من تلقاء نفسه. المهام التي تتشارك مفتاحًا واحدًا تعمل بالتناوب.
+- **طلبات السحب من النسخ المتفرعة (forks)** لا تحصل على أسرارك، ولذلك لا يمكن تشغيل الخطوة هناك.
+
+<Aside type="caution" title="رسائلك تُعالَج على كمبيوتر شخص آخر">
+يعمل نموذج الذكاء الاصطناعي على جهاز المزوّد، لذا تمر عبره رسائلك إلى النموذج وإجاباته. لا ترسل كلمات مرور أو أرقام بطاقات أو أي أسرار أخرى لا تشاركها مع شخص غريب.
+</Aside>
+
+هل هناك ما لا يعمل؟ راجع [حل مشكلة](/ar/renters/troubleshooting/).

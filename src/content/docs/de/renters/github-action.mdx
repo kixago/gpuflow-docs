@@ -1,0 +1,66 @@
+---
+title: In GitHub Actions verwenden
+description: Mit der Action GPUFlow Inference führen Sie Prompts aus einem GitHub-Actions-Workflow auf Ihrer gemieteten GPU aus.
+sidebar:
+  label: In GitHub Actions verwenden
+  order: 3
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+Die Action [GPUFlow Inference](https://github.com/gpuflow-app/inference) schickt einen Prompt direkt aus einem GitHub-Actions-Workflow an die GPU, die Sie gemietet haben. Die Antwort erscheint im Job-Protokoll, und spätere Schritte können sie verwenden. Typische Einsätze: Versionshinweise entwerfen, Änderungen zusammenfassen oder Issues mit Labels versehen.
+
+## Einrichten
+
+<Steps>
+
+1. Kopieren Sie Ihren API-Schlüssel unter **Dashboard → Aktuelle Mieten**. Er beginnt mit `gfk_`.
+2. Öffnen Sie in Ihrem GitHub-Repository **Settings → Secrets and variables → Actions** und klicken Sie auf **New repository secret**. Nennen Sie das Secret `GPUFLOW_API_KEY` und fügen Sie den Schlüssel ein.
+3. Fügen Sie den Schritt in einen Workflow ein:
+
+</Steps>
+
+```yaml
+jobs:
+  ask:
+    runs-on: ubuntu-latest
+    steps:
+      - id: gpu
+        uses: gpuflow-app/inference@v1
+        with:
+          api-key: ${{ secrets.GPUFLOW_API_KEY }}
+          prompt: Explain what a GPU is in three sentences.
+
+      - run: echo "$ANSWER"
+        env:
+          ANSWER: ${{ steps.gpu.outputs.response }}
+```
+
+Ein Modell müssen Sie nicht angeben. Die Action nimmt das Modell der GPU, die Sie gemietet haben.
+
+## Eine Datei senden, die Antwort speichern
+
+```yaml
+- uses: actions/checkout@v7
+- uses: gpuflow-app/inference@v1
+  with:
+    api-key: ${{ secrets.GPUFLOW_API_KEY }}
+    system: You write release notes. Be brief and factual.
+    prompt-file: .github/prompts/release-notes.md
+    output-file: notes/draft.md
+    max-tokens: 800
+```
+
+`prompt-file` und `output-file` sind Pfade in Ihrem Repository. Alle Einstellungen stehen auf der [Seite der Action](https://github.com/gpuflow-app/inference#inputs).
+
+## Gut zu wissen
+
+- **Der Schlüssel gilt so lange wie die Miete.** Endet die Miete, schlägt der Schritt mit `invalid_api_key` fehl. Starten Sie eine neue Miete und tragen Sie den neuen Schlüssel im Secret ein.
+- **Limits.** Sendet der Workflow mehr Anfragen, als das Angebot erlaubt, wartet die Action und versucht es von selbst erneut. Jobs, die sich einen Schlüssel teilen, kommen nacheinander an die Reihe.
+- **Pull Requests aus Forks** erhalten Ihre Secrets nicht. Dort kann der Schritt also nicht laufen.
+
+<Aside type="caution" title="Ihre Prompts laufen auf dem privaten Rechner eines anderen">
+Das KI-Modell läuft auf dem Rechner des Anbieters. Ihre Prompts und die Antworten gehen also über diesen Rechner. Senden Sie keine Passwörter, Kartennummern oder andere Geheimnisse, die Sie keinem Fremden verraten würden.
+</Aside>
+
+Etwas funktioniert nicht? Lesen Sie [Ein Problem lösen](/de/renters/troubleshooting/).

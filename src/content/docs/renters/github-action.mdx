@@ -1,0 +1,66 @@
+---
+title: Use it in GitHub Actions
+description: Run prompts on your rented GPU from a GitHub Actions workflow with the GPUFlow Inference action.
+sidebar:
+  label: Use it in GitHub Actions
+  order: 3
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+The [GPUFlow Inference](https://github.com/gpuflow-app/inference) action sends a prompt to the GPU you rented, straight from a GitHub Actions workflow. The answer appears in the job log, and later steps can use it. People use it to draft release notes, summarize changes or label issues.
+
+## Set it up
+
+<Steps>
+
+1. Copy your API key from **Dashboard → Current Rentals**. It starts with `gfk_`.
+2. In your GitHub repository, open **Settings → Secrets and variables → Actions** and click **New repository secret**. Name it `GPUFLOW_API_KEY` and paste the key.
+3. Add the step to a workflow:
+
+</Steps>
+
+```yaml
+jobs:
+  ask:
+    runs-on: ubuntu-latest
+    steps:
+      - id: gpu
+        uses: gpuflow-app/inference@v1
+        with:
+          api-key: ${{ secrets.GPUFLOW_API_KEY }}
+          prompt: Explain what a GPU is in three sentences.
+
+      - run: echo "$ANSWER"
+        env:
+          ANSWER: ${{ steps.gpu.outputs.response }}
+```
+
+You don't have to name a model. The action uses the one on the GPU you rented.
+
+## Send a file, save the answer
+
+```yaml
+- uses: actions/checkout@v7
+- uses: gpuflow-app/inference@v1
+  with:
+    api-key: ${{ secrets.GPUFLOW_API_KEY }}
+    system: You write release notes. Be brief and factual.
+    prompt-file: .github/prompts/release-notes.md
+    output-file: notes/draft.md
+    max-tokens: 800
+```
+
+`prompt-file` and `output-file` are paths inside your repository. Every setting is listed on the [action's page](https://github.com/gpuflow-app/inference#inputs).
+
+## Good to know
+
+- **The key lasts as long as the rental.** When the rental ends, the step fails with `invalid_api_key`. Start a new rental and put the new key in the secret.
+- **Limits.** If the workflow sends more requests than the listing allows, the action waits and tries again by itself. Jobs that share one key take turns.
+- **Pull requests from forks** don't receive your secrets, so the step can't run there.
+
+<Aside type="caution" title="Your prompts run on someone's own computer">
+The AI model runs on the provider's machine, so your prompts and the answers pass through it. Don't send passwords, card numbers or other secrets you wouldn't share with a stranger.
+</Aside>
+
+Something not working? See [fix a problem](/renters/troubleshooting/).

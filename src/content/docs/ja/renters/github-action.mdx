@@ -1,0 +1,66 @@
+---
+title: GitHub Actions で使う
+description: GPUFlow Inference アクションを使って、GitHub Actions のワークフローからレンタルした GPU でプロンプトを実行します。
+sidebar:
+  label: GitHub Actions で使う
+  order: 3
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+[GPUFlow Inference](https://github.com/gpuflow-app/inference) アクションは、GitHub Actions のワークフローから、レンタルした GPU にプロンプトを直接送ります。回答はジョブのログに表示され、後続のステップで使えます。リリースノートの下書き、変更内容の要約、Issue のラベル付けなどに使われています。
+
+## 設定する
+
+<Steps>
+
+1. **ダッシュボード → 現在のレンタル** で API キーをコピーします。キーは `gfk_` で始まります。
+2. GitHub のリポジトリで **Settings → Secrets and variables → Actions** を開き、**New repository secret** をクリックします。名前を `GPUFLOW_API_KEY` にして、キーを貼り付けます。
+3. ワークフローにステップを追加します。
+
+</Steps>
+
+```yaml
+jobs:
+  ask:
+    runs-on: ubuntu-latest
+    steps:
+      - id: gpu
+        uses: gpuflow-app/inference@v1
+        with:
+          api-key: ${{ secrets.GPUFLOW_API_KEY }}
+          prompt: Explain what a GPU is in three sentences.
+
+      - run: echo "$ANSWER"
+        env:
+          ANSWER: ${{ steps.gpu.outputs.response }}
+```
+
+モデルを指定する必要はありません。アクションはレンタルした GPU のモデルを使います。
+
+## ファイルを送り、回答を保存する
+
+```yaml
+- uses: actions/checkout@v7
+- uses: gpuflow-app/inference@v1
+  with:
+    api-key: ${{ secrets.GPUFLOW_API_KEY }}
+    system: You write release notes. Be brief and factual.
+    prompt-file: .github/prompts/release-notes.md
+    output-file: notes/draft.md
+    max-tokens: 800
+```
+
+`prompt-file` と `output-file` はリポジトリ内のパスです。すべての設定は[アクションのページ](https://github.com/gpuflow-app/inference#inputs)に載っています。
+
+## 知っておきたいこと
+
+- **キーはレンタル中だけ有効です。** レンタルが終了すると、ステップは `invalid_api_key` で失敗します。新しくレンタルを始めて、新しいキーをシークレットに入れてください。
+- **制限。** ワークフローが出品で許可された数を超えるリクエストを送ると、アクションは待ってから自動で再試行します。同じキーを使うジョブは順番に実行されます。
+- **フォークからのプルリクエスト**にはシークレットが渡されないため、そこではステップを実行できません。
+
+<Aside type="caution" title="プロンプトは他人のコンピューターで処理されます">
+AI モデルはプロバイダーのマシンで動いています。そのため、プロンプトと回答はそのマシンを通ります。パスワードやカード番号など、知らない人に教えたくない情報は送らないでください。
+</Aside>
+
+うまく動かない場合は、[問題を解決する](/ja/renters/troubleshooting/)をご覧ください。

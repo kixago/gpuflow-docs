@@ -1,0 +1,66 @@
+---
+title: Как использовать ключ в GitHub Actions
+description: Запускайте промпты на арендованном GPU из рабочего процесса GitHub Actions с помощью действия GPUFlow Inference.
+sidebar:
+  label: Как использовать ключ в GitHub Actions
+  order: 3
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+Действие [GPUFlow Inference](https://github.com/gpuflow-app/inference) отправляет промпт на арендованный вами GPU прямо из рабочего процесса GitHub Actions. Ответ появляется в журнале задания, и его могут использовать следующие шаги. Так удобно готовить черновики примечаний к выпуску, кратко описывать изменения или расставлять метки на issues.
+
+## Настройка
+
+<Steps>
+
+1. Скопируйте API-ключ на странице **Панель управления → Текущие аренды**. Он начинается с `gfk_`.
+2. В своём репозитории на GitHub откройте **Settings → Secrets and variables → Actions** и нажмите **New repository secret**. Назовите секрет `GPUFLOW_API_KEY` и вставьте ключ.
+3. Добавьте шаг в рабочий процесс:
+
+</Steps>
+
+```yaml
+jobs:
+  ask:
+    runs-on: ubuntu-latest
+    steps:
+      - id: gpu
+        uses: gpuflow-app/inference@v1
+        with:
+          api-key: ${{ secrets.GPUFLOW_API_KEY }}
+          prompt: Explain what a GPU is in three sentences.
+
+      - run: echo "$ANSWER"
+        env:
+          ANSWER: ${{ steps.gpu.outputs.response }}
+```
+
+Модель указывать не обязательно. Действие использует модель арендованного GPU.
+
+## Отправить файл и сохранить ответ
+
+```yaml
+- uses: actions/checkout@v7
+- uses: gpuflow-app/inference@v1
+  with:
+    api-key: ${{ secrets.GPUFLOW_API_KEY }}
+    system: You write release notes. Be brief and factual.
+    prompt-file: .github/prompts/release-notes.md
+    output-file: notes/draft.md
+    max-tokens: 800
+```
+
+`prompt-file` и `output-file` — это пути внутри вашего репозитория. Все настройки перечислены на [странице действия](https://github.com/gpuflow-app/inference#inputs).
+
+## Полезно знать
+
+- **Ключ действует, пока идёт аренда.** Когда аренда заканчивается, шаг завершается ошибкой `invalid_api_key`. Начните новую аренду и запишите новый ключ в секрет.
+- **Лимиты.** Если рабочий процесс отправляет больше запросов, чем разрешает объявление, действие ждёт и само повторяет попытку. Задания с одним общим ключом выполняются по очереди.
+- **Pull request из форков** не получают ваши секреты, поэтому шаг там выполниться не может.
+
+<Aside type="caution" title="Ваши запросы обрабатываются на чужом компьютере">
+Модель ИИ работает на компьютере провайдера, поэтому ваши запросы и ответы проходят через него. Не отправляйте пароли, номера карт и другие данные, которые вы не доверили бы незнакомому человеку.
+</Aside>
+
+Что-то не работает? Смотрите [решение проблем](/ru/renters/troubleshooting/).

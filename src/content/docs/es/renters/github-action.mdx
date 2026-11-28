@@ -1,0 +1,66 @@
+---
+title: Úsala en GitHub Actions
+description: Ejecuta prompts en tu GPU alquilada desde un flujo de trabajo de GitHub Actions con la acción GPUFlow Inference.
+sidebar:
+  label: Úsala en GitHub Actions
+  order: 3
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+La acción [GPUFlow Inference](https://github.com/gpuflow-app/inference) envía un prompt a la GPU que alquilaste, directamente desde un flujo de trabajo de GitHub Actions. La respuesta aparece en el registro del job y los pasos siguientes pueden usarla. Sirve, por ejemplo, para redactar notas de versión, resumir cambios o etiquetar issues.
+
+## Configúrala
+
+<Steps>
+
+1. Copia tu clave API en **Panel → Alquileres Actuales**. Empieza por `gfk_`.
+2. En tu repositorio de GitHub, abre **Settings → Secrets and variables → Actions** y haz clic en **New repository secret**. Ponle el nombre `GPUFLOW_API_KEY` y pega la clave.
+3. Añade el paso a un flujo de trabajo:
+
+</Steps>
+
+```yaml
+jobs:
+  ask:
+    runs-on: ubuntu-latest
+    steps:
+      - id: gpu
+        uses: gpuflow-app/inference@v1
+        with:
+          api-key: ${{ secrets.GPUFLOW_API_KEY }}
+          prompt: Explain what a GPU is in three sentences.
+
+      - run: echo "$ANSWER"
+        env:
+          ANSWER: ${{ steps.gpu.outputs.response }}
+```
+
+No hace falta indicar un modelo. La acción usa el de la GPU que alquilaste.
+
+## Envía un archivo y guarda la respuesta
+
+```yaml
+- uses: actions/checkout@v7
+- uses: gpuflow-app/inference@v1
+  with:
+    api-key: ${{ secrets.GPUFLOW_API_KEY }}
+    system: You write release notes. Be brief and factual.
+    prompt-file: .github/prompts/release-notes.md
+    output-file: notes/draft.md
+    max-tokens: 800
+```
+
+`prompt-file` y `output-file` son rutas dentro de tu repositorio. Todos los ajustes están en la [página de la acción](https://github.com/gpuflow-app/inference#inputs).
+
+## Conviene saber
+
+- **La clave dura lo que dura el alquiler.** Cuando el alquiler termina, el paso falla con `invalid_api_key`. Inicia un alquiler nuevo y guarda la clave nueva en el secreto.
+- **Límites.** Si el flujo de trabajo envía más solicitudes de las que permite el anuncio, la acción espera y lo intenta de nuevo por sí sola. Los jobs que comparten una clave se turnan.
+- **Los pull requests desde forks** no reciben tus secretos, así que el paso no puede ejecutarse ahí.
+
+<Aside type="caution" title="Tus prompts se ejecutan en la computadora de otra persona">
+El modelo de IA se ejecuta en la máquina del proveedor, así que tus prompts y las respuestas pasan por ella. No envíes contraseñas, números de tarjeta ni otros datos secretos que no compartirías con un desconocido.
+</Aside>
+
+¿Algo no funciona? Consulta [resolver un problema](/es/renters/troubleshooting/).
